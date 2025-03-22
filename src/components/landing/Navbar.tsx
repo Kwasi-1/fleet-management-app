@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import logo from "../../assets/foundry_logo.png";
 import logoWhite from "../../assets/foundry_logo_white.png";
@@ -70,7 +69,6 @@ const Navbar = ({ onSearchClick, onToggleTheme, isDarkMode }: NavbarProps) => {
           />
         </button>
       </div>
-      {/* </div> */}
     </nav>
   );
 };

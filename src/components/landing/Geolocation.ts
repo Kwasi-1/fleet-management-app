@@ -1,30 +1,42 @@
 import { useState, useEffect } from "react";
 
+interface Location {
+  lat: number;
+  lng: number;
+}
+
 interface GeolocationProps {
-  onLocationFound: (location: { lat: number; lng: number }) => void;
+  onLocationFound: (location: Location) => void;
 }
 
 const Geolocation = ({ onLocationFound }: GeolocationProps) => {
-  const [location, setLocation] = useState(null);
+  const [location, setLocation] = useState<Location | null>(null);
 
   useEffect(() => {
     if (!navigator.geolocation) {
-      console.error("Geolocation not supported.");
+      console.error("Geolocation not supported by this browser.");
       return;
     }
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        setLocation({ lat: latitude, lng: longitude });
-        onLocationFound({ lat: latitude, lng: longitude });
-      },
-      (error) => console.error("Geolocation error:", error),
-      { enableHighAccuracy: true }
-    );
+    const onSuccess = (position: GeolocationPosition) => {
+      const { latitude, longitude } = position.coords;
+      if (latitude && longitude) {
+        const currentLocation = { lat: latitude, lng: longitude };
+        setLocation(currentLocation);
+        onLocationFound(currentLocation);
+      }
+    };
+
+    const onError = (error: GeolocationPositionError) => {
+      console.error("Geolocation error:", error.message);
+    };
+
+    navigator.geolocation.getCurrentPosition(onSuccess, onError, {
+      enableHighAccuracy: true,
+    });
   }, [onLocationFound]);
 
-  return null; // This component only handles logic
+  return null; // No UI, purely for logic
 };
 
 export default Geolocation;

@@ -1,48 +1,76 @@
 import { useEffect } from "react";
-import mapboxgl from "mapbox-gl";
-import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
+import mapboxgl, { Map } from "mapbox-gl";
+import MapboxGeocoder, { Result } from "@mapbox/mapbox-gl-geocoder";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 
+interface Business {
+  name: string;
+  location: { lng: number; lat: number };
+}
+
 interface GeocoderComponentProps {
-  mapRef: React.RefObject<mapboxgl.Map>;
-  businesses: { name: string; location: { lng: number; lat: number } }[];
+  mapRef: React.RefObject<Map>;
+  businesses: Business[];
   geocoderContainerRef: React.RefObject<HTMLDivElement>;
 }
 
-const GeocoderComponent: React.FC<GeocoderComponentProps> = ({ mapRef, businesses, geocoderContainerRef }) => {
+const GeocoderComponent: React.FC<GeocoderComponentProps> = ({
+  mapRef,
+  businesses,
+  geocoderContainerRef,
+}) => {
   useEffect(() => {
     if (!mapRef.current || !geocoderContainerRef.current) return;
+
+    // Ensure Mapbox token is set
+    if (!mapboxgl.accessToken) {
+      console.error("Mapbox access token is not set.");
+      return;
+    }
 
     const geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl,
       marker: false,
       placeholder: "Search for businesses...",
-      localGeocoder: (query) => {
+      localGeocoder: (query: string) => {
+        // Filter businesses based on query
         return businesses
           .filter((business) =>
             business.name.toLowerCase().includes(query.toLowerCase())
           )
           .map((business) => ({
-            text: business.name,
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: [business.location.lng, business.location.lat],
+            },
+            properties: {
+              title: business.name,
+            },
             place_name: business.name,
+            text: business.name,
             center: [business.location.lng, business.location.lat],
-            properties: { name: business.name },
-          }));
+          })) as GeoJSON.Feature<GeoJSON.Point>[];
       },
     });
 
-    geocoder.on("result", (event) => {
+    // Event Listener for Geocoder Result
+    geocoder.on("result", (event: { result: Result }) => {
       const coords = event.result.center;
-      mapRef.current.flyTo({ center: coords, zoom: 17.5 });
+      if (coords && mapRef.current) {
+        mapRef.current.flyTo({ center: coords, zoom: 17.5 });
+      }
     });
 
-    geocoderContainerRef.current.appendChild(geocoder.onAdd(mapRef.current));
+    // Append Geocoder to Container
+    geocoderContainerRef.current.appendChild(geocoder.onAdd(mapRef.current)!);
 
+    // Cleanup on Unmount
     return () => {
-      geocoder.onRemove(); // ✅ Properly remove the geocoder
+      geocoder.onRemove();
     };
-  }, [mapRef, businesses]);
+  }, [mapRef, businesses, geocoderContainerRef]);
 
   return (
     <div

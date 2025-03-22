@@ -6,19 +6,37 @@ import GeocoderComponent from "./GeocoderComponent";
 import TruckSimulation from "./TruckSimulation";
 import DeliveryInfo from "./DeliveryInfo";
 import Navbar from "./Navbar";
-import Geolocation from "./Geolocation";
-import Directions from "./Directions";
+// import Geolocation from "./Geolocation";
+// import Directions from "./Directions";
 import { dummy_data } from "../../db";
 
-const INITIAL_CENTER = [-0.16912933535458255, 5.678395107981338];
+const INITIAL_CENTER: [number, number] = [
+  -0.16912933535458255, 5.678395107981338,
+];
 const INITIAL_ZOOM = 17.12;
 // const DATA_URL = "http://localhost:8000/foundry-ecosytem";
 
+// Define business type (adjust as needed)
+interface Business {
+  id: number;
+  name: string;
+  type: string;
+  location: {
+    lat: number;
+    lng: number;
+  };
+}
+
+interface Location {
+  lat: number;
+  lng: number;
+}
+
 const MapComponent = () => {
   const mapRef = useRef<mapboxgl.Map | null>(null);
-  const mapContainerRef = useRef();
-  const geocoderContainerRef = useRef();
-  const [businesses, setBusinesses] = useState([]);
+  const mapContainerRef = useRef<HTMLDivElement | null>(null);
+  const geocoderContainerRef = useRef<HTMLDivElement | null>(null);
+  const [businesses, setBusinesses] = useState<Business[]>([]);
   const [showGeocoder, setShowGeocoder] = useState(false); // 🔹 Toggle Geocoder
   const [isDarkMode, setIsDarkMode] = useState(() => {
     return localStorage.getItem("theme") === "dark";
@@ -43,7 +61,7 @@ const MapComponent = () => {
   }, [isDarkMode]);
 
   // Handle Location Found
-  const handleLocationFound = (location) => {
+  const handleLocationFound = (location: Location) => {
     if (mapRef.current) {
       mapRef.current.setCenter([location.lng, location.lat]);
       new mapboxgl.Marker()
@@ -55,6 +73,8 @@ const MapComponent = () => {
   useEffect(() => {
     mapboxgl.accessToken =
       "pk.eyJ1Ijoia3dhc2ktMSIsImEiOiJjbThkNG15anAyYXF2MmtzOGJneW55cmVnIn0.uRUn_veAFyZ8u1CxkRGnWg";
+
+    if (!mapContainerRef.current) return;
 
     // Initialize Map
     mapRef.current = new mapboxgl.Map({
@@ -72,6 +92,8 @@ const MapComponent = () => {
     mapRef.current.addControl(new mapboxgl.NavigationControl());
 
     mapRef.current.on("load", () => {
+      if (!mapRef.current) return;
+
       mapRef.current.addLayer({
         id: "3d-buildings",
         source: "composite",
@@ -105,12 +127,16 @@ const MapComponent = () => {
       //     setBusinesses([...data.wholesalers, ...data.microfinance, ...data.market_businesses]);
       //   })
       //   .catch((error) => console.error("Error fetching data:", error));
-      const data = { ...dummy_data["foundry-ecosytem"] };
-      setBusinesses([
-        ...data.wholesalers,
-        ...data.microfinance,
-        ...data.market_businesses,
-      ]);
+
+      // Dummy data simulation
+      const data = dummy_data["foundry-ecosytem"];
+      if (data) {
+        setBusinesses([
+          ...data.wholesalers,
+          ...data.microfinance,
+          ...data.market_businesses,
+        ]);
+      }
     });
 
     return () => {

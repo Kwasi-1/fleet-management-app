@@ -22,13 +22,15 @@ const DetailItem: React.FC<DetailItemProps> = ({
   <div className="w-fit">
     <p className="text-base text-gray-500 font-sans mb-1">{title}</p>
     <p
-      className={`text-2xl font-semibold text-black pb-2 border-b-4`}
-      style={{ borderColor: borderColour, width: "full" }}
+      className={`text-2xl font-semibold text-black pb-2 border-b-4 w-full`}
+      style={{ borderColor: borderColour }}
     >
       {icon && (
         <Icon
           icon={icon}
-          className={`inline-block w-10 h-10 rounded-full mr-1 ${iconColor}`}
+          className={`inline-block w-10 h-10 rounded-full mr-1 ${
+            iconColor || ""
+          }`}
         />
       )}
       {value}
@@ -40,8 +42,18 @@ const DetailItem: React.FC<DetailItemProps> = ({
   </div>
 );
 
+interface DeliveryItem {
+  title: string;
+  value: string;
+  subtitle?: string;
+  extra?: string;
+  icon?: string;
+  borderColour: string;
+  iconColor?: string;
+}
+
 const DeliveryInfo = () => {
-  const deliveryData = {
+  const deliveryData: Record<string, DeliveryItem> = {
     status: {
       title: "Status",
       value: "In Transit",
@@ -77,7 +89,7 @@ const DeliveryInfo = () => {
 
   return (
     <div className="flex items-center justify-center z-20 absolute bottom-0 inset-x-0 mb-10">
-      <div className="w-[60%] mx-auto bg-white shadow-lg rounded-lg flex justify-evenly items-start py-7 px-6 lg:px-0  space-x-6">
+      <div className="w-[60%] mx-auto bg-white shadow-lg rounded-lg flex justify-evenly items-start py-7 px-6 lg:px-0 space-x-6">
         {Object.values(deliveryData).map((item, index) => (
           <DetailItem
             key={index}
