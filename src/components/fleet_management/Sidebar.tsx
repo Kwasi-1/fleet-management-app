@@ -51,7 +51,7 @@ const SideBar: React.FC = () => {
   }, [pathname]);
 
   return (
-    <div className="w-[15%] fixed bg-white h-screen py-4 px-2 border-r">
+    <div className="w-[15%] fixed bg-white h-screen py-4 px-2 border-r border-[#e5e7eb]">
       {/* Logo and title */}
       <div
         onClick={() => navigate("/")}

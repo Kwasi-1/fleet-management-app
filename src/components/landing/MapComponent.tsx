@@ -150,7 +150,7 @@ const MapComponent = () => {
         <div
           id="map-container"
           ref={mapContainerRef}
-          className="h-[75vh] my-auto rounded-xl border"
+          className="h-[75vh] my-auto rounded-xl border border-[#e5e7eb]"
         />
       </div>
 
