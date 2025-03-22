@@ -4,12 +4,15 @@ import { Doughnut } from "react-chartjs-2";
 
 ChartJS.register(ArcElement, Legend, Title, Tooltip);
 
-const GaugeChart = ({ backgroundColor, values }) => {
+const GaugeChart = ({
+  backgroundColor = ["#10B981", "#E5E7EB"],
+  values = [50, 50],
+}) => {
   const data = {
-    labels: [],
+    labels: ["Active", "Inactive"], // Added labels to prevent Chart.js errors
     datasets: [
       {
-        data: [values[0], values[1]], // Closed percentage and gap percentage
+        data: values, // Ensure it's always an array with two values
         backgroundColor: backgroundColor,
         borderWidth: 0,
         cutout: "83%",
@@ -22,6 +25,10 @@ const GaugeChart = ({ backgroundColor, values }) => {
 
   const options = {
     maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false }, // Hides legend since labels aren't shown
+      tooltip: { enabled: true }, // Enables tooltips for better UX
+    },
   };
 
   return <Doughnut data={data} options={options} />;

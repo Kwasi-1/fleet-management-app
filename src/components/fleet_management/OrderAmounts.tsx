@@ -1,8 +1,16 @@
 import React from "react";
 import StatusText from "./StatusText";
 
+// Define the type for each order item
+interface Order {
+  orderId: string;
+  amount: string;
+  status: string;
+}
+
 const OrderAmount = () => {
-  const data = [
+  // Define the order data with proper typing
+  const data: Order[] = [
     { orderId: "12345", amount: "₵1,200", status: "successful" },
     { orderId: "67890", amount: "₵1,200", status: "returned" },
     { orderId: "11223", amount: "₵1,200", status: "successful" },
@@ -10,16 +18,17 @@ const OrderAmount = () => {
     { orderId: "77889", amount: "₵1,200", status: "successful" },
   ];
 
-  // Calculate success and issue percentages
-  const successCount = data.filter((order) =>
+  // Calculate success and issue counts
+  const successCount: number = data.filter((order: Order) =>
     ["successful", "completed", "paid", "approved"].includes(
       order.status.toLowerCase()
     )
   ).length;
-  const issueCount = data.length - successCount;
+  const issueCount: number = data.length - successCount;
 
-  const successPercentage = (successCount / data.length) * 100;
-  const issuePercentage = 100 - successPercentage;
+  // Calculate success and issue percentages
+  const successPercentage: number = (successCount / data.length) * 100;
+  const issuePercentage: number = 100 - successPercentage;
 
   return (
     <div className="bg-[#e0e6e930] p-6 rounded-xl border border-[#e0e6e930]">
@@ -61,7 +70,7 @@ const OrderAmount = () => {
             </tr>
           </thead>
           <tbody>
-            {data.map((row, index) => (
+            {data.map((row: Order, index: number) => (
               <tr
                 key={index}
                 className="border-b border-[#e5e7eb] last:border-b-0"

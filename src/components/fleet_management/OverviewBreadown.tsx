@@ -4,11 +4,15 @@ const OverallBreakdown = () => {
   // Example dynamic values (replace with real data if needed)
   const totalVehicles = 124;
   const activeVehicles = 98;
-  const activePercentage = ((activeVehicles / totalVehicles) * 100).toFixed(1);
-  const remainingPercentage = (100 - activePercentage).toFixed(1);
+
+  // Ensure percentages are numbers, not strings
+  const activePercentage = parseFloat(
+    ((activeVehicles / totalVehicles) * 100).toFixed(1)
+  );
+  const remainingPercentage = parseFloat((100 - activePercentage).toFixed(1));
 
   return (
-    <div className="bg-[#e0e6e930] min-w80  p-4 font-sans rounded-xl border border-[#e0e6e930] ">
+    <div className="bg-[#e0e6e930] min-w80 p-4 font-sans rounded-xl border border-[#e0e6e930]">
       <h2 className="text-[15px] text-[#4b5563] font-semibold mb-5">
         Overall Breakdown
       </h2>
@@ -39,7 +43,7 @@ const OverallBreakdown = () => {
           </div>
           <div className="flex flex-col -mt-14 text-center">
             <p className="text-gray-600 text-3xl font-semibold tracking-wider uppercase">
-              {activePercentage}%
+              {activePercentage.toFixed(1)}%
             </p>
             <p className="text-gray-600 text-xs tracking-wider uppercase">
               Fleet Utilization

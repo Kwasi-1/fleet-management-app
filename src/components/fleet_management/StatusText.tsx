@@ -1,7 +1,19 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 
-const StatusText = ({ text, textClassName = "" }) => {
-  const scheme = (status) => {
+type StatusTextProps = {
+  text: string | null | undefined;
+  textClassName?: string;
+};
+
+// Define the type for the return object of scheme()
+type Scheme = {
+  icon: string;
+  color: string;
+};
+
+const StatusText = ({ text, textClassName = "" }: StatusTextProps) => {
+  // Function to determine icon and color scheme based on status
+  const scheme = (status: string): Scheme => {
     const lowerStatus = status.toLowerCase();
 
     if (
