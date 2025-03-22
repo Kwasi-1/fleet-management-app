@@ -6,26 +6,26 @@ import SideBar from "./components/fleet_management/Sidebar";
 function App() {
   return (
     <BrowserRouter>
-      <div className="flex">
-        <ShowSidebar />
-        <div className="flex-1">
-          <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/fleet" element={<Fleet/>} />
-          </Routes>
-        </div>
-      </div>
+      <AppContent />
     </BrowserRouter>
   );
 }
 
-const ShowSidebar = () => {
+function AppContent() {
   const location = useLocation();
   const isLanding = location.pathname === "/";
-  return !isLanding ? (
-    <>
-      <SideBar />
-    </>
-  ) : null;
-};
+
+  return (
+    <div className="flex">
+      {!isLanding && <SideBar />}
+      <div className={!isLanding ? "w-[85%] ml-[15%]" : "w-full"}>
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/fleet" element={<Fleet />} />
+        </Routes>
+      </div>
+    </div>
+  );
+}
+
 export default App;

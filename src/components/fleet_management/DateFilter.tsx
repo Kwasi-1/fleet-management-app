@@ -4,7 +4,7 @@ const DateFilter = () => {
   const [activeFilter, setActiveFilter] = useState("Today");
 
   return (
-    <div className="flex bg-gray-100 border rounded-xl p-2 gap-2">
+    <div className="flex bg-[#e0e6e930] border border-[#e5e7eb] rounded-xl p-[6px] gap-[2px]">
       {[
         "Today",
         "This Month",
@@ -16,10 +16,10 @@ const DateFilter = () => {
         <button
           key={filter}
           onClick={() => setActiveFilter(filter)}
-          className={`px-4 py-2 rounded-md text-sm transition duration-300
+          className={`px-3 py-[6px] rounded-lg text-sm transition duration-300
             ${
               activeFilter === filter
-                ? "bg-white shadow-sm border text-black"
+                ? "bg-white border border-[#e5e7eb] text-black focus:border-[#e5e7eb]"
                 : "hover:text-gray-400 text-gray-500"
             }`}
         >

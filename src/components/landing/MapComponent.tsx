@@ -8,7 +8,7 @@ import DeliveryInfo from "./DeliveryInfo";
 import Navbar from "./Navbar";
 import Geolocation from "./Geolocation";
 import Directions from "./Directions";
-import { dummy_data } from "../db";
+import { dummy_data } from "../../db";
 
 const INITIAL_CENTER = [-0.16912933535458255, 5.678395107981338];
 const INITIAL_ZOOM = 17.12;

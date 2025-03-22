@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import logo from "../assets/foundry_logo.png";
-import logoWhite from "../assets/foundry_logo_white.png";
+import logo from "../../assets/foundry_logo.png";
+import logoWhite from "../../assets/foundry_logo_white.png";
 import { NavLink } from "react-router";
 
 // Navigation links array (easier to edit)
