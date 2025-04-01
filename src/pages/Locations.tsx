@@ -1,4 +1,4 @@
-import LocationsTable from "../components/Locations/LocationsTable";
+import LocationsTable from "../components/locations/LocationsTable";
 import Layout from "../layouts/Layout";
 
 function locations() {

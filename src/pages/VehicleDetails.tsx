@@ -1,7 +1,7 @@
 import Layout from "../layouts/Layout";
-import VehicleTable from "../components/fleet_management/VehicleTable";
-import MeterHistory from "../components/vehicle/MeterHistory";
-import ExpenseHistory from "../components/vehicle/ExpenseHistory";
+import VehicleTable from "../components/fleet_management/vehicle/VehicleTable";
+import MeterHistory from "../components/fleet_management/vehicle/MeterHistory";
+import ExpenseHistory from "../components/fleet_management/vehicle/ExpenseHistory";
 
 const tabs = [
   "Vehicle List",
@@ -26,7 +26,6 @@ const VehicleDetails = () => {
       tabs={tabs}
       components={components}
       showDashboard={false}
-      
     />
   );
 };

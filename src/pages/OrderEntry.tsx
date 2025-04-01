@@ -1,18 +1,40 @@
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 import InputField from "../components/common/InputField";
 import SelectField from "../components/common/SelectField";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
-const OrderEntry = () => {
-  const [orders, setOrders] = useState([{ id: 1 }]);
-  const [formData, setFormData] = useState({});
+// Interface for Form Data
+interface FormData {
+  pickupLocation?: string;
+  earliestPickup?: string;
+  latestPickup?: string;
+  deliveryLocation?: string;
+  referenceType?: string;
+  referenceNumber?: string;
+  orderType?: string;
+  productId?: string;
+  productDescription?: string;
+  quantity?: string;
+  paymentMethodType?: string;
+  mode?: string;
+  equipment?: string;
+  comments?: string;
+}
+
+interface OrderEntryProps {}
+
+const OrderEntry: React.FC<OrderEntryProps> = () => {
+  const [orders, setOrders] = useState<{ id: number }[]>([{ id: 1 }]);
+  const [formData, setFormData] = useState<FormData>({});
 
   // Function to add another order
   const addOrder = () => {
     setOrders([...orders, { id: orders.length + 1 }]);
   };
 
-  const handleChange = (e) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
@@ -154,7 +176,7 @@ const OrderEntry = () => {
             <h3 className="font-medium mb-4">Comments (Optional)</h3>
             <textarea
               className="w-full border bg-[#F5F6F7] border-[#E5E7EB] px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#619B7D] text-sm text-gray-600"
-              rows="4"
+              rows={4}
               placeholder="Add your comments"
               value={formData.comments || ""}
               onChange={(e) =>
@@ -169,7 +191,7 @@ const OrderEntry = () => {
           <button className="px-4 py-2 border border-gray-400 text-gray-600 text-sm rounded-md">
             Cancel
           </button>
-          <button className="ustify-center rounded-md text-[12.5px] ring-offset-white transition-colors focus-visible:outline-none disabled:pointer-events-none bg-[#619B7D] dark:text-black hover:opacity-90 hover:dark:bg-[#619B7D]/80 disabled:dark:bg-[#619B7D]/50 disabled:bg-gray-300 disabled:text-gray-500 h-10 px-4 py-2 flex items-center gap-1 bg-primary-green text-black font-medium">
+          <button className="justify-center rounded-md text-[12.5px] ring-offset-white transition-colors focus-visible:outline-none disabled:pointer-events-none bg-[#619B7D] dark:text-black hover:opacity-90 hover:dark:bg-[#619B7D]/80 disabled:dark:bg-[#619B7D]/50 disabled:bg-gray-300 disabled:text-gray-500 h-10 px-4 py-2 flex items-center gap-1 bg-primary-green text-black font-medium">
             Create order
           </button>
         </div>

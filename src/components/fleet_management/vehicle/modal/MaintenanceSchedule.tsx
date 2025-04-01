@@ -1,11 +1,25 @@
 import { useState } from "react";
 
-function MaintenanceSchedule({ formData, handleInputChange }) {
-  const [selectedOption, setSelectedOption] = useState(
+// Define the structure of the formData prop
+interface FormData {
+  serviceProgram: string;
+}
+
+// Define the prop types for MaintenanceSchedule
+interface MaintenanceScheduleProps {
+  formData: FormData;
+  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const MaintenanceSchedule: React.FC<MaintenanceScheduleProps> = ({
+  formData,
+  handleInputChange,
+}) => {
+  const [selectedOption, setSelectedOption] = useState<string>(
     formData.serviceProgram || "None"
   );
 
-  const handleOptionChange = (value) => {
+  const handleOptionChange = (value: string) => {
     setSelectedOption(value);
     handleInputChange({ target: { name: "serviceProgram", value } });
   };
@@ -40,9 +54,6 @@ function MaintenanceSchedule({ formData, handleInputChange }) {
             </div>
             <p className="text-gray-700 font-medium">None</p>
           </div>
-          {/* <p className="text-gray-400 text-sm">
-            No Service Reminders will be created
-          </p> */}
         </div>
 
         {/* Existing Service Program Option */}
@@ -74,6 +85,6 @@ function MaintenanceSchedule({ formData, handleInputChange }) {
       </div>
     </div>
   );
-}
+};
 
 export default MaintenanceSchedule;

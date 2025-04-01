@@ -1,6 +1,6 @@
 import Layout from "../layouts/Layout";
-import VehicleRenewalTable from "../components/reminders/VehicleRenewalTable";
-import ContactRenewalTable from "../components/reminders/ContactRenewalTable";
+import VehicleRenewalTable from "../components/fleet_management/reminders/VehicleRenewalTable";
+import ContactRenewalTable from "../components/fleet_management/reminders/ContactRenewalTable";
 import ServiceHistoryTable from "../components/fleet_management/service/ServiceHistoryTable";
 
 const tabs = ["Service History", "Vehicle Renewal", "Contact Renewal"];

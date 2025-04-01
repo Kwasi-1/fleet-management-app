@@ -1,13 +1,29 @@
-import { useState } from "react";
-import ModalLayout from "../../layouts/ModalLayout";
+import { useState, ChangeEvent } from "react";
+import ModalLayout from "../../../layouts/ModalLayout";
 import FirstStep from "./modal/FirstStep";
 import MaintenanceSchedule from "./modal/MaintenanceSchedule";
 import Lifecycle from "./modal/Lifecycle";
 import Financial from "./modal/Financial";
 import Specifications from "./modal/Specifications";
 
-function VehicleModal({ isOpen, onClose }) {
-  const [formData, setFormData] = useState({
+// Define the type for the formData
+interface FormData {
+  vin: string;
+  vehicleName: string;
+  type: string;
+  status: string;
+  ownership: string;
+  labels: string;
+}
+
+// Define the type for the props of VehicleModal
+interface VehicleModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const VehicleModal: React.FC<VehicleModalProps> = ({ isOpen, onClose }) => {
+  const [formData, setFormData] = useState<FormData>({
     vin: "",
     vehicleName: "",
     type: "Car",
@@ -16,7 +32,9 @@ function VehicleModal({ isOpen, onClose }) {
     labels: "",
   });
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -48,6 +66,6 @@ function VehicleModal({ isOpen, onClose }) {
       />
     </ModalLayout>
   );
-}
+};
 
 export default VehicleModal;

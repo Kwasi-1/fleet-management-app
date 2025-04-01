@@ -1,5 +1,4 @@
-import { useState } from "react";
-import Table from "../Table";
+import Table from "../../common/Table";
 
 const ServiceHistoryTable = () => {
   // Define columns for the table

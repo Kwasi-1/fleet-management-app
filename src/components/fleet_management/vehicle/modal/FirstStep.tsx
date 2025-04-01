@@ -1,11 +1,27 @@
-import InputField from "../../common/InputField";
-import SelectField from "../../common/SelectField";
+import InputField from "../../../common/InputField";
+import SelectField from "../../../common/SelectField";
 
-function FirstStep({ formData, handleInputChange }) {
+// Define the structure of the formData prop
+interface FormData {
+  vin: string;
+  vehicleName: string;
+  type: string;
+  status: string;
+  ownership: string;
+  labels: string;
+}
+
+// Define the prop types for FirstStep
+interface FirstStepProps {
+  formData: FormData;
+  handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+}
+
+const FirstStep: React.FC<FirstStepProps> = ({ formData, handleInputChange }) => {
   return (
     <div className="px6">
       <h1 className="capitalize text-xl mb-2">Vehicle details</h1>
-      <div className="grid grid-cols-2 gap-x-6 gap-y-3  pb-24">
+      <div className="grid grid-cols-2 gap-x-6 gap-y-3 pb-24">
         <InputField
           label="VIN/SN"
           name="vin"

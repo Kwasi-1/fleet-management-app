@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Table from "../fleet_management/Table";
+import Table from "../../common/Table";
 import AddMeterEntryModal from "./AddEntryModal";
 
 const MeterHistory = () => {

@@ -1,6 +1,22 @@
-import InputField from "../../common/InputField";
+import InputField from "../../../common/InputField";
 
-function Specifications({ formData, handleInputChange }) {
+// Define the structure of the formData prop
+interface FormData {
+  engineType: string;
+  horsepower: number | string;
+  torque: number | string;
+  transmission: string;
+  fuelType: string;
+  fuelCapacity: number | string;
+}
+
+// Define the prop types for Specifications
+interface SpecificationsProps {
+  formData: FormData;
+  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const Specifications: React.FC<SpecificationsProps> = ({ formData, handleInputChange }) => {
   return (
     <div className="">
       <h1 className="text-xl font-semibold mb-2">Specifications</h1>

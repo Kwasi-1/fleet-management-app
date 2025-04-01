@@ -1,12 +1,12 @@
 import { useState } from "react";
-import ShipmentTable from "../components/fleet_management/ShipmentTable";
-import ShipmentDetails from "../components/fleet_management/ShipmentDetails";
+import ShipmentTable from "../components/logistics/shipment/ShipmentTable";
+import ShipmentDetails from "../components/logistics/shipment/ShipmentDetails";
 
 function Shipment() {
   const [selectedShipment, setSelectedShipment] = useState(null);
 
   // Function to handle shipment click
-  const handleShipmentClick = (shipment) => {
+  const handleShipmentClick = (shipment: any) => {
     setSelectedShipment(shipment);
   };
 

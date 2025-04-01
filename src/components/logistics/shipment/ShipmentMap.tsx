@@ -1,19 +1,27 @@
 import { useRef, useEffect } from "react";
-import mapboxgl from "mapbox-gl";
+import mapboxgl, { LngLat } from "mapbox-gl"; // Import LngLat type from mapbox-gl
 import "mapbox-gl/dist/mapbox-gl.css";
 
+// Set Mapbox access token
 mapboxgl.accessToken =
   "pk.eyJ1Ijoia3dhc2ktMSIsImEiOiJjbThkNG15anAyYXF2MmtzOGJneW55cmVnIn0.uRUn_veAFyZ8u1CxkRGnWg";
 
-export default function ShipmentMap({ pickup, destination }) {
-  const mapContainer = useRef(null);
-  const map = useRef(null);
+// Define props types for the ShipmentMap component
+interface ShipmentMapProps {
+  pickup: LngLat; // LatLng type for pickup coordinates
+  destination: LngLat; // LatLng type for destination coordinates
+}
+
+const ShipmentMap: React.FC<ShipmentMapProps> = ({ pickup, destination }) => {
+  const mapContainer = useRef<HTMLDivElement | null>(null);
+  const map = useRef<mapboxgl.Map | null>(null);
 
   useEffect(() => {
     if (map.current) return; // Initialize map only once
 
+    // Initialize mapbox map
     map.current = new mapboxgl.Map({
-      container: mapContainer.current,
+      container: mapContainer.current!,
       style: "mapbox://styles/mapbox/streets-v12",
       center: pickup,
       zoom: 4,
@@ -33,19 +41,19 @@ export default function ShipmentMap({ pickup, destination }) {
 
     // Draw Route Line
     map.current.on("load", () => {
-      map.current.addSource("route", {
+      map.current?.addSource("route", {
         type: "geojson",
         data: {
           type: "Feature",
           properties: {},
           geometry: {
             type: "LineString",
-            coordinates: [pickup, destination],
+            coordinates: [pickup.toArray(), destination.toArray()],
           },
         },
       });
 
-      map.current.addLayer({
+      map.current?.addLayer({
         id: "route",
         type: "line",
         source: "route",
@@ -60,6 +68,7 @@ export default function ShipmentMap({ pickup, destination }) {
       });
     });
 
+    // Clean up on component unmount
     return () => {
       if (map.current) map.current.remove();
     };
@@ -72,4 +81,6 @@ export default function ShipmentMap({ pickup, destination }) {
       style={{ minHeight: "200px" }}
     />
   );
-}
+};
+
+export default ShipmentMap;

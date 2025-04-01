@@ -1,6 +1,23 @@
-import InputField from "../../common/InputField";
+import InputField from "../../../common/InputField";
 
-function Lifecycle({ formData, handleInputChange }) {
+// Define the structure of the formData prop
+interface FormData {
+  activeFleetServiceDate: string;
+  inServiceOdometer: number | string;
+  serviceLifeMonths: number;
+  serviceLifeMeter: number;
+  resaleValue: number;
+  outOfServiceDate: string;
+  outOfServiceOdometer: number | string;
+}
+
+// Define the prop types for Lifecycle
+interface LifecycleProps {
+  formData: FormData;
+  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const Lifecycle: React.FC<LifecycleProps> = ({ formData, handleInputChange }) => {
   return (
     <div className="">
       <h1 className="text-xl font-semibold mb-2">Lifecycle</h1>
@@ -48,7 +65,7 @@ function Lifecycle({ formData, handleInputChange }) {
           placeholder="e.g., 15000"
           value={formData.resaleValue}
           onChange={handleInputChange}
-        />{" "}
+        />
       </div>
 
       <h2 className="mt-4 text-lg font-semibold">Out-of-Service</h2>

@@ -5,6 +5,6 @@ function Landing() {
     <div className="flex-1">
       <MapComponent />
     </div>
-  )
+  );
 }
 export default Landing;

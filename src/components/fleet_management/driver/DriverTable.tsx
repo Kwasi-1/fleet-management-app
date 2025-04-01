@@ -1,6 +1,6 @@
 import { useState } from "react";
 import DriverModal from "./DriverModal";
-import Table from "../Table";
+import Table from "../../common/Table";
 
 const driverColumns = [
   { key: "id", label: "Driver ID" },

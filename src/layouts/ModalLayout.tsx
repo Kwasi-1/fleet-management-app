@@ -1,19 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, ReactNode, MouseEvent } from "react";
 
-function ModalLayout({
+interface ModalLayoutProps {
+  isOpen: boolean;
+  onClose: () => void;
+  title: string;
+  description?: string;
+  tabs?: string[];
+  children: ReactNode;
+}
+
+const ModalLayout: React.FC<ModalLayoutProps> = ({
   isOpen,
   onClose,
   title,
   description,
   tabs = [],
   children,
-}) {
+}) => {
   const [activeTab, setActiveTab] = useState(0);
   const childArray = React.Children.toArray(children); // Ensure children are an array
 
-  const handleTabClick = (index) => setActiveTab(index);
-  const handleBackdropClick = (e) => {
-    if (e.target.id === "backdrop") {
+  const handleTabClick = (index: number) => setActiveTab(index);
+
+  const handleBackdropClick = (e: MouseEvent<HTMLDivElement>) => {
+    if ((e.target as HTMLElement).id === "backdrop") {
       onClose();
     }
   };
@@ -43,7 +53,7 @@ function ModalLayout({
         {/* Modal Header */}
         <div className="mb-3 bg-[#619B7D] py-6 px-[30px] text-white">
           <h2 className="text-lg font-semibold">{title}</h2>
-          <p>{description}</p>
+          {description && <p>{description}</p>}
         </div>
 
         {/* Tabs (if they exist) */}
@@ -120,6 +130,6 @@ function ModalLayout({
       </div>
     </div>
   );
-}
+};
 
 export default ModalLayout;

@@ -1,5 +1,4 @@
-import { useState } from "react";
-import Table from "../Table";
+import Table from "../../common/Table";
 
 const FuelHistoryTable = () => {
   // Define table columns

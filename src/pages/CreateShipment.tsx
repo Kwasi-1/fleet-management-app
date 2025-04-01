@@ -1,35 +1,43 @@
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 import { AddressAutofill } from "@mapbox/search-js-react";
-import { DayPicker } from "react-day-picker";
+import { DayPicker, DateRange } from "react-day-picker";
 import { format } from "date-fns";
 import "react-day-picker/dist/style.css";
 import BackButton from "../components/common/BackButton";
 import LoadPriority from "../components/logistics/create_shipment/LoadPriority";
 
-function CreateShipment({ onClose }) {
-  const [serviceType, setServiceType] = useState("FTL");
-  const [equipmentType, setEquipmentType] = useState("Dry Van");
-  const [formData, setFormData] = useState({
+// Define the type for formData state
+interface FormData {
+  pickupAddress: string;
+  deliveryAddress: string;
+  pickupDate: string;
+  deliveryDate: string;
+}
+
+const CreateShipment = () => {
+  const [serviceType, setServiceType] = useState<string>("FTL");
+  const [equipmentType, setEquipmentType] = useState<string>("Dry Van");
+  const [formData, setFormData] = useState<FormData>({
     pickupAddress: "",
     deliveryAddress: "",
     pickupDate: "",
     deliveryDate: "",
   });
-  const [range, setRange] = useState();
+  const [range, setRange] = useState<DateRange | undefined>(undefined);
 
   const MAPBOX_TOKEN =
     "pk.eyJ1Ijoia3dhc2ktMSIsImEiOiJjbThkNG15anAyYXF2MmtzOGJneW55cmVnIn0.uRUn_veAFyZ8u1CxkRGnWg";
 
-  const handleServiceTypeChange = (type) => {
+  const handleServiceTypeChange = (type: string) => {
     setServiceType(type);
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleDateChange = (range) => {
+  const handleDateChange = (range: DateRange | undefined) => {
     setRange(range);
     if (range?.from && range?.to) {
       setFormData((prev) => ({
@@ -219,6 +227,6 @@ function CreateShipment({ onClose }) {
       </div>
     </div>
   );
-}
+};
 
 export default CreateShipment;

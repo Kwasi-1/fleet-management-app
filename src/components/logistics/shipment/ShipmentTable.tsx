@@ -1,7 +1,58 @@
 import { useNavigate } from "react-router-dom";
 import Table from "../../common/Table";
 
-const shipmentColumns = [
+// Define types for shipment progress and shipment data
+interface ShipmentProgress {
+  title: string;
+  location?: string;
+  address?: string;
+  time: string;
+  iconColor: string;
+  status: {
+    label?: string;
+    color?: string;
+    bgColor?: string;
+  } | null;
+}
+
+interface LastKnownPosition {
+  location: string;
+  timestamp: string;
+}
+
+interface ETA {
+  location: string;
+  timestamp: string;
+}
+
+interface Shipment {
+  id: string;
+  order: string;
+  pickup: string;
+  destination: string;
+  pickupCoordinates: [number, number];
+  destinationCoordinates: [number, number];
+  date: string;
+  status: string;
+  reference: string;
+  primaryReference: string;
+  lastKnownPosition: LastKnownPosition;
+  eta: ETA;
+  progress: ShipmentProgress[];
+}
+
+// Define columns type
+interface Column {
+  key: string;
+  label: string;
+}
+
+// Define props type for the ShipmentTable component
+interface ShipmentTableProps {
+  onShipmentClick: (shipment: Shipment) => void;
+}
+
+const shipmentColumns: Column[] = [
   { key: "id", label: "Shipment ID" },
   { key: "order", label: "Order" },
   { key: "pickup", label: "Pickup" },
@@ -10,7 +61,7 @@ const shipmentColumns = [
   { key: "status", label: "Status" },
 ];
 
-const shipmentData = [
+const shipmentData: Shipment[] = [
   {
     id: "SHP-301",
     order: "ORD-789",
@@ -112,7 +163,7 @@ const shipmentData = [
   },
 ];
 
-const ShipmentTable = ({ onShipmentClick }) => {
+const ShipmentTable: React.FC<ShipmentTableProps> = ({ onShipmentClick }) => {
   const navigate = useNavigate(); // ✅ Hook must be inside the function body
 
   const handleButtonClick = () => {

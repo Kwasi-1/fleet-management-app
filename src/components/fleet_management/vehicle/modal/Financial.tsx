@@ -1,9 +1,28 @@
-import InputField from "../../common/InputField";
-import SelectField from "../../common/SelectField";
+import InputField from "../../../common/InputField";
+import SelectField from "../../../common/SelectField";
 
-function Financial({ formData, handleInputChange }) {
+interface FinancialFormData {
+  acquisitionCost: number | string;
+  bookValue: number | string;
+  depreciationMethod: string;
+  residualValue: number | string;
+  ownershipType: string;
+  depreciationStartDate: string;
+}
+
+interface FinancialProps {
+  formData: FinancialFormData;
+  handleInputChange: (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => void;
+}
+
+const Financial: React.FC<FinancialProps> = ({
+  formData,
+  handleInputChange,
+}) => {
   return (
-    <div className="">
+    <div>
       <h1 className="text-xl font-semibold mb-2">Financial</h1>
       <div className="grid grid-cols-2 gap-x-6 gap-y-3">
         <InputField
@@ -63,6 +82,6 @@ function Financial({ formData, handleInputChange }) {
       </div>
     </div>
   );
-}
+};
 
 export default Financial;

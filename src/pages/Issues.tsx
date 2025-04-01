@@ -1,4 +1,4 @@
-import IssuesTable from "../components/vehicle/IssuesTable";
+import IssuesTable from "../components/fleet_management/vehicle/IssuesTable";
 import Layout from "../layouts/Layout";
 
 const tabs = ["Issues", "Faults", "Recalls"];

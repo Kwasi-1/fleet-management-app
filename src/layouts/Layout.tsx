@@ -1,7 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ReactNode } from "react";
 import Dashboard from "./Dashboard";
 
-const Layout = ({
+interface LayoutProps {
+  title: string;
+  tabs?: string[];
+  components?: Record<string, ReactNode>;
+  showDashboard?: boolean;
+  dashboardData?: Record<string, any>;
+  defaultDashboardData?: any;
+}
+
+const Layout: React.FC<LayoutProps> = ({
   title,
   tabs = [],
   components = {},
@@ -9,9 +18,9 @@ const Layout = ({
   dashboardData = {},
   defaultDashboardData = null,
 }) => {
-  const [activeTab, setActiveTab] = useState(tabs[0] || "default");
+  const [activeTab, setActiveTab] = useState<string>(tabs[0] || "default");
   const [currentDashboardData, setCurrentDashboardData] =
-    useState(defaultDashboardData);
+    useState<any>(defaultDashboardData);
 
   // Update dashboard data when activeTab changes
   useEffect(() => {

@@ -1,6 +1,5 @@
-import { useState } from "react";
-import Table from "../fleet_management/Table";
-import StatusText from "../fleet_management/StatusText";
+import Table from "../../common/Table";
+
 const IssuesTable = () => {
   // Define the table columns
   const columns = [

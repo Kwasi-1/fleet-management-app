@@ -2,8 +2,28 @@ import React, { useState } from "react";
 import ModalLayout from "../../../layouts/ModalLayout";
 import InputField from "../../common/InputField";
 
-const DriverModal = ({ isOpen, onClose }) => {
-  const [formData, setFormData] = useState({
+interface DriverFormData {
+  firstName: string;
+  lastName: string;
+  mobilePhone: string;
+  email: string;
+  dateOfBirth: string;
+  startDate: string;
+  leaveDate: string;
+  licenseNumber: string;
+  licenseClass: string;
+  hourlyRate: string;
+  profilePhoto: File | null;
+  group: string;
+}
+
+interface DriverModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const DriverModal: React.FC<DriverModalProps> = ({ isOpen, onClose }) => {
+  const [formData, setFormData] = useState<DriverFormData>({
     firstName: "",
     lastName: "",
     mobilePhone: "",
@@ -18,14 +38,14 @@ const DriverModal = ({ isOpen, onClose }) => {
     group: "",
   });
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setFormData({ ...formData, profilePhoto: file });
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setFormData((prev) => ({ ...prev, profilePhoto: file }));
   };
 
   return (

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import Table from "../fleet_management/Table";
+import Table from "../common/Table";
 
 // Define table columns
 const columns = [

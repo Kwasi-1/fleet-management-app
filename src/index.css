@@ -69,6 +69,13 @@ button:focus-visible {
   }
 } */
 
+@import "@fontsource/public-sans/index.css";
+
+/* Example CSS */
+body {
+  font-family: "Public Sans", sans-serif;
+}
+
 
 html, body, #root {
   width: 100%;

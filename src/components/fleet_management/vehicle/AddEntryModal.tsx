@@ -1,14 +1,30 @@
 import { useState } from "react";
-import ModalLayout from "../../layouts/ModalLayout";
+import ModalLayout from "../../../layouts/ModalLayout";
 
-function AddMeterEntryModal({ isOpen, onClose }) {
-  const [formData, setFormData] = useState({
+// Define the structure of the formData state
+interface FormData {
+  asset: string;
+  primaryMeter: string | number;
+  meterDate: string;
+}
+
+// Define the props for AddMeterEntryModal
+interface AddMeterEntryModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const AddMeterEntryModal: React.FC<AddMeterEntryModalProps> = ({
+  isOpen,
+  onClose,
+}) => {
+  const [formData, setFormData] = useState<FormData>({
     asset: "1100 [2018 Toyota Prius]",
     primaryMeter: "",
     meterDate: new Date().toISOString().split("T")[0], // Default to today’s date
   });
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -77,6 +93,6 @@ function AddMeterEntryModal({ isOpen, onClose }) {
       </div>
     </ModalLayout>
   );
-}
+};
 
 export default AddMeterEntryModal;

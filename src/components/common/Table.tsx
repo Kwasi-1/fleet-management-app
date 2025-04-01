@@ -3,17 +3,40 @@ import { useState } from "react";
 import StatusText from "./StatusText";
 import Pagination from "./Pagination";
 
-const Table = ({
+interface Column {
+  key: string;
+  label: string;
+}
+
+interface Row {
+  id: number | string;
+  [key: string]: any; // Allows flexible key-value mapping
+}
+
+interface TableProps {
+  columns: Column[];
+  data: Row[];
+  searchPlaceholder?: string;
+  buttonLabel?: string;
+  onRowClick?: (row: Row) => void;
+  onButtonClick?: () => void;
+  onOperatorClick?: (
+    row: Row,
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => void;
+}
+
+const Table: React.FC<TableProps> = ({
   columns,
   data,
-  searchPlaceholder,
-  buttonLabel,
+  searchPlaceholder = "Search...",
+  buttonLabel = "Add",
   onRowClick,
   onButtonClick,
   onOperatorClick,
 }) => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 5;
 
   // Handle refresh
@@ -36,7 +59,10 @@ const Table = ({
   );
 
   // Handle operator click
-  const handleOperatorClick = (e, row) => {
+  const handleOperatorClick = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    row: Row
+  ) => {
     e.stopPropagation(); // Prevent row click
     if (onOperatorClick) onOperatorClick(row, e);
   };
@@ -48,7 +74,7 @@ const Table = ({
           <input
             type="text"
             placeholder={searchPlaceholder}
-            className="p-2 border rounded-lg focus:outline outline-2"
+            className="p-2 border border-[#e5e7eb] appearance-none outline-none rounded-lg focus:outline-none focus:ring-2 focus:ring-[#619B7D] text-sm text-gray-600 w-1/3"
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <button
@@ -73,7 +99,7 @@ const Table = ({
             {paginatedData.map((row) => (
               <tr
                 key={row.id}
-                className="border-b last:border-b-0 hover:bg-gray-100 cursor-pointer text-[13px] text-gray-600"
+                className="border-b border-[#e5e7eb] last:border-b-0 hover:bg-gray-100 cursor-pointer text-[13px] text-gray-600"
                 onClick={() => onRowClick && onRowClick(row)}
               >
                 {columns.map((col) => (
@@ -98,13 +124,12 @@ const Table = ({
         </table>
       </div>
       {/* Pagination and Refresh at Bottom */}
-
-      {/* <Pagination
+      <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={setCurrentPage}
         onRefresh={handleRefresh}
-      /> */}
+      />
     </div>
   );
 };

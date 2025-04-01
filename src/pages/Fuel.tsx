@@ -1,5 +1,5 @@
 import Layout from "../layouts/Layout";
-import VehicleRenewalTable from "../components/reminders/VehicleRenewalTable";
+import VehicleRenewalTable from "../components/fleet_management/reminders/VehicleRenewalTable";
 import FuelHistoryTable from "../components/fleet_management/fuel&energy/FuelHistoryTable";
 
 const tabs = ["Fuel History", "Charging History"];

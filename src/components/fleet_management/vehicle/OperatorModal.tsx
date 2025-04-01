@@ -1,4 +1,13 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, MutableRefObject } from "react";
+
+// Define the types for props
+interface OperatorModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onAssign: (operator: string) => void;
+  triggerRef: MutableRefObject<HTMLElement | null>; // Ref to the button triggering the modal
+  selectedOperator?: string | null; // Optional prop to track current selection
+}
 
 const operators = [
   "Jacob Silva",
@@ -8,18 +17,24 @@ const operators = [
   "Unassigned",
 ];
 
-const OperatorModal = ({
+const OperatorModal: React.FC<OperatorModalProps> = ({
   isOpen,
   onClose,
   onAssign,
-  triggerRef, // New prop to track the button that opened the modal
-  selectedOperator = null, // Optional prop to track current selection
+  triggerRef,
+  selectedOperator = null,
 }) => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedOp, setSelectedOp] = useState(selectedOperator);
-  const modalRef = useRef(null);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [selectedOp, setSelectedOp] = useState<string | null>(selectedOperator);
+  const modalRef = useRef<HTMLDivElement | null>(null);
 
-  const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
+  const [modalPosition, setModalPosition] = useState<{
+    top: number;
+    left: number;
+  }>({
+    top: 0,
+    left: 0,
+  });
 
   useEffect(() => {
     if (isOpen && triggerRef && triggerRef.current) {
@@ -35,8 +50,8 @@ const OperatorModal = ({
     op.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleBackdropClick = (e) => {
-    if (e.target.id === "backdrop") {
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).id === "backdrop") {
       onClose();
     }
   };
@@ -58,7 +73,7 @@ const OperatorModal = ({
     >
       <div
         ref={modalRef}
-        className="absolute bg-white rounded-lg shadow-lgborder w-[300px] -ml-[5%]"
+        className="absolute bg-white rounded-lg shadow-lg border w-[300px] -ml-[5%]"
         style={{
           top: `${modalPosition.top}px`,
           left: `${modalPosition.left}px`,
@@ -75,14 +90,13 @@ const OperatorModal = ({
         <ul className="max-h-40 overflow-auto px-3 mb-2">
           {filteredOperators.map((op) => (
             <div
-              // className=" bg-red-50 mb-1"
               className={`flex justify-between items-center rounded-lg mb-1 p-2 hover:bg-gray-100 cursor-pointer text-[13px] ${
                 selectedOp === op ? "bg-gray-200" : ""
               }`}
               onClick={() => setSelectedOp(op)}
               key={op}
             >
-              <li key={op}>{op}</li>
+              <li>{op}</li>
               <button
                 onClick={handleAssign}
                 disabled={!selectedOp}

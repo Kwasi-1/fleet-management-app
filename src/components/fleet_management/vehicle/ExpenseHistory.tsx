@@ -1,4 +1,4 @@
-import Table from "../fleet_management/Table";
+import Table from "../../common/Table";
 
 const ExpenseHistory = () => {
   const columns = [
