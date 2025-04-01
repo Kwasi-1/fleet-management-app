@@ -1,5 +1,5 @@
 import React from "react";
-import StatusText from "../StatusText";
+import StatusText from "../../common/StatusText";
 
 // Define the type for each order item
 interface Order {
