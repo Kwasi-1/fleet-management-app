@@ -1,4 +1,4 @@
-import GaugeChart from "./GaugeChart";
+import GaugeChart from "../GaugeChart";
 
 const OverallBreakdown = () => {
   // Example dynamic values (replace with real data if needed)

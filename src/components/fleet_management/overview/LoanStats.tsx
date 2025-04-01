@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import RangeBar from "./RangeBar";
+import RangeBar from "../RangeBar";
 
 const stats = [
   { label: "Total Vehicles", value: 124 },
@@ -48,14 +48,14 @@ const LoanStats = () => {
                 <h3 className="text-xl font-semibold">{value}</h3>
               </div>
               <div>
-                <p className="text-left">{percentage}%</p>
+                <p className="text-left text-[15px]">{percentage}%</p>
                 <RangeBar value={value} total={124} />
               </div>
             </div>
           );
         })}
       </div>
-      <p>Last Updated: {lastUpdated}</p>
+      <p className="text-sm">Last Updated: {lastUpdated}</p>
     </div>
   );
 };
