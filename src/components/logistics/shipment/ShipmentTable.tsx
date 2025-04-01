@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import Table from "./Table";
+import Table from "../../common/Table";
 
 const shipmentColumns = [
   { key: "id", label: "Shipment ID" },
