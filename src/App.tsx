@@ -1,4 +1,3 @@
-// index.js or App.js
 import "./index.css";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import Landing from "./pages/Landing";
@@ -7,7 +6,7 @@ import SideBar from "./components/common/Sidebar";
 import Shipment from "./pages/Shipment";
 import DriverDetails from "./pages/Drivers";
 import VehicleDetails from "./pages/Vehicles";
-import CreateShipment from "./pages/CreateShipment";
+// import CreateShipment from "./pages/CreateShipment";
 import Issues from "./pages/Issues";
 import Reminders from "./pages/Reminders";
 import Fuel from "./pages/Fuel";
@@ -49,7 +48,7 @@ function AppContent() {
           />
           <Route path="/fleet/vehicle" element={<Vehicles />} />
           <Route path="/fleet/vehicle/info" element={<VehicleDetails />} />
-          <Route path="/logistics/shipment/add" element={<CreateShipment />} />
+          {/* <Route path="/logistics/shipment/add" element={<CreateShipment />} /> */}
           <Route path="/fleet/issues" element={<Issues />} />
           <Route path="/fleet/reminders" element={<Reminders />} />
           <Route path="/fleet/reminders/info" element={<ReminderDetails />} />

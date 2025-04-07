@@ -3,7 +3,6 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import BusinessLayer from "./BusinessLayer";
 import GeocoderComponent from "./GeocoderComponent";
-import TruckSimulation from "./TruckSimulation";
 import DeliveryInfo from "./DeliveryInfo";
 import Navbar from "./Navbar";
 // import Geolocation from "./Geolocation";
@@ -172,7 +171,7 @@ const MapComponent = () => {
 
       <div className="h-[75vh] mx-10 relative">
         <BusinessLayer mapRef={mapRef} businesses={businesses} />
-        <TruckSimulation mapRef={mapRef} />
+        {/* <TruckSimulation mapRef={mapRef} /> */}
         <div
           id="map-container"
           ref={mapContainerRef}

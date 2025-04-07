@@ -1,6 +1,7 @@
-import { useNavigate } from "react-router-dom";
 import Table from "../../common/Table";
 import { Shipment } from "../../../types/shipmentTypes";
+import CreateShipmentModal from "../create_shipment/CreateShipmentModal";
+import { useState } from "react";
 
 interface Column {
   key: string;
@@ -124,21 +125,33 @@ const shipmentData: Shipment[] = [
 ];
 
 const ShipmentTable: React.FC<ShipmentTableProps> = ({ onShipmentClick }) => {
-  const navigate = useNavigate();
+  const [isCreateShipmentModalOpen, setIsCreateShipmentModalOpen] =
+    useState(false);
 
-  const handleButtonClick = () => {
-    navigate("/logistics/shipment/add");
+  const handleOpenModal = () => {
+    setIsCreateShipmentModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsCreateShipmentModalOpen(false);
   };
 
   return (
-    <Table
-      columns={shipmentColumns}
-      data={shipmentData}
-      searchPlaceholder="Search Shipments..."
-      buttonLabel="Add Shipment"
-      onButtonClick={handleButtonClick}
-      onRowClick={onShipmentClick}
-    />
+    <div>
+      <Table
+        columns={shipmentColumns}
+        data={shipmentData}
+        searchPlaceholder="Search Shipments..."
+        buttonLabel="Add Shipment"
+        onButtonClick={handleOpenModal}
+        onRowClick={onShipmentClick}
+      />
+
+      <CreateShipmentModal
+        isOpen={isCreateShipmentModalOpen}
+        onClose={handleCloseModal}
+      />
+    </div>
   );
 };
 
