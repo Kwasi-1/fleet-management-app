@@ -1,4 +1,3 @@
-
 // User Information Component
 interface Driver {
   name: string;

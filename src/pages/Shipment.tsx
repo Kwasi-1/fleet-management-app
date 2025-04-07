@@ -1,16 +1,17 @@
 import { useState } from "react";
 import ShipmentTable from "../components/logistics/shipment/ShipmentTable";
 import ShipmentDetails from "../components/logistics/shipment/ShipmentDetails";
+import { Shipment } from "../types/shipmentTypes"; // ⬅️ We'll define this next
 
-function Shipment() {
-  const [selectedShipment, setSelectedShipment] = useState(null);
+const ShipmentPage = () => {
+  const [selectedShipment, setSelectedShipment] = useState<Shipment | null>(
+    null
+  );
 
-  // Function to handle shipment click
-  const handleShipmentClick = (shipment: any) => {
+  const handleShipmentClick = (shipment: Shipment) => {
     setSelectedShipment(shipment);
   };
 
-  // Function to close the details panel
   const handleCloseDetails = () => {
     setSelectedShipment(null);
   };
@@ -31,6 +32,6 @@ function Shipment() {
       </div>
     </div>
   );
-}
+};
 
-export default Shipment;
+export default ShipmentPage;

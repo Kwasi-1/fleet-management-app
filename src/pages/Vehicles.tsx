@@ -3,20 +3,12 @@ import VehicleTable from "../components/fleet_management/vehicle/VehicleTable";
 import MeterHistory from "../components/fleet_management/vehicle/MeterHistory";
 import ExpenseHistory from "../components/fleet_management/vehicle/ExpenseHistory";
 
-const tabs = [
-  "Vehicle List",
-  "Vehicle Assignments",
-  "Meter History",
-  "Expense History",
-  "Replacement Analysis",
-];
+const tabs = ["Vehicle List", "Meter History", "Expense History"];
 
 const components = {
   "Vehicle List": <VehicleTable />,
-  "Vehicle Assignments": <p>Vehicle Assignments content here</p>,
   "Meter History": <MeterHistory />,
   "Expense History": <ExpenseHistory />,
-  "Replacement Analysis": <p>Replacement Analysis content here</p>,
 };
 
 const Vehicles = () => {

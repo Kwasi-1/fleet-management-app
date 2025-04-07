@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import EditButton from "../components/common/EditButton";
-// import ServiceReminderModal
 import StatusText from "../components/common/StatusText";
+import ServiceReminderModal from "../components/fleet_management/reminders/ServiceReminderModal";
 
 // Define types for reminderDetails and related objects
 interface ReminderDetails {
@@ -220,7 +220,7 @@ const ReminderDetails: React.FC = () => {
       <ServiceReminderModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        reminder={reminderDetails}
+        // reminder={reminderDetails}
         isEditMode={true}
       />
     </div>

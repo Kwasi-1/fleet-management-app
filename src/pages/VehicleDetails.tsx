@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import MapActivity from "../components/fleet_management/driver/MapActivity";
 import AIRecommendation from "../components/fleet_management/driver/AIRecommendation";
-import Alerts from "../components/vehicle/Alerts";
+import Alerts from "../components/fleet_management/vehicle/Alerts";
 import Properties from "../components/fleet_management/driver/Properties";
-import VehicleDocuments from "../components/vehicle/VehicleDocuments";
+import VehicleDocuments from "../components/fleet_management/vehicle/VehicleDocuments";
 import EditButton from "../components/common/EditButton";
-import VehicleModal from "../components/vehicle/VehicleModal";
+import VehicleModal from "../components/fleet_management/vehicle/VehicleModal";
 import { useLocation } from "react-router";
-import VehicleImage from "../components/vehicle/VehicleImage";
+import VehicleImage from "../components/fleet_management/vehicle/VehicleImage";
 
 const VehicleDetails = () => {
-  const location = useLocation(); // ✅ Get navigation state
+  const location = useLocation();
   const selectedVehicle = location.state?.vehicle;
   const [isModalOpen, setIsModalOpen] = useState(false);
 

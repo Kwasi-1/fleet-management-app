@@ -37,6 +37,18 @@ const OperatorModal: React.FC<OperatorModalProps> = ({
   });
 
   useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
     if (isOpen && triggerRef && triggerRef.current) {
       const triggerRect = triggerRef.current.getBoundingClientRect();
       setModalPosition({
@@ -73,7 +85,7 @@ const OperatorModal: React.FC<OperatorModalProps> = ({
     >
       <div
         ref={modalRef}
-        className="absolute bg-white rounded-lg shadow-lg border w-[300px] -ml-[5%]"
+        className="absolute bg-white rounded-lg shadow-lg w-[300px] -ml-[5%]"
         style={{
           top: `${modalPosition.top}px`,
           left: `${modalPosition.left}px`,

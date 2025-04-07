@@ -5,6 +5,13 @@ import ServiceRemindersTable from "../components/fleet_management/reminders/Serv
 
 const tabs = ["Service Reminder", "Vehicle Renewal", "Contact Renewal"];
 
+const dashboardStats = [
+  { label: "Overdue Vehicles", value: "3" },
+  { label: "Due Soon Vehicles", value: "1" },
+  { label: "Snoozed Vehicles", value: "0" },
+  { label: "Average Compliance", value: "44%" },
+];
+
 const components = {
   "Service Reminder": <ServiceRemindersTable />,
   "Vehicle Renewal": <VehicleRenewalTable />,
@@ -17,7 +24,8 @@ const Reminders = () => {
       title="Reminders"
       tabs={tabs}
       components={components}
-      showDashboard={false}
+      showDashboard={true}
+      defaultDashboardData={dashboardStats}
     />
   );
 };

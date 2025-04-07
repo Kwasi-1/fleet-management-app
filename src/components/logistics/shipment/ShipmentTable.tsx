@@ -1,53 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import Table from "../../common/Table";
+import { Shipment } from "../../../types/shipmentTypes";
 
-// Define types for shipment progress and shipment data
-interface ShipmentProgress {
-  title: string;
-  location?: string;
-  address?: string;
-  time: string;
-  iconColor: string;
-  status: {
-    label?: string;
-    color?: string;
-    bgColor?: string;
-  } | null;
-}
-
-interface LastKnownPosition {
-  location: string;
-  timestamp: string;
-}
-
-interface ETA {
-  location: string;
-  timestamp: string;
-}
-
-interface Shipment {
-  id: string;
-  order: string;
-  pickup: string;
-  destination: string;
-  pickupCoordinates: [number, number];
-  destinationCoordinates: [number, number];
-  date: string;
-  status: string;
-  reference: string;
-  primaryReference: string;
-  lastKnownPosition: LastKnownPosition;
-  eta: ETA;
-  progress: ShipmentProgress[];
-}
-
-// Define columns type
 interface Column {
   key: string;
   label: string;
 }
 
-// Define props type for the ShipmentTable component
 interface ShipmentTableProps {
   onShipmentClick: (shipment: Shipment) => void;
 }
@@ -61,14 +20,15 @@ const shipmentColumns: Column[] = [
   { key: "status", label: "Status" },
 ];
 
+// Ideally you should fetch this data from an API
 const shipmentData: Shipment[] = [
   {
     id: "SHP-301",
     order: "ORD-789",
     pickup: "Accra",
     destination: "Kumasi",
-    pickupCoordinates: [-118.2437, 34.0522], // Los Angeles
-    destinationCoordinates: [-87.6298, 41.8781], // Chicago
+    pickupCoordinates: [-118.2437, 34.0522],
+    destinationCoordinates: [-87.6298, 41.8781],
     date: "20/03/2025",
     status: "In Transit",
     reference: "ME #12345678",
@@ -164,7 +124,7 @@ const shipmentData: Shipment[] = [
 ];
 
 const ShipmentTable: React.FC<ShipmentTableProps> = ({ onShipmentClick }) => {
-  const navigate = useNavigate(); // ✅ Hook must be inside the function body
+  const navigate = useNavigate();
 
   const handleButtonClick = () => {
     navigate("/logistics/shipment/add");
@@ -176,8 +136,8 @@ const ShipmentTable: React.FC<ShipmentTableProps> = ({ onShipmentClick }) => {
       data={shipmentData}
       searchPlaceholder="Search Shipments..."
       buttonLabel="Add Shipment"
-      onButtonClick={handleButtonClick} // Pass the click handler
-      onRowClick={onShipmentClick} // Pass the click handler
+      onButtonClick={handleButtonClick}
+      onRowClick={onShipmentClick}
     />
   );
 };
