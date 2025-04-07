@@ -1,12 +1,26 @@
-import { Icon } from "@iconify/react/dist/iconify.js";
+import { Icon } from "@iconify/react";
 import { useState } from "react";
 
-function SelectField({ label, name, options, value, onChange }) {
+interface SelectFieldProps {
+  label: string;
+  name: string;
+  options: string[];
+  value: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const SelectField: React.FC<SelectFieldProps> = ({
+  label,
+  name,
+  options,
+  value,
+  onChange,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => setIsOpen((prev) => !prev);
 
-  const handleOptionClick = (option) => {
+  const handleOptionClick = (option: string) => {
     onChange({ target: { name, value: option } });
     setIsOpen(false);
   };
@@ -45,6 +59,6 @@ function SelectField({ label, name, options, value, onChange }) {
       )}
     </div>
   );
-}
+};
 
 export default SelectField;

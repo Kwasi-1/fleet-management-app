@@ -2,16 +2,17 @@ import React from "react";
 import ModalLayout from "../../layouts/ModalLayout";
 
 // Define the shape of the invoice object
+// InvoiceModal.tsx
 interface Invoice {
   id: string;
   customer: string;
   creation: string;
-  paidAmount: number;
-  outstanding: number;
+  paidAmount: string; // ✅ match source
+  outstanding: string; // ✅ match source
   status: "Paid" | "Unpaid" | string;
-  quantity: number;
-  unitPrice: number;
-  totalAmount: number;
+  quantity?: number;
+  unitPrice?: number;
+  totalAmount?: number;
 }
 
 // Define the component props

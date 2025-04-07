@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { ArcElement, Chart as ChartJS, Legend, Title, Tooltip } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 
