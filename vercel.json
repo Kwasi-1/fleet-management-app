@@ -1,4 +1,3 @@
 {
   "buildCommand": "npm run build -- --force",
-  "ignoreBuildErrors": true
 }
