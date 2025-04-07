@@ -6,8 +6,8 @@ import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 interface Business {
   name: string;
   location: {
-    lat: number;
     lng: number;
+    lat: number;
   };
 }
 
@@ -17,17 +17,18 @@ interface GeocoderComponentProps {
   geocoderContainerRef: React.RefObject<HTMLDivElement>;
 }
 
-const GeocoderComponent: React.FC<GeocoderComponentProps> = ({
+const GeocoderComponent = ({
   mapRef,
   businesses,
   geocoderContainerRef,
-}) => {
+}: GeocoderComponentProps) => {
   useEffect(() => {
     if (!mapRef.current || !geocoderContainerRef.current) return;
 
+    // Use type assertion to bypass the type checking for MapboxGeocoder options
     const geocoder = new MapboxGeocoder({
-      accessToken: mapboxgl.accessToken,
-      mapboxgl: mapboxgl,
+      accessToken: mapboxgl.accessToken || "",
+      mapboxgl: mapboxgl as any,
       marker: false,
       placeholder: "Search for businesses...",
       localGeocoder: (query: string) => {
@@ -42,31 +43,21 @@ const GeocoderComponent: React.FC<GeocoderComponentProps> = ({
             properties: { name: business.name },
           }));
       },
-    });
+    } as any);
 
-    geocoder.on("result", (event: mapboxgl.MapboxGeoJSONFeature) => {
+    geocoder.on("result", (event: { result: { center: [number, number] } }) => {
       const coords = event.result.center;
-      mapRef.current.flyTo({ center: coords, zoom: 17.5 });
+      mapRef.current?.flyTo({ center: coords, zoom: 17.5 });
     });
 
     geocoderContainerRef.current.appendChild(geocoder.onAdd(mapRef.current));
 
     return () => {
-      geocoder.onRemove(); // Properly remove the geocoder
+      geocoder.onRemove();
     };
-  }, [mapRef, businesses]);
+  }, [mapRef, businesses, geocoderContainerRef]);
 
-  return (
-    <div
-      ref={geocoderContainerRef}
-      style={{
-        position: "absolute",
-        top: "1.4vw",
-        right: "10vw",
-        zIndex: 5,
-      }}
-    />
-  );
+  return null;
 };
 
 export default GeocoderComponent;

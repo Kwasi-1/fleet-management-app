@@ -77,7 +77,7 @@ const ShipmentMap: React.FC<ShipmentMapProps> = ({ pickup, destination }) => {
   return (
     <div
       ref={mapContainer}
-      className="w-full h-[200px] rounded-md border"
+      className="w-full h-[200px] rounded-md border border-[#e0e6e9]"
       style={{ minHeight: "200px" }}
     />
   );

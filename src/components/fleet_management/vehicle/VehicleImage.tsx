@@ -1,11 +1,30 @@
-// components/vehicle/VehicleImage.jsx
 import { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 
-const VehicleImage = ({ make, model, year, className }) => {
-  const [imageUrl, setImageUrl] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+interface VehicleImageProps {
+  make: string;
+  model: string;
+  year: string | number;
+  className?: string; // className is optional
+}
+
+interface PixabayResponse {
+  hits: { webformatURL: string }[];
+}
+
+interface EdmundsResponse {
+  photos: { url: string }[];
+}
+
+const VehicleImage: React.FC<VehicleImageProps> = ({
+  make,
+  model,
+  year,
+  className = "",
+}) => {
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchVehicleImage = async () => {
@@ -18,7 +37,7 @@ const VehicleImage = ({ make, model, year, className }) => {
         );
 
         if (edmundsResponse.ok) {
-          const data = await edmundsResponse.json();
+          const data: EdmundsResponse = await edmundsResponse.json();
           if (data.photos && data.photos.length > 0) {
             setImageUrl(data.photos[0].url);
             return;
@@ -31,7 +50,7 @@ const VehicleImage = ({ make, model, year, className }) => {
         );
 
         if (pixabayResponse.ok) {
-          const data = await pixabayResponse.json();
+          const data: PixabayResponse = await pixabayResponse.json();
           if (data.hits && data.hits.length > 0) {
             setImageUrl(data.hits[0].webformatURL);
             return;

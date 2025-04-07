@@ -42,9 +42,7 @@ const VehicleDocuments: React.FC = () => {
             key={index}
             className="p-4 rounded-lg min-w-[320px] border border-gray-200"
           >
-            <h3 className="text-sm font-semibold border-b pb-2">
-              {match.title}
-            </h3>
+            <h3 className="text-sm font-semibold pb-2">{match.title}</h3>
 
             {/* Clickable Image */}
             <div
@@ -65,7 +63,7 @@ const VehicleDocuments: React.FC = () => {
       {/* Full-Screen Image Modal */}
       {selectedImage && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"
+          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
           onClick={() => setSelectedImage(null)}
         >
           <div className="relative max-w-3xl w-full p-4">
@@ -75,7 +73,7 @@ const VehicleDocuments: React.FC = () => {
               className="w-full h-auto max-h-[85vh] object-contain rounded-lg"
             />
             <button
-              className="fixed top-4 right-4 text-white text-lg font-bold bg-gray-800 px-3 py-1 rounded-full"
+              className="fixed top-4 right-4 text-white text-lg font-bold bg-gray-600 px-3 py-1 rounded-full"
               onClick={() => setSelectedImage(null)}
             >
               ✕
