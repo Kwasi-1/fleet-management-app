@@ -1,36 +1,49 @@
+import { useState } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import logo from "../../assets/foundry_logo.png";
 import logoWhite from "../../assets/foundry_logo_white.png";
 import { NavLink } from "react-router";
 
-// Navigation links array (easier to edit)
-// const navLinks = ["Dashboard", ["Fleet", "/fleet" ], "Order Management", "Logistics", "Invoices"];
+// Define the type for the navLinks array
+interface NavLinkItem {
+  to: string;
+  label: string;
+}
 
-const navLinks = [
+const navLinks: NavLinkItem[] = [
   { to: "/", label: "Dashboard" },
   { to: "/fleet", label: "Fleet" },
-  { to: "/order_Managementg", label: "Order Management" },
+  { to: "/order_Management", label: "Order Management" },
   { to: "/logistics", label: "Logistics" },
   { to: "/invoices", label: "Invoices" },
+  { to: "/locations", label: "Locations" },
 ];
 
+// Define props for the Navbar component
 interface NavbarProps {
   onSearchClick: () => void;
   onToggleTheme: () => void;
   isDarkMode: boolean;
 }
 
-const Navbar = ({ onSearchClick, onToggleTheme, isDarkMode }: NavbarProps) => {
+const Navbar: React.FC<NavbarProps> = ({
+  onSearchClick,
+  onToggleTheme,
+  isDarkMode,
+}) => {
+  const [menuOpen, setMenuOpen] = useState<boolean>(false);
+
   return (
-    <nav className=" h-[10vh] px-8 py-4 w-[90%] mx-auto flex items-center justify-between ">
-      {/* Left - Navigation Links */}
-      <div className="flex items-center space-x-10">
+    <nav className="px-4 py-3 w-[95%] h-[10vh] md:w-[90%] mx-auto flex items-center justify-between dark:border-white/10 relative z-50">
+      {/* Left - Logo */}
+      <div className="flex items-center space-x-4">
         <img
           src={isDarkMode ? logoWhite : logo}
           alt="logo"
           className="w-4 h-5"
         />
-        <ul className="flex space-x-10 text-sm font-medium ">
+        {/* Desktop Links */}
+        <ul className="hidden lg:flex space-x-6 text-sm font-medium">
           {navLinks.map((link, index) => (
             <NavLink
               to={link.to}
@@ -43,32 +56,65 @@ const Navbar = ({ onSearchClick, onToggleTheme, isDarkMode }: NavbarProps) => {
         </ul>
       </div>
 
-      {/* Right - Icons */}
-      <div className="flex space-x-4">
+      {/* Right - Icons & Mobile Toggle */}
+      <div className="flex items-center space-x-4">
+        {/* Search */}
         <button
           onClick={onSearchClick}
-          className={`p-3 rounded-md transition duration-300 ${
-            isDarkMode ? "hover:bg-white" : "hover:bg-gray-100"
+          className={`p-3 rounded-md transition duration-300 group ${
+            isDarkMode ? "hover:bg-white/10" : "hover:bg-gray-100"
           }`}
         >
           <Icon
             icon="carbon:search"
-            className="text-lg cursor-pointer  hover:text-gray-500"
+            className="text-lg cursor-pointer hover:text-gray-500 transition"
           />
         </button>
 
+        {/* Theme Toggle */}
         <button
           onClick={onToggleTheme}
-          className={`p-3 rounded-md group transition duration-300 ${
-            isDarkMode ? "hover:bg-white" : "group-hover:bg-gray-100"
+          className={`p-3 rounded-md transition duration-300 group ${
+            isDarkMode ? "hover:bg-white/10" : "hover:bg-gray-100"
           }`}
         >
           <Icon
             icon={isDarkMode ? "mynaui:moon" : "iconoir:sun-light"}
-            className="text-lg cursor-pointer  group-hover:text-gray-500"
+            className="text-lg group-hover:text-gray-500 transition"
+          />
+        </button>
+
+        {/* Mobile Menu Toggle */}
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="lg:hidden p-2 rounded-md hover:bg-gray-100 dark:hover:bg-white/10"
+        >
+          <Icon
+            icon={menuOpen ? "ic:round-close" : "ci:hamburger-md"}
+            className="text-2xl"
           />
         </button>
       </div>
+
+      {/* Mobile Menu */}
+      {menuOpen && (
+        <div
+          className={`absolute top-[100%] h-sc left-0 w-full ${
+            isDarkMode ? "bg-[#333333]" : "bg-white"
+          } lg:hidden py-4 px-6 space-y-4`}
+        >
+          {navLinks.map((link, index) => (
+            <NavLink
+              to={link.to}
+              key={index}
+              onClick={() => setMenuOpen(false)}
+              className="block hover:text-gray-500 dark:hover:text-gray-400 cursor-pointer"
+            >
+              {link.label}
+            </NavLink>
+          ))}
+        </div>
+      )}
     </nav>
   );
 };
