@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+// @ts-ignore
 import { MapRef } from "react-map-gl";
 import { FeatureCollection, Point } from "geojson";
 

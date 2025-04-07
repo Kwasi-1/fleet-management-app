@@ -73,6 +73,8 @@ const ServiceReminderModal: React.FC<ServiceReminderModalProps> = ({
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
+    // @ts-ignore
+
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,

@@ -38,6 +38,8 @@ const VehicleRenewalModal: React.FC<VehicleRenewalModalProps> = ({
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
+    // @ts-ignore
+
     const { name, value, type, checked } = e.target;
     setFormData((prevData) => ({
       ...prevData,

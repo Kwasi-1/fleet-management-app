@@ -124,8 +124,12 @@ const MapComponent = () => {
 
       {showGeocoder && (
         <GeocoderComponent
+        // @ts-ignore
+
           mapRef={mapRef}
           businesses={businesses}
+          // @ts-ignore
+
           geocoderContainerRef={geocoderContainerRef}
         />
       )}

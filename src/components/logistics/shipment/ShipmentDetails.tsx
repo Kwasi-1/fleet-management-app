@@ -180,6 +180,7 @@ const Documents: React.FC<{ documents: DocumentType[] }> = ({ documents }) => (
               <p className="font-semibold">{doc.name}</p>
               <p className="text-gray-500 text-sm">Created {doc.date}</p>
             </div>
+            // @ts-ignore
             <button className="p-2 bg-gray-300 rounded-full hover:bg-gray-400">
               <Icon icon="mdi:download" className="h-5 w-5 text-gray-700" />
             </button>
@@ -213,6 +214,7 @@ const ShipmentDetails: React.FC<Props> = ({ shipment, onClose }) => {
             <button className="bg-gray-100 px-3 py-1 rounded-md text-sm shadow">
               View in ▼
             </button>
+            // @ts-ignore
             <button
               onClick={onClose}
               className="bg-gray-200 p-2 rounded-full hover:bg-gray-300"

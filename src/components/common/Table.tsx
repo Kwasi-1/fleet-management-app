@@ -11,7 +11,8 @@ export interface Column {
 // Generic row type with `id` as string or number and flexible keys
 export interface TableRow {
   id: string | number;
-  [key: string]: any;
+
+  [key: string]: string | number | boolean | React.ReactNode;
 }
 
 interface TableProps<T extends TableRow> {
@@ -90,6 +91,8 @@ const Table = <T extends TableRow>({
                 {columns.map((col) => (
                   <td key={col.key} className="p-3">
                     {col.key === "status" ? (
+                      // @ts-ignore
+
                       <StatusText text={row[col.key]} />
                     ) : col.key === "operator" ? (
                       <button

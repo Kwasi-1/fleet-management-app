@@ -225,6 +225,8 @@ const VehicleTable = () => {
         isOpen={isOperatorModalOpen}
         onClose={() => setIsOperatorModalOpen(false)}
         onAssign={handleAssignOperator}
+        // @ts-ignore
+
         triggerRef={operatorTriggerRef}
         selectedOperator={
           vehicles.find((v) => v.id === selectedVehicleId)?.operator

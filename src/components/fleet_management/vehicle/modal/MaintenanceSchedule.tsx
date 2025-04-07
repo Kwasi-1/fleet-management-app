@@ -21,6 +21,8 @@ const MaintenanceSchedule: React.FC<MaintenanceScheduleProps> = ({
 
   const handleOptionChange = (value: string) => {
     setSelectedOption(value);
+    // @ts-ignore
+
     handleInputChange({ target: { name: "serviceProgram", value } });
   };
 

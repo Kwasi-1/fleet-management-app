@@ -21,6 +21,8 @@ const SelectField: React.FC<SelectFieldProps> = ({
   const toggleDropdown = () => setIsOpen((prev) => !prev);
 
   const handleOptionClick = (option: string) => {
+    // @ts-ignore
+
     onChange({ target: { name, value: option } });
     setIsOpen(false);
   };

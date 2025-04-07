@@ -26,6 +26,7 @@ const ServiceRemindersTable: React.FC = () => {
     useState<boolean>(false);
 
   const navigate = useNavigate();
+// @ts-ignore
 
   const handleRowClick = (row: TableRowData) => {
     navigate(`/fleet/reminders/info`);

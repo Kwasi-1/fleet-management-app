@@ -28,7 +28,7 @@ const GeocoderComponent = ({
     // Use type assertion to bypass the type checking for MapboxGeocoder options
     const geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken || "",
-      mapboxgl: mapboxgl as any,
+      mapboxgl: mapboxgl,
       marker: false,
       placeholder: "Search for businesses...",
       localGeocoder: (query: string) => {
@@ -43,7 +43,7 @@ const GeocoderComponent = ({
             properties: { name: business.name },
           }));
       },
-    } as any);
+    });
 
     geocoder.on("result", (event: { result: { center: [number, number] } }) => {
       const coords = event.result.center;

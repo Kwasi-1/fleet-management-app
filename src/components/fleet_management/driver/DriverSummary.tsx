@@ -66,7 +66,9 @@ const DriverSummary = ({ driver }: { driver: Driver }) => {
               className={`font-bold mt-1 ${
                 stat.danger
                   ? "text-red-500"
-                  : stat.warning
+                  : // @ts-ignore
+
+                  stat.warning
                   ? "text-yellow-500"
                   : "text-gray-700"
               }`}

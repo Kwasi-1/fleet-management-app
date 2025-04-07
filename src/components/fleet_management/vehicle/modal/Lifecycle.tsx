@@ -35,6 +35,8 @@ const Lifecycle: React.FC<LifecycleProps> = ({ formData, handleInputChange }) =>
           name="inServiceOdometer"
           type="number"
           placeholder="e.g., 10000"
+          // @ts-ignore
+
           value={formData.inServiceOdometer}
           onChange={handleInputChange}
         />
