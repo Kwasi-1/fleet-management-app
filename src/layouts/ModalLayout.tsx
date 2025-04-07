@@ -1,4 +1,4 @@
-import React, { useState, ReactNode, MouseEvent } from "react";
+import React, { useState, ReactNode, MouseEvent, useEffect } from "react";
 
 interface ModalLayoutProps {
   isOpen: boolean;
@@ -22,6 +22,18 @@ const ModalLayout: React.FC<ModalLayoutProps> = ({
 
   const handleTabClick = (index: number) => setActiveTab(index);
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto"; // Clean up on unmount
+    };
+  }, [isOpen]);
+
   const handleBackdropClick = (e: MouseEvent<HTMLDivElement>) => {
     if ((e.target as HTMLElement).id === "backdrop") {
       onClose();
@@ -33,7 +45,7 @@ const ModalLayout: React.FC<ModalLayoutProps> = ({
   return (
     <div
       id="backdrop"
-      className="fixed inset-0 bg-black bg-opacity-50 z-50"
+      className="fixed inset-0 bg-black/50 z-50"
       onClick={handleBackdropClick}
     >
       <div
@@ -122,7 +134,7 @@ const ModalLayout: React.FC<ModalLayoutProps> = ({
                 onClick={onClose}
                 className="px-4 py-2 bg-[#619B7D] text-white rounded-xl"
               >
-                Close
+                Save
               </button>
             )}
           </div>

@@ -1,8 +1,37 @@
+import { useState } from "react";
+import { useNavigate } from "react-router";
 import Table from "../../common/Table";
+import ServiceReminderModal from "./ServiceReminderModal";
 
-const ServiceRemindersTable = () => {
-  // Define columns for the table
-  const columns = [
+// Types
+interface TableColumn {
+  key: string;
+  label: string;
+}
+
+interface TableRowData {
+  id: number;
+  asset: string;
+  serviceTask: string;
+  status: string;
+  nextDue: string;
+  activeWorkOrder: string;
+  lastCompleted: string;
+  compliance: string;
+  watchers: string;
+}
+
+const ServiceRemindersTable: React.FC = () => {
+  const [isServiceReminderModalOpen, setIsServiceReminderModalOpen] =
+    useState<boolean>(false);
+
+  const navigate = useNavigate();
+
+  const handleRowClick = (row: TableRowData) => {
+    navigate(`/fleet/reminders/info`);
+  };
+
+  const columns: TableColumn[] = [
     { key: "asset", label: "Asset" },
     { key: "serviceTask", label: "Service Task" },
     { key: "status", label: "Status" },
@@ -13,8 +42,7 @@ const ServiceRemindersTable = () => {
     { key: "watchers", label: "Watchers" },
   ];
 
-  // Sample data for the table
-  const data = [
+  const data: TableRowData[] = [
     {
       id: 1,
       asset: "3100 [2014 Chevrolet Express Cargo]",
@@ -83,6 +111,14 @@ const ServiceRemindersTable = () => {
     },
   ];
 
+  const handleOpenModal = () => {
+    setIsServiceReminderModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsServiceReminderModalOpen(false);
+  };
+
   return (
     <div>
       <Table
@@ -90,8 +126,13 @@ const ServiceRemindersTable = () => {
         data={data}
         searchPlaceholder="Search service reminders..."
         buttonLabel="Add Service Reminder"
-        onRowClick={(row) => console.log("Clicked Row:", row)}
-        onButtonClick={() => console.log("Add Service Reminder Clicked")}
+        onRowClick={handleRowClick}
+        onButtonClick={handleOpenModal}
+      />
+      <ServiceReminderModal
+        isOpen={isServiceReminderModalOpen}
+        onClose={handleCloseModal}
+        isEditMode={false}
       />
     </div>
   );

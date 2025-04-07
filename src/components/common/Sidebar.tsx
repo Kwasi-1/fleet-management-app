@@ -117,44 +117,44 @@ const MenuItems = () => [
     sublinks: [
       {
         title: "Overview",
-        icon: "hugeicons:truck",
+        icon: "clarity:dashboard-line",
         link: "/fleet",
       },
       {
         title: "Drivers",
-        icon: "hugeicons:truck",
+        icon: "mdi:drivers-license-outline",
         link: "/fleet/drivers",
       },
       {
         title: "Vehicles",
-        icon: "hugeicons:truck",
+        icon: "fluent:vehicle-car-20-regular",
         link: "/fleet/vehicle",
         parent: ["Vehicles", false],
       },
       {
         title: "Fuel & Energy",
-        icon: "hugeicons:truck",
+        icon: "clarity:fuel-line",
         link: "/fleet/fuel",
         parent: ["Fuel & Energy", false],
         sublinks: [],
       },
       {
         title: "Reminders",
-        icon: "hugeicons:truck",
+        icon: "hugeicons:apple-reminder",
         link: "/fleet/reminders",
         parent: ["reminders", false],
         sublinks: [],
       },
       {
         title: "Issues",
-        icon: "hugeicons:truck",
+        icon: "iconoir:wifi-issue",
         link: "/fleet/issues",
         parent: ["issues", false],
         sublinks: [],
       },
       {
         title: "Service",
-        icon: "hugeicons:truck",
+        icon: "fluent-mdl2:service-off",
         link: "/fleet/service",
         parent: ["service", false],
         sublinks: [],
@@ -175,8 +175,13 @@ const MenuItems = () => [
     parent: ["logistics", false],
     sublinks: [
       {
+        title: "Overview",
+        icon: "clarity:dashboard-line",
+        link: "/logistics",
+      },
+      {
         title: "Shipment",
-        icon: "hugeicons:truck",
+        icon: "emojione-monotone:package",
         link: "/logistics/shipment",
       },
     ],
@@ -190,7 +195,7 @@ const MenuItems = () => [
   },
   {
     title: "Locations",
-    icon: "hugeicons:wallet-add-01",
+    icon: "mdi:locations-outline",
     link: "/locations",
     parent: ["locations", false],
     sublinks: [],

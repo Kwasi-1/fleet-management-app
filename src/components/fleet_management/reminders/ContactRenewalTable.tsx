@@ -1,6 +1,19 @@
+import { useState } from "react";
 import Table from "../../common/Table";
+import ContactRenewalModal from "./ContactRenewalModal";
 
 const ContactRenewalTable = () => {
+  const [isContactRenewalModalOpen, setIsContactRenewalModalOpen] =
+    useState(false);
+
+  const handleOpenContactRenewalModal = () => {
+    setIsContactRenewalModalOpen(true);
+  };
+
+  const handleCloseContactRenewalModal = () => {
+    setIsContactRenewalModalOpen(false);
+  };
+
   // Define columns
   const columns = [
     { key: "contact", label: "Contact" },
@@ -45,8 +58,13 @@ const ContactRenewalTable = () => {
         data={data}
         searchPlaceholder="Search contact renewal reminders..."
         buttonLabel="Add Contact Renewal Reminder"
-        onRowClick={(row) => console.log("Clicked Row:", row)}
-        onButtonClick={() => console.log("Add Contact Renewal Clicked")}
+        onButtonClick={handleOpenContactRenewalModal} // Open modal on button click
+      />
+
+      {/* Modal component */}
+      <ContactRenewalModal
+        isOpen={isContactRenewalModalOpen}
+        onClose={handleCloseContactRenewalModal}
       />
     </div>
   );

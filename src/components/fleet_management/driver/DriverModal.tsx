@@ -1,8 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, ChangeEvent } from "react";
 import ModalLayout from "../../../layouts/ModalLayout";
 import InputField from "../../common/InputField";
 
-interface DriverFormData {
+// Types
+interface Driver {
+  name?: string;
+  phone?: string;
+  license?: string;
+  licenseType?: string;
+}
+
+interface DriverModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  selectedDriver?: Driver | null;
+}
+
+interface FormData {
   firstName: string;
   lastName: string;
   mobilePhone: string;
@@ -17,13 +31,12 @@ interface DriverFormData {
   group: string;
 }
 
-interface DriverModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-const DriverModal: React.FC<DriverModalProps> = ({ isOpen, onClose }) => {
-  const [formData, setFormData] = useState<DriverFormData>({
+const DriverModal: React.FC<DriverModalProps> = ({
+  isOpen,
+  onClose,
+  selectedDriver,
+}) => {
+  const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
     mobilePhone: "",
@@ -38,12 +51,48 @@ const DriverModal: React.FC<DriverModalProps> = ({ isOpen, onClose }) => {
     group: "",
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    if (selectedDriver) {
+      const [firstName = "", lastName = ""] =
+        selectedDriver.name?.split(" ") || [];
+      setFormData({
+        firstName,
+        lastName,
+        mobilePhone: selectedDriver.phone || "",
+        email: "",
+        dateOfBirth: "",
+        startDate: "",
+        leaveDate: "",
+        licenseNumber: selectedDriver.license || "",
+        licenseClass: selectedDriver.licenseType || "",
+        hourlyRate: "",
+        profilePhoto: null,
+        group: "",
+      });
+    } else {
+      setFormData({
+        firstName: "",
+        lastName: "",
+        mobilePhone: "",
+        email: "",
+        dateOfBirth: "",
+        startDate: "",
+        leaveDate: "",
+        licenseNumber: "",
+        licenseClass: "",
+        hourlyRate: "",
+        profilePhoto: null,
+        group: "",
+      });
+    }
+  }, [selectedDriver]);
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     setFormData((prev) => ({ ...prev, profilePhoto: file }));
   };
@@ -52,7 +101,7 @@ const DriverModal: React.FC<DriverModalProps> = ({ isOpen, onClose }) => {
     <ModalLayout
       isOpen={isOpen}
       onClose={onClose}
-      title="Driver Details"
+      title={selectedDriver ? "Edit Driver" : "Add Driver"}
       description="Fill in the driver's information"
       tabs={["Basic Details", "Personal Details"]}
     >

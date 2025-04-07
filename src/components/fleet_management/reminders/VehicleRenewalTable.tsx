@@ -1,6 +1,19 @@
+import { useState } from "react";
 import Table from "../../common/Table";
+import VehicleRenewalModal from "./VehicleRenewalModal";
 
 const VehicleRenewalTable = () => {
+  const [isVehicleRenewalModalOpen, setIsVehicleRenewalModalOpen] =
+    useState(false);
+
+  const handleOpenVehicleRenewalModal = () => {
+    setIsVehicleRenewalModalOpen(true);
+  };
+
+  const handleVehicleCloseRenewalModal = () => {
+    setIsVehicleRenewalModalOpen(false);
+  };
+
   // Define columns
   const columns = [
     { key: "asset", label: "Asset" },
@@ -85,8 +98,13 @@ const VehicleRenewalTable = () => {
         data={data}
         searchPlaceholder="Search asset renewal reminders..."
         buttonLabel="Add Asset Renewal Reminder"
-        onRowClick={(row) => console.log("Clicked Row:", row)}
-        onButtonClick={() => console.log("Add Asset Renewal Clicked")}
+        onButtonClick={handleOpenVehicleRenewalModal} // Open modal on button click
+      />
+
+      {/* Modal component */}
+      <VehicleRenewalModal
+        isOpen={isVehicleRenewalModalOpen}
+        onClose={handleVehicleCloseRenewalModal}
       />
     </div>
   );
