@@ -37,7 +37,6 @@ const ShipmentTrackingTable = () => {
       columns={columns}
       data={data}
       searchPlaceholder="Search past due not delivered..."
-      buttonLabel="Add filter"
     />
   );
 };
