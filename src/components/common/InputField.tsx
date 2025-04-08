@@ -1,5 +1,5 @@
 interface InputFieldProps {
-  label: string;
+  label?: string;
   name: string;
   type?: string;
   placeholder?: string;
@@ -17,9 +17,11 @@ function InputField({
 }: InputFieldProps) {
   return (
     <div className="relative">
-      <label className="bg-white px-1 text-[11px] font-semibold text-gray-500">
-        {label.toUpperCase()}
-      </label>
+      {label && (
+        <label className="bg-white px-1 text-[11px] font-semibold text-gray-500">
+          {label.toUpperCase()}
+        </label>
+      )}
       <input
         type={type}
         name={name}

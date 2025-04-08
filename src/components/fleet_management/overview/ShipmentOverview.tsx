@@ -107,21 +107,21 @@ const ShipmentOverview: React.FC = () => {
   });
 
   return (
-    <div className="p-4 bg-[#e0e6e930] w-full rounded-xl border border-[#e0e6e930]">
-      <h1 className="text-gray-600 capitalize font-semibold text-lg mb-4">
+    <div className="p-4 bg-[#e0e6e930] w-full h-full rounded-xl border border-[#e0e6e930]">
+      <h1 className="text-gray-600 capitalize font-semibold text-base mb-4">
         deliveries
       </h1>
       <div className="overflow-x-auto">
         <table className="w-full rounded-lg text-sm text-left">
           <thead className="border-b font-semibold border-gray-300">
-            <tr className="text-gray-600 text-[14px] border-b border-gray-200">
+            <tr className="text-gray-500 text-[13px] border-b uppercase border-gray-300/70">
               {[
                 { label: "ShipmentId", key: "shipment" },
                 { label: "Driver", key: "driver" },
                 { label: "Current Location", key: "currentLocation" },
                 { label: "ETA", key: "eta" },
-                { label: "Status", key: "submissionStatus" },
                 { label: "Destination", key: "destination" },
+                { label: "Status", key: "submissionStatus" },
               ].map((col) => (
                 <th
                   key={col.key}
@@ -147,7 +147,7 @@ const ShipmentOverview: React.FC = () => {
             {sortedData.map((row, index) => (
               <tr
                 key={index}
-                className="border-t border-[#e5e7eb] text-[14px] text-gray-600"
+                className="border-t border-[#e5e7eb] text-[13px] text-black uppercase"
               >
                 <td className="p-3">{row.shipment}</td>
                 <td className="p-3">{row.driver}</td>
@@ -166,10 +166,11 @@ const ShipmentOverview: React.FC = () => {
                     />
                   </div>
                 </td>
+                <td className="p-3">{row.destination}</td>
 
                 <td className="p-3">
                   <div
-                    className={`rounded-full flex justify-center items-center w-5 h-5 p-[2px] ${
+                    className={`rounded-full flex justify-center items-center w-4 h-4 p-[2px] ${
                       row.submissionStatus ? "bg-[#619b7d]" : "bg-red-600"
                     }`}
                   >
@@ -179,12 +180,10 @@ const ShipmentOverview: React.FC = () => {
                           ? "akar-icons:check"
                           : "emojione-monotone:exclamation-mark"
                       }
-                      className="text-sm text-white"
+                      className="text-[10px] text-white"
                     />
                   </div>
                 </td>
-
-                <td className="p-3">{row.destination}</td>
               </tr>
             ))}
           </tbody>

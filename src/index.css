@@ -1,15 +1,19 @@
+/* Import the font AFTER base styles */
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
 /* @tailwind base;
 @tailwind components;
 @tailwind utilities; */
 
-/* Import the font AFTER base styles */
-@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap');
+*{
+  font-family: "Public Sans", sans-serif;
+}
+
 
 body {
   margin: 0;
-  font-family: "Public Sans", sans-serif;
+
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

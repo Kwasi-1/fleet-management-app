@@ -1,7 +1,10 @@
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useRef, useEffect } from "react";
 import ModalLayout from "../../../layouts/ModalLayout";
 import InputField from "../../common/InputField";
 import SelectField from "../../common/SelectField";
+import mapboxgl from "mapbox-gl";
+import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
+import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 
 // Define props for the modal
 interface CreateShipmentModalProps {
@@ -41,6 +44,8 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
   isOpen,
   onClose,
 }) => {
+  const pickupGeocoderRef = useRef<HTMLDivElement>(null);
+  const destinationGeocoderRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState<FormData>({
     pickupType: "",
     pickupCompany: "",
@@ -52,6 +57,42 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
     parcels: [{ length: "", width: "", height: "", weight: "", count: "" }],
     notes: [{ note: "", value: "" }],
   });
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    mapboxgl.accessToken =
+      "pk.eyJ1Ijoia3dhc2ktMSIsImEiOiJjbThkNG15anAyYXF2MmtzOGJneW55cmVnIn0.uRUn_veAFyZ8u1CxkRGnWg";
+
+    // Initialize pickup geocoder
+    const pickupGeocoder = new MapboxGeocoder({
+      accessToken: mapboxgl.accessToken,
+      mapboxgl: mapboxgl, // Add this line
+      placeholder: "Search pickup location...",
+      marker: false,
+    });
+
+    // Initialize destination geocoder
+    const destinationGeocoder = new MapboxGeocoder({
+      accessToken: mapboxgl.accessToken,
+      mapboxgl: mapboxgl, // Add this line
+      placeholder: "Search destination...",
+      marker: false,
+    });
+
+    if (pickupGeocoderRef.current) {
+      pickupGeocoderRef.current.appendChild(pickupGeocoder.onAdd());
+    }
+
+    if (destinationGeocoderRef.current) {
+      destinationGeocoderRef.current.appendChild(destinationGeocoder.onAdd());
+    }
+
+    return () => {
+      pickupGeocoder.onRemove();
+      destinationGeocoder.onRemove();
+    };
+  }, [isOpen]);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -122,20 +163,21 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
           value={formData.pickupCompany}
           onChange={handleChange}
         />
-        <InputField
-          label="Pickup Address"
-          name="pickupAddress"
-          placeholder="Enter Pickup address"
-          value={formData.pickupAddress}
-          onChange={handleChange}
-        />
-        <InputField
-          label="Destination Address"
-          name="destinationAddress"
-          placeholder="Enter Destination address"
-          value={formData.destinationAddress}
-          onChange={handleChange}
-        />
+
+        <div className="space-y-1">
+          <label className="block text-sm font-medium text-gray-700">
+            Pickup Address
+          </label>
+          <div ref={pickupGeocoderRef} className="w-full" />
+        </div>
+
+        <div className="space-y-1">
+          <label className="block text-sm font-medium text-gray-700">
+            Destination Address
+          </label>
+          <div ref={destinationGeocoderRef} className="w-full" />
+        </div>
+
         <InputField
           label="Contact Person"
           name="pickupContact"

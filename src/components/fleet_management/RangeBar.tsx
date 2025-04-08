@@ -7,7 +7,7 @@ const RangeBar = ({ value, total }: RangeBarProps) => {
   const percentage = (value / total) * 100;
 
   return (
-    <div className="w-full rounded-xl h-[14px] bg-gray-200 mt-2">
+    <div className="w-full rounded-xl h-[14px] bg-gray-200 mt-[2px]">
       <div
         className="h-full rounded-xl min-w-[7px] transition-all duration-300"
         style={{
