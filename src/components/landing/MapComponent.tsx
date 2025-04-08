@@ -132,13 +132,13 @@ const MapComponent = () => {
         />
       )}
 
-      <div className="h-[65vh] md:h-[75vh] mx-10 relative">
+      <div className="h-[65vh] md:h-[75vh] mx-5 md:mx-10  relative">
         <BusinessLayer mapRef={mapRef} businesses={businesses} />
         {/* <TruckSimulation mapRef={mapRef} /> */}
         <div
           id="map-container"
           ref={mapContainerRef}
-          className=" h-[65vh] md:h-[75vh]  myauto rounded-xl border"
+          className=" h-[65vh] md:h-[75vh] rounded-xl border"
         />
       </div>
 
