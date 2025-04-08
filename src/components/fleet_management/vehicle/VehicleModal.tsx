@@ -35,6 +35,11 @@ interface Vehicle {
   transmission: string;
   fuelType: string;
   fuelCapacity: string;
+  serviceProgram: string;
+  ownershipType: string;
+  depreciationStartDate: string;
+  outOfServiceDate: string;
+  outOfServiceOdometer: string;
 }
 
 interface VehicleFormData extends Omit<Vehicle, "id"> {
@@ -86,6 +91,11 @@ const VehicleModal: React.FC<VehicleModalProps> = ({
     transmission: "",
     fuelType: "",
     fuelCapacity: "",
+    serviceProgram: "None",
+    ownershipType: "Owned",
+    depreciationStartDate: "",
+    outOfServiceDate: "",
+    outOfServiceOdometer: "",
   });
 
   useEffect(() => {
@@ -120,6 +130,11 @@ const VehicleModal: React.FC<VehicleModalProps> = ({
         transmission: vehicle.transmission,
         fuelType: vehicle.fuelType,
         fuelCapacity: vehicle.fuelCapacity,
+        serviceProgram: vehicle.serviceProgram || "None",
+        ownershipType: vehicle.ownershipType || "Owned",
+        depreciationStartDate: vehicle.depreciationStartDate || "",
+        outOfServiceDate: vehicle.outOfServiceDate || "",
+        outOfServiceOdometer: vehicle.outOfServiceOdometer || "",
       });
     }
   }, [isEditMode, vehicle]);
@@ -153,14 +168,10 @@ const VehicleModal: React.FC<VehicleModalProps> = ({
     >
       <FirstStep formData={formData} handleInputChange={handleInputChange} />
       <MaintenanceSchedule
-      // @ts-ignore
-
         formData={formData}
         handleInputChange={handleInputChange}
       />
-      {/* @ts-ignore */}
       <Lifecycle formData={formData} handleInputChange={handleInputChange} />
-      {/* @ts-ignore */}
       <Financial formData={formData} handleInputChange={handleInputChange} />
       <Specifications
         formData={formData}

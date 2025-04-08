@@ -1,12 +1,12 @@
 import { Icon } from "@iconify/react";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 interface SelectFieldProps {
   label: string;
   name: string;
   options: string[];
   value: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: ChangeEvent<HTMLSelectElement>) => void; //r interface
 }
 
 const SelectField: React.FC<SelectFieldProps> = ({
@@ -21,9 +21,13 @@ const SelectField: React.FC<SelectFieldProps> = ({
   const toggleDropdown = () => setIsOpen((prev) => !prev);
 
   const handleOptionClick = (option: string) => {
-    // @ts-ignore
-
-    onChange({ target: { name, value: option } });
+    const mockEvent = {
+      target: {
+        name,
+        value: option,
+      },
+    } as ChangeEvent<HTMLSelectElement>;
+    onChange(mockEvent);
     setIsOpen(false);
   };
 

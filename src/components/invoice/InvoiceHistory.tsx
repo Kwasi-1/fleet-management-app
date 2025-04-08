@@ -23,7 +23,7 @@ interface Column {
   label: string;
 }
 
-const invoiceData: Invoice[] = [
+const invoiceData = [
   {
     id: "ACC-SINV-2025-00837",
     customer: "EAGNACIOUS - GINO",

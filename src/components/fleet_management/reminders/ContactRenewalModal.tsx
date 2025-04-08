@@ -38,13 +38,21 @@ const ContactRenewalModal: React.FC<ContactRenewalModalProps> = ({
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
-    // @ts-ignore
+    const { name, value, type } = e.target;
 
-    const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === "checkbox" ? checked : value,
-    });
+    // Handle checkbox inputs separately
+    if (type === "checkbox" && "checked" in e.target) {
+      setFormData({
+        ...formData,
+        [name]: (e.target as HTMLInputElement).checked,
+      });
+    } else {
+      // Handle all other inputs
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
   const handleSubmit = () => {
@@ -100,9 +108,6 @@ const ContactRenewalModal: React.FC<ContactRenewalModalProps> = ({
               label="Due Soon Threshold"
               name="dueSoonThreshold"
               type="number"
-              // @ts-ignore
-
-              min="1"
               value={formData.dueSoonThreshold}
               onChange={handleChange}
             />

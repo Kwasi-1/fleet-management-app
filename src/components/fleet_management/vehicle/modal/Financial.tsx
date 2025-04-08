@@ -2,10 +2,10 @@ import InputField from "../../../common/InputField";
 import SelectField from "../../../common/SelectField";
 
 interface FinancialFormData {
-  acquisitionCost: number | string;
-  bookValue: number | string;
+  acquisitionCost: string;
+  bookValue: string;
   depreciationMethod: string;
-  residualValue: number | string;
+  residualValue: string;
   ownershipType: string;
   depreciationStartDate: string;
 }

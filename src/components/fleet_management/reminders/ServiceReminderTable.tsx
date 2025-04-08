@@ -3,36 +3,35 @@ import { useNavigate } from "react-router";
 import Table from "../../common/Table";
 import ServiceReminderModal from "./ServiceReminderModal";
 
-// Types
-interface TableColumn {
-  key: string;
-  label: string;
-}
+// // Types
+// interface TableColumn {
+//   key: string;
+//   label: string;
+// }
 
-interface TableRowData {
-  id: number;
-  asset: string;
-  serviceTask: string;
-  status: string;
-  nextDue: string;
-  activeWorkOrder: string;
-  lastCompleted: string;
-  compliance: string;
-  watchers: string;
-}
+// interface TableRowData {
+//   id: number;
+//   asset: string;
+//   serviceTask: string;
+//   status: string;
+//   nextDue: string;
+//   activeWorkOrder: string;
+//   lastCompleted: string;
+//   compliance: string;
+//   watchers: string;
+// }
 
 const ServiceRemindersTable: React.FC = () => {
   const [isServiceReminderModalOpen, setIsServiceReminderModalOpen] =
     useState<boolean>(false);
 
   const navigate = useNavigate();
-// @ts-ignore
 
-  const handleRowClick = (row: TableRowData) => {
+  const handleRowClick = () => {
     navigate(`/fleet/reminders/info`);
   };
 
-  const columns: TableColumn[] = [
+  const columns = [
     { key: "asset", label: "Asset" },
     { key: "serviceTask", label: "Service Task" },
     { key: "status", label: "Status" },
@@ -43,7 +42,7 @@ const ServiceRemindersTable: React.FC = () => {
     { key: "watchers", label: "Watchers" },
   ];
 
-  const data: TableRowData[] = [
+  const data = [
     {
       id: 1,
       asset: "3100 [2014 Chevrolet Express Cargo]",

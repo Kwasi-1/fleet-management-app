@@ -3,12 +3,12 @@ import InputField from "../../../common/InputField";
 // Define the structure of the formData prop
 interface FormData {
   activeFleetServiceDate: string;
-  inServiceOdometer: number | string;
-  serviceLifeMonths: number;
-  serviceLifeMeter: number;
-  resaleValue: number;
+  inServiceOdometer: string;
+  serviceLifeMonths: string;
+  serviceLifeMeter: string;
+  resaleValue: string;
   outOfServiceDate: string;
-  outOfServiceOdometer: number | string;
+  outOfServiceOdometer: string;
 }
 
 // Define the prop types for Lifecycle
@@ -17,7 +17,10 @@ interface LifecycleProps {
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Lifecycle: React.FC<LifecycleProps> = ({ formData, handleInputChange }) => {
+const Lifecycle: React.FC<LifecycleProps> = ({
+  formData,
+  handleInputChange,
+}) => {
   return (
     <div className="">
       <h1 className="text-xl font-semibold mb-2">Lifecycle</h1>
@@ -35,8 +38,6 @@ const Lifecycle: React.FC<LifecycleProps> = ({ formData, handleInputChange }) =>
           name="inServiceOdometer"
           type="number"
           placeholder="e.g., 10000"
-          // @ts-ignore
-
           value={formData.inServiceOdometer}
           onChange={handleInputChange}
         />
@@ -91,6 +92,6 @@ const Lifecycle: React.FC<LifecycleProps> = ({ formData, handleInputChange }) =>
       </div>
     </div>
   );
-}
+};
 
 export default Lifecycle;

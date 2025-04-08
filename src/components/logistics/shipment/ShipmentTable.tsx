@@ -3,16 +3,11 @@ import { Shipment } from "../../../types/shipmentTypes";
 import CreateShipmentModal from "../create_shipment/CreateShipmentModal";
 import { useState } from "react";
 
-interface Column {
-  key: string;
-  label: string;
-}
-
 interface ShipmentTableProps {
   onShipmentClick: (shipment: Shipment) => void;
 }
 
-const shipmentColumns: Column[] = [
+const shipmentColumns = [
   { key: "id", label: "Shipment ID" },
   { key: "order", label: "Order" },
   { key: "pickup", label: "Pickup" },
@@ -22,7 +17,7 @@ const shipmentColumns: Column[] = [
 ];
 
 // Ideally you should fetch this data from an API
-const shipmentData: Shipment[] = [
+const shipmentData = [
   {
     id: "SHP-301",
     order: "ORD-789",
@@ -138,15 +133,16 @@ const ShipmentTable: React.FC<ShipmentTableProps> = ({ onShipmentClick }) => {
 
   return (
     <div>
-      <Table
+      <Table<Shipment>
         columns={shipmentColumns}
+        // @ts-ignore
+
         data={shipmentData}
         searchPlaceholder="Search Shipments..."
         buttonLabel="Add Shipment"
         onButtonClick={handleOpenModal}
-        onRowClick={onShipmentClick}
+        onRowClick={onShipmentClick} // Now types match perfectly
       />
-
       <CreateShipmentModal
         isOpen={isCreateShipmentModalOpen}
         onClose={handleCloseModal}

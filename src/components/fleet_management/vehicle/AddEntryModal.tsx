@@ -37,7 +37,6 @@ const AddMeterEntryModal: React.FC<AddMeterEntryModalProps> = ({
           <label className="block text-sm font-medium text-gray-700">
             Asset
           </label>
-          {/* @ts-ignore */}
           <input
             type="text"
             name="asset"
@@ -73,7 +72,6 @@ const AddMeterEntryModal: React.FC<AddMeterEntryModalProps> = ({
           <label className="block text-sm font-medium text-gray-700">
             Meter Date
           </label>
-          {/*  @ts-ignore */}
           <input
             type="date"
             name="meterDate"

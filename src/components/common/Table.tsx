@@ -11,8 +11,8 @@ export interface Column {
 // Generic row type with `id` as string or number and flexible keys
 export interface TableRow {
   id: string | number;
-
-  [key: string]: string | number | boolean | React.ReactNode;
+  [key: string]: string | number | boolean | React.ReactNode | undefined;
+  // Add undefined to match optional Invoice properties
 }
 
 interface TableProps<T extends TableRow> {
@@ -91,9 +91,7 @@ const Table = <T extends TableRow>({
                 {columns.map((col) => (
                   <td key={col.key} className="p-3">
                     {col.key === "status" ? (
-                      // @ts-ignore
-
-                      <StatusText text={row[col.key]} />
+                      <StatusText text={String(row[col.key])} />
                     ) : col.key === "operator" ? (
                       <button
                         className="underline hover:text-gray-400 transition duration-300"

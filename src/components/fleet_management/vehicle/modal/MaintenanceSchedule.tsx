@@ -21,9 +21,15 @@ const MaintenanceSchedule: React.FC<MaintenanceScheduleProps> = ({
 
   const handleOptionChange = (value: string) => {
     setSelectedOption(value);
-    // @ts-ignore
 
-    handleInputChange({ target: { name: "serviceProgram", value } });
+    const syntheticEvent = {
+      target: {
+        name: "serviceProgram",
+        value,
+      },
+    } as React.ChangeEvent<HTMLInputElement>;
+
+    handleInputChange(syntheticEvent);
   };
 
   return (

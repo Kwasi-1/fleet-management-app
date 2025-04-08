@@ -38,13 +38,21 @@ const VehicleRenewalModal: React.FC<VehicleRenewalModalProps> = ({
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
-    // @ts-ignore
+    const { name, value, type } = e.target;
 
-    const { name, value, type, checked } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    // Handle checkbox inputs separately
+    if (type === "checkbox" && "checked" in e.target) {
+      setFormData({
+        ...formData,
+        [name]: (e.target as HTMLInputElement).checked,
+      });
+    } else {
+      // Handle all other inputs
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
   const handleSubmit = () => {

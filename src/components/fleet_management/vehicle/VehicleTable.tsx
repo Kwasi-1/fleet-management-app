@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import Table from "../../common/Table";
+import Table, { TableRow } from "../../common/Table";
 import VehicleModal from "../vehicle/VehicleModal";
 import OperatorModal from "../vehicle/OperatorModal";
 import { useNavigate } from "react-router";
@@ -12,7 +12,7 @@ interface Column {
 }
 
 // Define the vehicle type
-interface Vehicle {
+interface Vehicle extends TableRow {
   id: number;
   name: string;
   operator: string;
@@ -30,6 +30,7 @@ interface Vehicle {
   ownership: string;
   bodyType: string;
   msrp: string;
+  [key: string]: string | number | boolean | React.ReactNode | undefined;
 }
 
 const vehicleColumns: Column[] = [

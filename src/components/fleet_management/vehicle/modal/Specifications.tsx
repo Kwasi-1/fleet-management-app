@@ -3,11 +3,11 @@ import InputField from "../../../common/InputField";
 // Define the structure of the formData prop
 interface FormData {
   engineType: string;
-  horsepower: number | string;
-  torque: number | string;
+  horsepower: string;
+  torque: string;
   transmission: string;
   fuelType: string;
-  fuelCapacity: number | string;
+  fuelCapacity: string;
 }
 
 // Define the prop types for Specifications
@@ -16,7 +16,10 @@ interface SpecificationsProps {
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Specifications: React.FC<SpecificationsProps> = ({ formData, handleInputChange }) => {
+const Specifications: React.FC<SpecificationsProps> = ({
+  formData,
+  handleInputChange,
+}) => {
   return (
     <div className="">
       <h1 className="text-xl font-semibold mb-2">Specifications</h1>
@@ -34,8 +37,6 @@ const Specifications: React.FC<SpecificationsProps> = ({ formData, handleInputCh
           name="horsepower"
           type="number"
           placeholder="e.g., 400"
-          // @ts-ignore
-
           value={formData.horsepower}
           onChange={handleInputChange}
         />
@@ -45,8 +46,6 @@ const Specifications: React.FC<SpecificationsProps> = ({ formData, handleInputCh
           name="torque"
           type="number"
           placeholder="e.g., 500"
-          // @ts-ignore
-
           value={formData.torque}
           onChange={handleInputChange}
         />
@@ -72,14 +71,12 @@ const Specifications: React.FC<SpecificationsProps> = ({ formData, handleInputCh
           name="fuelCapacity"
           type="number"
           placeholder="e.g., 60"
-          // @ts-ignore
-
           value={formData.fuelCapacity}
           onChange={handleInputChange}
         />
       </div>
     </div>
   );
-}
+};
 
 export default Specifications;

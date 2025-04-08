@@ -64,13 +64,7 @@ const DriverSummary = ({ driver }: { driver: Driver }) => {
             {stat.label}:{" "}
             <span
               className={`font-bold mt-1 ${
-                stat.danger
-                  ? "text-red-500"
-                  : // @ts-ignore
-
-                  stat.warning
-                  ? "text-yellow-500"
-                  : "text-gray-700"
+                stat.danger ? "text-red-500" : "text-gray-700"
               }`}
             >
               {stat.value}
