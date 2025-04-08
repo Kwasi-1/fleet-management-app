@@ -1,4 +1,6 @@
-import { BadgeCheck, MoreHorizontal, XCircle } from "lucide-react";
+import { BadgeCheck, MoreHorizontal } from "lucide-react";
+import InputField from "../components/common/InputField";
+import { useState } from "react";
 
 const styles = {
   card: "bg-gray-200/30 p-6 rounded-lg border border-[#e0e6e940] text-gray-700 mb-5 min-h-[200px]",
@@ -48,12 +50,18 @@ const orderItems = [
 ];
 
 function OrderDetails() {
+  const [note, setNote] = useState("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNote(e.target.value);
+  };
+
   return (
     <div className="p-8 pt-4">
       <h1 className="mb-4 text-2xl font-semibold">Order Info</h1>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 ">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 ">
         {/* Order Summary Section */}
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-3">
           <div className={styles.card}>
             <div className={styles.sectionTitle}>
               <div className={`flex items-center justify-between gap-2`}>
@@ -89,6 +97,7 @@ function OrderDetails() {
           </div>
 
           {/* Summary Table */}
+          {/* Summary Table Section */}
           <div className={styles.card}>
             <div className="flex items-center justify-between">
               <h3 className={styles.sectionTitle}>Summary</h3>
@@ -103,17 +112,8 @@ function OrderDetails() {
               </div>
             </div>
 
-            {/* table saction */}
-            {/* Optimized Summary Table */}
             <div className="overflow-x-auto pt-4">
               <table className="w-full text-sm">
-                {/* <thead>
-                <tr className="text-left text-gray-500 border-b border-gray-300/30">
-                  <th className="py-2">Item</th>
-                  <th className="py-2">Price × Qty</th>
-                  <th className="py-2 text-right">Total</th>
-                </tr>
-                </thead> */}
                 <tbody>
                   {orderItems.map((item, idx) => (
                     <tr key={idx} className="align-top">
@@ -140,6 +140,47 @@ function OrderDetails() {
                   ))}
                 </tbody>
               </table>
+
+              {/* Subtotal / Summary Breakdown */}
+              <div className="pt-6 mt space-y-3 text-sm pl-3">
+                <div className="flex justify-between">
+                  <p className="text-muted-foreground">Subtotal</p>
+                  <p className="font-medium text-gray-700">
+                    GHS{" "}
+                    {orderItems
+                      .reduce((sum, item) => sum + item.total, 0)
+                      .toFixed(2)}
+                  </p>
+                </div>
+                <div className="flex justify-between">
+                  <p className="text-muted-foreground">Shipping</p>
+                  <p className="font-medium text-gray-700">GHS 35.00</p>
+                </div>
+                <div className="flex justify-between">
+                  <p className="text-muted-foreground">Tax (5%)</p>
+                  <p className="font-medium text-gray-700">
+                    GHS{" "}
+                    {(
+                      (orderItems.reduce((sum, item) => sum + item.total, 0) +
+                        35) *
+                      0.05
+                    ).toFixed(2)}
+                  </p>
+                </div>
+                <div className="flex justify-between text-base font-semibold border-t border-gray-200/30 pt-3">
+                  <p>Total</p>
+                  <p>
+                    GHS{" "}
+                    {(
+                      orderItems.reduce((sum, item) => sum + item.total, 0) +
+                      35 +
+                      (orderItems.reduce((sum, item) => sum + item.total, 0) +
+                        35) *
+                        0.05
+                    ).toFixed(2)}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -251,20 +292,18 @@ function OrderDetails() {
         </div>
 
         {/* Timeline Section */}
-        <div>
+        <div className="lg:col-span-2">
           <div className={styles.card}>
             <h3 className={styles.sectionTitle}>Timeline</h3>
-            <div className="border p-3 rounded-md bg-red-50 text-red-600 flex items-center justify-between">
-              <div>
-                <XCircle className="w-4 h-4 inline-block mr-1" />
-                Refund required
-              </div>
-              <button className="bg-red-500 text-white hover:bg-red-600">
-                Refund GHS 6,774.00
-              </button>
-            </div>
 
-            <div className="space-y-4 text-sm">
+            <InputField
+              placeholder="Write a note"
+              name="note"
+              value={note}
+              onChange={handleChange}
+            />
+
+            <div className="space-y-4 text-sm mt-6">
               <div>
                 <p className="font-medium">Order Edit force confirmed</p>
                 <p className="text-muted-foreground text-xs">
