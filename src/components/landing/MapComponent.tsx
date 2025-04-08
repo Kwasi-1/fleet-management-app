@@ -8,7 +8,9 @@ import DeliveryInfo from "./DeliveryInfo";
 import Navbar from "./Navbar";
 import { dummy_data } from "../../db";
 
-// const INITIAL_CENTER = [-0.16912933535458255, 5.678395107981338];
+const INITIAL_CENTER: [number, number] = [
+  -0.16912933535458255, 5.678395107981338,
+];
 const INITIAL_ZOOM = 17.12;
 
 interface Business {
@@ -20,9 +22,9 @@ interface Business {
 }
 
 const MapComponent = () => {
-  const mapRef = useRef<mapboxgl.Map | null>(null);
-  const mapContainerRef = useRef<HTMLDivElement>(null);
-  const geocoderContainerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<mapboxgl.Map>(null!); // Note the non-null assertion
+  const mapContainerRef = useRef<HTMLDivElement>(null!);
+  const geocoderContainerRef = useRef<HTMLDivElement>(null!);
   const [businesses, setBusinesses] = useState<Business[]>([]);
   const [showGeocoder, setShowGeocoder] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -59,7 +61,7 @@ const MapComponent = () => {
       pitch: 60,
       bearing: -20,
       antialias: true,
-      // center: INITIAL_CENTER,
+      center: INITIAL_CENTER,
       zoom: INITIAL_ZOOM,
     });
 
@@ -124,12 +126,8 @@ const MapComponent = () => {
 
       {showGeocoder && (
         <GeocoderComponent
-        // @ts-ignore
-
           mapRef={mapRef}
           businesses={businesses}
-          // @ts-ignore
-
           geocoderContainerRef={geocoderContainerRef}
         />
       )}
