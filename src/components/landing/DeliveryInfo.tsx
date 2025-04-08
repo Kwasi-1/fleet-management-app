@@ -19,16 +19,16 @@ const DetailItem: React.FC<DetailItemProps> = ({
   borderColour,
   iconColor,
 }) => (
-  <div className="w-fit">
-    <p className="text-base text-gray-500 font-sans mb-1">{title}</p>
+  <div className="w-full sm:w-fit">
+    <p className="text-sm sm:text-base text-gray-500 font-sans mb-1">{title}</p>
     <p
-      className={`text-2xl font-semibold text-black pb-2 border-b-4 w-full`}
+      className="text-xl sm:text-2xl font-semibold text-black pb-2 border-b-4"
       style={{ borderColor: borderColour }}
     >
       {icon && (
         <Icon
           icon={icon}
-          className={`inline-block w-10 h-10 rounded-full mr-1 ${
+          className={`inline-block w-6 h-6 sm:w-10 sm:h-10 rounded-full mr-1 ${
             iconColor || ""
           }`}
         />
@@ -36,9 +36,11 @@ const DetailItem: React.FC<DetailItemProps> = ({
       {value}
     </p>
     {subtitle && (
-      <p className="text-base text-black font-semibold mt-1">{subtitle}</p>
+      <p className="text-sm sm:text-base text-black font-semibold mt-1">
+        {subtitle}
+      </p>
     )}
-    {extra && <p className="text-sm text-gray-500 mt-1">{extra}</p>}
+    {extra && <p className="text-xs sm:text-sm text-gray-500 mt-1">{extra}</p>}
   </div>
 );
 
@@ -88,8 +90,8 @@ const DeliveryInfo = () => {
   };
 
   return (
-    <div className="flex items-center justify-center z-20 absolute bottom-0 inset-x-0 mb-10">
-      <div className="w-[60%] mx-auto bg-white shadow-lg rounded-lg flex justify-evenly items-start py-7 px-6 lg:px-0 space-x-6">
+    <div className="flex items-center justify-center z-20 relative mt-10 md:mt-0 sm:absolute bottom-0 inset-x-0 pb-6 sm:mb-10 px-4">
+      <div className="w-[90%] sm:w-[60%] md:max-w-[80%] xl:w-[60%] mx-auto bg-white shadow-lg rounded-lg grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 py-6 px-4 sm:px-8">
         {Object.values(deliveryData).map((item, index) => (
           <DetailItem
             key={index}
