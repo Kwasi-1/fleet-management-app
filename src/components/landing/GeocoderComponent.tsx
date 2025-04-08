@@ -15,12 +15,14 @@ interface GeocoderComponentProps {
   mapRef: React.RefObject<mapboxgl.Map>;
   businesses: Business[];
   geocoderContainerRef: React.RefObject<HTMLDivElement>;
+  styleProps?: string;
 }
 
 const GeocoderComponent = ({
   mapRef,
   businesses,
   geocoderContainerRef,
+  styleProps,
 }: GeocoderComponentProps) => {
   useEffect(() => {
     if (!mapRef.current || !geocoderContainerRef.current) return;
@@ -57,7 +59,7 @@ const GeocoderComponent = ({
     };
   }, [mapRef, businesses, geocoderContainerRef]);
 
-  return null;
+  return <div ref={geocoderContainerRef} className={styleProps} />;
 };
 
 export default GeocoderComponent;

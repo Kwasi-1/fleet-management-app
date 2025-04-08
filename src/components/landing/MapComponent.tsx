@@ -129,6 +129,7 @@ const MapComponent = () => {
           mapRef={mapRef}
           businesses={businesses}
           geocoderContainerRef={geocoderContainerRef}
+          styleProps="absolute top-[1.4vw] right-[10vw] z-100"
         />
       )}
 
