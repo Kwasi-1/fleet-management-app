@@ -85,13 +85,17 @@ const OrdersTable = () => {
     navigate("/order_management/order_entry");
   };
 
+  const handleRowClick = () => {
+    navigate(`/order_management/order`);
+  };
+
   return (
     <Table
       columns={columns}
       data={ordersData}
       searchPlaceholder="eg. PUR-ORD-2024-00000"
       buttonLabel="Order Entry"
-      onRowClick={(row) => console.log("Row clicked:", row)}
+      onRowClick={handleRowClick}
       onButtonClick={handleButtonClick} // Pass the click handler
       onOperatorClick={(row) => console.log("Operator clicked:", row)}
     />
