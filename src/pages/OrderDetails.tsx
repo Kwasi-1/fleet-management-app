@@ -1,8 +1,7 @@
-import { BadgeCheck, MoreHorizontal } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 import InputField from "../components/common/InputField";
 import { useState } from "react";
 import EditOrderModal from "../components/order_management/EditOrderModal";
-import FulfillmentModal from "../components/order_management/FulfillmentModal";
 import Button from "../components/common/Button";
 import CreateShipmentModal from "../components/logistics/create_shipment/CreateShipmentModal";
 
@@ -59,15 +58,6 @@ function OrderDetails() {
   const [items, setItems] = useState(orderItems);
   const [fulfillmentModalOpen, setFulfillmentModalOpen] = useState(false);
 
-  const handleFulfillmentSubmit = (data: {
-    trackingNumber: string;
-    courier: string;
-    note: string;
-  }) => {
-    console.log("Fulfillment Created:", data);
-    // TODO: Save data or trigger API call
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNote(e.target.value);
   };
@@ -118,10 +108,6 @@ function OrderDetails() {
             <div className="flex items-center justify-between">
               <h3 className={styles.sectionTitle}>Summary</h3>
               <div className="flex items-center gap-2 mb-4">
-                <span className="flex items-center gap-1 text-green-600 border rounded-lg py-[7px] px-3 text-sm">
-                  <BadgeCheck className="w-3 h-3" />
-                  Allocated
-                </span>
                 <Button className="px-6" onClick={() => setEditModalOpen(true)}>
                   Edit Order
                 </Button>
@@ -244,17 +230,17 @@ function OrderDetails() {
           {/* Fulfillment Section */}
           <div className={styles.card}>
             <div className="flex flex-row items-start justify-between">
-              <div className={`${styles.sectionTitle} mb-0`}>Fulfillment</div>
+              <div className={`${styles.sectionTitle} mb-0`}>Shipment</div>
               <div className="flex items-center gap-2 text-sm font-light">
                 <div className="flex items-center gap-1">
                   <div className="bg-red-600 h-2 w-2 rounded-full"></div>
-                  Awaiting fulfillment
+                  Awaiting shipment
                 </div>
                 <Button
                   className="px-6"
                   onClick={() => setFulfillmentModalOpen(true)}
                 >
-                  Create Fulfillment
+                  Create Shipment
                 </Button>
               </div>
             </div>
@@ -367,7 +353,7 @@ function OrderDetails() {
         orderItems={items}
         onSave={(updatedItems) => setItems(updatedItems)}
       />
-       <CreateShipmentModal
+      <CreateShipmentModal
         isOpen={fulfillmentModalOpen}
         onClose={() => setFulfillmentModalOpen(false)}
       />
