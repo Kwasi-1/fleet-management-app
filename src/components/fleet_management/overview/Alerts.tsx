@@ -48,10 +48,10 @@ const DeliveryCard: React.FC<DeliveryData> = ({
   value,
 }) => {
   return (
-    <div className="bg-gray-100 backdrop-blur-sm text-gray-600 p-4 rounded-2xl gap-4 border border-[#e0e6e9] w-full">
+    <div className="bg-gray-100 backdrop-blur-sm text-sm p-4 rounded-2xl gap-4 border border-[#e0e6e9] w-full">
       <div className="flex items-start mb-5 justify-between">
         <div>
-          <h2 className="font-semibold text-base">{title}</h2>
+          <h2 className="font-semibold text-[15px]">{title}</h2>
           <p className="text-gray-600 text-sm">Driver: {driver}</p>
         </div>
         <div className="w-12 h-12">
