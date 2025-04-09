@@ -1,9 +1,9 @@
 import { MoreHorizontal } from "lucide-react";
-import InputField from "../components/common/InputField";
 import { useState } from "react";
 import EditOrderModal from "../components/order_management/EditOrderModal";
 import Button from "../components/common/Button";
 import CreateShipmentModal from "../components/logistics/create_shipment/CreateShipmentModal";
+import ActivitiesComponent from "../components/common/ActivitiesComponent";
 
 const styles = {
   card: "bg-gray-200/30 p-6 rounded-lg border border-[#e0e6e940] text-gray-700 mb-5 min-h-[200px]",
@@ -301,48 +301,16 @@ function OrderDetails() {
           <div className={styles.card}>
             <h3 className={styles.sectionTitle}>Timeline</h3>
 
-            <InputField
-              placeholder="Write a note"
+            <textarea
+              className="w-full border bg-white border-[#E5E7EB] px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#619B7D] text-sm text-gray-600 "
+              placeholder="Write a comment"
+              rows={4}
+              onChange={handleChange}
               name="note"
               value={note}
-              onChange={handleChange}
             />
 
-            <div className="space-y-4 text-sm mt-6">
-              <div>
-                <p className="font-medium">Order Edit force confirmed</p>
-                <p className="text-muted-foreground text-xs">
-                  7 months ago · By Access 89
-                </p>
-              </div>
-              <div>
-                <p className="font-medium">Order Edit requested</p>
-                <p className="text-muted-foreground text-xs">
-                  7 months ago · By Access 89
-                </p>
-                <p className="text-xs mt-1 text-muted-foreground">Removed</p>
-                <ul className="pl-4 list-disc text-sm">
-                  <li>FORTUNE VIET RICE (5×5KG)</li>
-                  <li>OBA BASMATI RICE (4×4.5KG)</li>
-                </ul>
-              </div>
-              <div>
-                <p className="font-medium">Order Edit force confirmed</p>
-                <p className="text-muted-foreground text-xs">
-                  7 months ago · By Access 89
-                </p>
-              </div>
-              <div>
-                <p className="font-medium">Order Edit requested</p>
-                <p className="text-muted-foreground text-xs">
-                  7 months ago · By Access 89
-                </p>
-                <p className="text-xs mt-1 text-muted-foreground">Removed</p>
-                <ul className="pl-4 list-disc text-sm">
-                  <li>2x TASTY TOM TOMATOE (210G) - TIN</li>
-                </ul>
-              </div>
-            </div>
+            <ActivitiesComponent />
           </div>
         </div>
       </div>
