@@ -214,7 +214,6 @@ const ShipmentDetails: React.FC<Props> = ({ shipment, onClose }) => {
             <button className="bg-gray-100 px-3 py-1 rounded-md text-sm shadow">
               View in ▼
             </button>
-            // @ts-ignore
             <button
               onClick={onClose}
               className="bg-gray-200 p-2 rounded-full hover:bg-gray-300"

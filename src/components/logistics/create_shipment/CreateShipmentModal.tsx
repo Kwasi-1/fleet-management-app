@@ -64,10 +64,19 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
     mapboxgl.accessToken =
       "pk.eyJ1Ijoia3dhc2ktMSIsImEiOiJjbThkNG15anAyYXF2MmtzOGJneW55cmVnIn0.uRUn_veAFyZ8u1CxkRGnWg";
 
+    // Create a minimal map instance just for the geocoder
+    const map = new mapboxgl.Map({
+      container: document.createElement("div"),
+      style: "mapbox://styles/mapbox/streets-v11",
+      center: [0, 0],
+      zoom: 1,
+      interactive: false, // We don't need interaction for this
+    });
+
     // Initialize pickup geocoder
     const pickupGeocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
-      mapboxgl: mapboxgl, // Add this line
+      mapboxgl: mapboxgl,
       placeholder: "Search pickup location...",
       marker: false,
     });
@@ -75,22 +84,25 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
     // Initialize destination geocoder
     const destinationGeocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
-      mapboxgl: mapboxgl, // Add this line
+      mapboxgl: mapboxgl,
       placeholder: "Search destination...",
       marker: false,
     });
 
     if (pickupGeocoderRef.current) {
-      pickupGeocoderRef.current.appendChild(pickupGeocoder.onAdd());
+      pickupGeocoderRef.current.appendChild(pickupGeocoder.onAdd(map));
     }
 
     if (destinationGeocoderRef.current) {
-      destinationGeocoderRef.current.appendChild(destinationGeocoder.onAdd());
+      destinationGeocoderRef.current.appendChild(
+        destinationGeocoder.onAdd(map)
+      );
     }
 
     return () => {
       pickupGeocoder.onRemove();
       destinationGeocoder.onRemove();
+      map.remove(); // Clean up the map instance
     };
   }, [isOpen]);
 
