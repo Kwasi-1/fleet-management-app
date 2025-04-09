@@ -180,7 +180,6 @@ const Documents: React.FC<{ documents: DocumentType[] }> = ({ documents }) => (
               <p className="font-semibold">{doc.name}</p>
               <p className="text-gray-500 text-sm">Created {doc.date}</p>
             </div>
-            // @ts-ignore
             <button className="p-2 bg-gray-300 rounded-full hover:bg-gray-400">
               <Icon icon="mdi:download" className="h-5 w-5 text-gray-700" />
             </button>
@@ -196,14 +195,8 @@ const ShipmentDetails: React.FC<Props> = ({ shipment, onClose }) => {
     "Status" | "Details" | "Comments" | "Documents"
   >("Status");
 
-  const handleBackdropClick = (e: MouseEvent<HTMLDivElement>) => {
-    if ((e.target as HTMLElement).id === "backdrop") {
-      onClose();
-    }
-  };
-
   return (
-    <div onClick={handleBackdropClick} id="backdrop">
+    <div>
       <div className="fixed right-0 top-0 h-screen overflow-auto max-w-md mx-auto bg-white shadow-lg border border-[#e0e6e9] p-6 z-50">
         <div className="flex justify-between items-start mb-4">
           <div>
