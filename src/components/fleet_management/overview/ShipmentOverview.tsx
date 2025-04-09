@@ -113,8 +113,8 @@ const ShipmentOverview: React.FC = () => {
       </h1>
       <div className="overflow-x-auto">
         <table className="w-full rounded-lg text-sm text-left">
-          <thead className="border-b font-semibold border-gray-300">
-            <tr className="text-gray-500 text-[13px] border-b uppercase border-gray-300/70">
+          <thead className="border-b border-gray-300">
+            <tr className="text-gray-500 font-light text-[13px] border-b uppercase border-gray-300/70">
               {[
                 { label: "ShipmentId", key: "shipment" },
                 { label: "Driver", key: "driver" },

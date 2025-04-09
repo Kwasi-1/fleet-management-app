@@ -1,6 +1,7 @@
 import { BadgeCheck, MoreHorizontal } from "lucide-react";
 import InputField from "../components/common/InputField";
 import { useState } from "react";
+import EditOrderModal from "../components/order_management/EditOrderModal";
 
 const styles = {
   card: "bg-gray-200/30 p-6 rounded-lg border border-[#e0e6e940] text-gray-700 mb-5 min-h-[200px]",
@@ -51,6 +52,8 @@ const orderItems = [
 
 function OrderDetails() {
   const [note, setNote] = useState("");
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [items, setItems] = useState(orderItems);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNote(e.target.value);
@@ -106,7 +109,10 @@ function OrderDetails() {
                   <BadgeCheck className="w-3 h-3" />
                   Allocated
                 </span>
-                <button className="justify-center rounded-md text-[12.5px] ring-offset-white transition-colors focus-visible:outline-none disabled:pointer-events-none border-2 border-[#619B7D] dark:bg-[#619B7D] dark:text-black hover:opacity-90 hover:dark:bg-[#619B7D]/80 disabled:dark:bg-[#619B7D]/50 disabled:bg-gray-300 disabled:text-gray-500 px-6 py-2 flex items-center gap-1 bg-primary-green text-black font-medium h-fit">
+                <button
+                  className="justify-center rounded-md text-[12.5px] ring-offset-white transition-colors focus-visible:outline-none disabled:pointer-events-none border-2 border-[#619B7D] dark:bg-[#619B7D] dark:text-black hover:opacity-90 hover:dark:bg-[#619B7D]/80 disabled:dark:bg-[#619B7D]/50 disabled:bg-gray-300 disabled:text-gray-500 px-6 py-2 flex items-center gap-1 bg-primary-green text-black font-medium h-fit"
+                  onClick={() => setEditModalOpen(true)}
+                >
                   Edit Order
                 </button>
               </div>
@@ -341,6 +347,13 @@ function OrderDetails() {
           </div>
         </div>
       </div>
+
+      <EditOrderModal
+        open={editModalOpen}
+        onClose={() => setEditModalOpen(false)}
+        orderItems={items}
+        onSave={(updatedItems) => setItems(updatedItems)}
+      />
     </div>
   );
 }
