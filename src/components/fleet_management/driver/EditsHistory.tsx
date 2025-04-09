@@ -30,7 +30,10 @@ const EditsHistory = () => {
           </thead>
           <tbody>
             {editHistory.map((edit, index) => (
-              <tr key={index} className="border-b text-xs text-gray-500">
+              <tr
+                key={index}
+                className="border-b border-gray-200 text-xs text-gray-500"
+              >
                 <td className="p-2">{edit.editor}</td>
                 <td className="p-2">{edit.date}</td>
                 <td className="p-2">{edit.comment}</td>

@@ -1,10 +1,13 @@
 import React from "react";
 import EditsHistory from "./EditsHistory";
 
-const PropertyItem: React.FC<{ label: string; value: string }> = ({ label, value }) => (
+const PropertyItem: React.FC<{ label: string; value: string }> = ({
+  label,
+  value,
+}) => (
   <div className="text-sm flex flex-col gap-1">
     <span className="text-gray-500">{label}:</span>
-    <span className="font-semibold text-gray-600">{value}</span>
+    <span className="font-semibold text-gray-700">{value}</span>
   </div>
 );
 

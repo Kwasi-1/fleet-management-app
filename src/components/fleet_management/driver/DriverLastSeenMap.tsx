@@ -46,7 +46,7 @@ const DriverLastSeenMap: React.FC<DriverLastSeenMapProps> = ({
     <div
       ref={mapContainer}
       className={`w-full rounded-xl border border-[#e0e6e9] ${
-        isDriverDetailsPage ? "h-[380px]" : "h-[440px]"
+        isDriverDetailsPage ? "h-[500px]" : "h-[440px]"
       }`}
       style={{ minHeight: "250px" }}
     />
