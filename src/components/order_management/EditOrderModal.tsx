@@ -214,7 +214,7 @@ export default function EditOrderModal({
           <Button outline={true} onClick={onClose}>
             Cancel
           </Button>
-          <Button onClick={handleSave}>Save and close</Button>
+          <Button onClick={handleSave}>Save</Button>
         </div>
       )}
     </DialogWrapper>

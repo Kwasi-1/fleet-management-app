@@ -3,6 +3,7 @@ import InputField from "../components/common/InputField";
 import { useState } from "react";
 import EditOrderModal from "../components/order_management/EditOrderModal";
 import FulfillmentModal from "../components/order_management/FulfillmentModal";
+import Button from "../components/common/Button";
 
 const styles = {
   card: "bg-gray-200/30 p-6 rounded-lg border border-[#e0e6e940] text-gray-700 mb-5 min-h-[200px]",
@@ -120,12 +121,9 @@ function OrderDetails() {
                   <BadgeCheck className="w-3 h-3" />
                   Allocated
                 </span>
-                <button
-                  className="justify-center rounded-md text-[12.5px] ring-offset-white transition-colors focus-visible:outline-none disabled:pointer-events-none border-2 border-[#619B7D] dark:bg-[#619B7D] dark:text-black hover:opacity-90 hover:dark:bg-[#619B7D]/80 disabled:dark:bg-[#619B7D]/50 disabled:bg-gray-300 disabled:text-gray-500 px-6 py-2 flex items-center gap-1 bg-primary-green text-black font-medium h-fit"
-                  onClick={() => setEditModalOpen(true)}
-                >
+                <Button className="px-6" onClick={() => setEditModalOpen(true)}>
                   Edit Order
-                </button>
+                </Button>
               </div>
             </div>
 
@@ -141,7 +139,7 @@ function OrderDetails() {
                           className="w-10 h-10 object-cover rounded"
                         />
                         <div>
-                          <p className="font-medium text-[13px]">{item.name}</p>
+                          <p className="font-medium text-[12px]">{item.name}</p>
                           <p className="text-xs text-muted-foreground">
                             {item.unit}
                           </p>
@@ -212,9 +210,9 @@ function OrderDetails() {
                   <div className="bg-[#619B7D] h-2 w-2 rounded-full"></div>
                   Paid
                 </div>
-                <button className="justify-center rounded-md text-[12.5px] ring-offset-white transition-colors focus-visible:outline-none disabled:pointer-events-none border-2 border-[#619B7D] dark:bg-[#619B7D] dark:text-black hover:opacity-90 hover:dark:bg-[#619B7D]/80 disabled:dark:bg-[#619B7D]/50 disabled:bg-gray-300 disabled:text-gray-500 px-6 py-2 flex items-center gap-1 bg-primary-green text-black font-medium h-fit">
+                <Button onClick={() => console.log("Refund")} className="px-6">
                   Refund
-                </button>
+                </Button>
               </div>
             </div>
 
@@ -251,12 +249,12 @@ function OrderDetails() {
                   <div className="bg-red-600 h-2 w-2 rounded-full"></div>
                   Awaiting fulfillment
                 </div>
-                <button
-                  className="justify-center rounded-md text-[12.5px] ring-offset-white transition-colors focus-visible:outline-none disabled:pointer-events-none border-2 border-[#619B7D] dark:bg-[#619B7D] dark:text-black hover:opacity-90 hover:dark:bg-[#619B7D]/80 disabled:dark:bg-[#619B7D]/50 disabled:bg-gray-300 disabled:text-gray-500 px-6 py-2 flex items-center gap-1 bg-primary-green text-black font-medium h-fit"
+                <Button
+                  className="px-6"
                   onClick={() => setFulfillmentModalOpen(true)}
                 >
                   Create Fulfillment
-                </button>
+                </Button>
               </div>
             </div>
 
