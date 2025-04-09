@@ -92,9 +92,31 @@ function OrderDetails() {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [items, setItems] = useState(orderItems);
   const [fulfillmentModalOpen, setFulfillmentModalOpen] = useState(false);
+  const [activities, setActivities] = useState([
+    {
+      type: "note",
+      content: "Order created",
+      timestamp: "19 September 2024 11:06 am",
+    },
+  ]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNote(e.target.value);
+  const handleNoteSubmit = () => {
+    if (!note.trim()) return;
+
+    const newActivity = {
+      type: "note",
+      content: note.trim(),
+      timestamp: new Date().toLocaleString("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    };
+
+    setActivities((prev) => [newActivity, ...prev]);
+    setNote(""); // Clear input
   };
 
   return (
@@ -337,22 +359,34 @@ function OrderDetails() {
             <div className={styles.card}>
               <h3 className={styles.sectionTitle}>Timeline</h3>
 
-              <textarea
-                className="w-full border bg-white border-[#E5E7EB] px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#619B7D] text-sm text-gray-600 "
-                placeholder="Write a comment"
-                rows={4}
-                // onChange={handleChange}
-                name="note"
-                value={note}
-              />
+              <div className="relative">
+                <textarea
+                  className="w-full border bg-white border-[#E5E7EB] px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#619B7D] text-sm text-gray-600 "
+                  placeholder="Write a comment"
+                  rows={4}
+                  onChange={(e) => setNote(e.target.value)}
+                  name="note"
+                  value={note}
+                />
+                <Button
+                  onClick={handleNoteSubmit}
+                  outline={true}
+                  disabled={!note.trim()}
+                  className="absolute bottom-2 right-1 capitalize"
+                >
+                  comment
+                </Button>
+              </div>
 
-              <ActivitiesComponent />
+              <ActivitiesComponent activities={activities} />
             </div>
           </div>
 
           <div className={`${styles.card} px-10 py-6 mt-6`}>
             <h3 className="font-semibold text-lg my-4">Shipment Progress</h3>
-            <Timeline events={progress} />
+            <div className="px-3">
+              <Timeline events={progress} />
+            </div>
           </div>
         </div>
       </div>
