@@ -4,6 +4,7 @@ import { useState } from "react";
 import EditOrderModal from "../components/order_management/EditOrderModal";
 import FulfillmentModal from "../components/order_management/FulfillmentModal";
 import Button from "../components/common/Button";
+import CreateShipmentModal from "../components/logistics/create_shipment/CreateShipmentModal";
 
 const styles = {
   card: "bg-gray-200/30 p-6 rounded-lg border border-[#e0e6e940] text-gray-700 mb-5 min-h-[200px]",
@@ -366,11 +367,9 @@ function OrderDetails() {
         orderItems={items}
         onSave={(updatedItems) => setItems(updatedItems)}
       />
-
-      <FulfillmentModal
-        open={fulfillmentModalOpen}
+       <CreateShipmentModal
+        isOpen={fulfillmentModalOpen}
         onClose={() => setFulfillmentModalOpen(false)}
-        onSubmit={handleFulfillmentSubmit}
       />
     </div>
   );
