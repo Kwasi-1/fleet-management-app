@@ -58,7 +58,7 @@ export default function DialogWrapper({
       >
         {title && <h2 className="text-lg font-semibold mb-4">{title}</h2>}
         <button
-          className="fixed top-4 right-4 text-white text-lg font-bold bg-gray-400 px-3 py-1 rounded-full"
+          className="fixed top-4 right-4 text-white text-lg hover:text-gray-300 font-bold bg-gray400 px-3 py-1 rounded-full transition duration-200"
           onClick={onClose}
         >
           ✕
