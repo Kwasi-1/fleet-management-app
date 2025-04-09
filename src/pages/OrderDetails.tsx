@@ -4,6 +4,7 @@ import EditOrderModal from "../components/order_management/EditOrderModal";
 import Button from "../components/common/Button";
 import CreateShipmentModal from "../components/logistics/create_shipment/CreateShipmentModal";
 import ActivitiesComponent from "../components/common/ActivitiesComponent";
+import Timeline from "../components/logistics/shipment/Timeline";
 
 const styles = {
   card: "bg-gray-200/30 p-6 rounded-lg border border-[#e0e6e940] text-gray-700 mb-5 min-h-[200px]",
@@ -49,6 +50,40 @@ const orderItems = [
     image:
       "https://furntech.org.za/wp-content/uploads/2017/05/placeholder-image.png",
     unit: "210G",
+  },
+];
+
+const progress = [
+  {
+    title: "Pickup",
+    location: "Accra Warehouse",
+    address: "123 Main St, Accra",
+    time: "20/03/2025 08:00 - 20/03/2025 09:00",
+    iconColor: "bg-blue-500",
+    status: null,
+  },
+  {
+    title: "Departure",
+    time: "20/03/2025 09:30",
+    iconColor: "bg-blue-500",
+    status: null,
+  },
+  {
+    title: "Interline Stop",
+    location: "Koforidua",
+    time: "20/03/2025 12:45",
+    iconColor: "bg-yellow-500",
+    status: null,
+  },
+  {
+    title: "Arrival",
+    time: "20/03/2025 18:30",
+    iconColor: "bg-green-500",
+    status: {
+      label: "On time",
+      color: "text-green-500",
+      bgColor: "bg-green-100",
+    },
   },
 ];
 
@@ -298,19 +333,26 @@ function OrderDetails() {
 
         {/* Timeline Section */}
         <div className="lg:col-span-2">
-          <div className={styles.card}>
-            <h3 className={styles.sectionTitle}>Timeline</h3>
+          <div>
+            <div className={styles.card}>
+              <h3 className={styles.sectionTitle}>Timeline</h3>
 
-            <textarea
-              className="w-full border bg-white border-[#E5E7EB] px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#619B7D] text-sm text-gray-600 "
-              placeholder="Write a comment"
-              rows={4}
-              onChange={handleChange}
-              name="note"
-              value={note}
-            />
+              <textarea
+                className="w-full border bg-white border-[#E5E7EB] px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#619B7D] text-sm text-gray-600 "
+                placeholder="Write a comment"
+                rows={4}
+                // onChange={handleChange}
+                name="note"
+                value={note}
+              />
 
-            <ActivitiesComponent />
+              <ActivitiesComponent />
+            </div>
+          </div>
+
+          <div className={`${styles.card} px-10 py-6 mt-6`}>
+            <h3 className="font-semibold text-lg my-4">Shipment Progress</h3>
+            <Timeline events={progress} />
           </div>
         </div>
       </div>

@@ -8,6 +8,7 @@ import {
   Document as DocumentType,
 } from "../../../types/shipmentDetailsTypes";
 import mapboxgl from "mapbox-gl";
+import Timeline from "./Timeline";
 
 interface Props {
   shipment: Shipment;
@@ -51,66 +52,7 @@ const Status: React.FC<{ shipment: Shipment }> = ({ shipment }) => {
       {/* Timeline */}
       <div className="py-4 px-3">
         <h3 className="font-semibold text-lg my-4">Shipment Progress</h3>
-        <div className="relative">
-          <div className="absolute left-[10px] top-1 bottom-0 w-1 bg-[#619B7D]"></div>
-          <div className="relative pl-6 space-y-8">
-            {shipment.progress.map((event, index) => {
-              const isFirst = index === 0;
-              const isLast = index === shipment.progress.length - 1;
-
-              return (
-                <div
-                  key={index}
-                  className={`relative flex gap-5 ${
-                    isLast ? "items-end" : "items-start"
-                  } ${!isFirst && !isLast && "items-center"}`}
-                >
-                  <div
-                    className={`bg-[#619B7D] ${
-                      isFirst || isLast
-                        ? "w-10 h-10 -ml-[31px]"
-                        : "w-4 h-4 -ml-5 mr-[10px]"
-                    } rounded-full flex items-center justify-center`}
-                  >
-                    {isFirst && (
-                      <Icon
-                        icon="icon-park-outline:arrow-up"
-                        className="h-4 w-4 text-white"
-                      />
-                    )}
-                    {isLast && (
-                      <Icon
-                        icon="icon-park-outline:arrow-down"
-                        className="h-4 w-4 text-white"
-                      />
-                    )}
-                  </div>
-
-                  <div>
-                    <p className="font-semibold">{event.title}</p>
-                    {event.location && (
-                      <p className="text-gray-500 text-sm">{event.location}</p>
-                    )}
-                    {event.address && (
-                      <p className="text-gray-400 text-xs">{event.address}</p>
-                    )}
-                    <div className="flex items-center text-sm mt-1">
-                      <ClockIcon className="h-4 w-4 text-gray-400 mr-1" />
-                      {event.time}
-                    </div>
-                    {event.status && (
-                      <span
-                        className={`${event.status.color} text-xs ${event.status.bgColor} px-2 py-1 rounded`}
-                      >
-                        {event.status.label}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+        <Timeline events={shipment.progress} />
       </div>
     </>
   );
