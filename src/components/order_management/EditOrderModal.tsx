@@ -1,7 +1,7 @@
 import Button from "../common/Button";
-import DialogWrapper from "../common/DialogWrapper";
 import { useState } from "react";
 import InputField from "../common/InputField";
+import ModalLayout from "../../layouts/ModalLayout";
 
 interface OrderItem {
   name: string;
@@ -52,72 +52,79 @@ export default function EditOrderModal({
   };
 
   return (
-    <DialogWrapper
+    <ModalLayout
       title="Edit Order"
-      open={open}
+      isOpen={open}
       onClose={onClose}
-      className="max-w-2xl w-full relative"
+      // className="max-w-2xl w-full relative"
     >
       {showAddItemModal && (
-        <DialogWrapper
+        <ModalLayout
           title="Add New Item"
-          open={showAddItemModal}
+          isOpen={showAddItemModal}
           onClose={() => setShowAddItemModal(false)}
+          className="w-full relative"
         >
           <div className="space-y-4 mt-2 text-sm">
-            <InputField
-              label="Item name"
-              name="name"
-              placeholder="e.g. Fire Extinguisher"
-              value={newItem.name}
-              onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
-            />
-            <InputField
-              label="Unit"
-              name="unit"
-              placeholder="e.g. piece, kg"
-              value={newItem.unit}
-              onChange={(e) => setNewItem({ ...newItem, unit: e.target.value })}
-            />
-            <InputField
-              label="Unit price (GHS)"
-              name="unitPrice"
-              type="number"
-              placeholder="e.g. 45.00"
-              value={newItem.unitPrice}
-              onChange={(e) => {
-                const price = parseFloat(e.target.value) || 0;
-                setNewItem((prev) => ({
-                  ...prev,
-                  unitPrice: price,
-                  total: price * prev.quantity,
-                }));
-              }}
-            />
-            <InputField
-              label="Quantity"
-              name="quantity"
-              type="number"
-              placeholder="e.g. 3"
-              value={newItem.quantity}
-              onChange={(e) => {
-                const qty = parseInt(e.target.value) || 1;
-                setNewItem((prev) => ({
-                  ...prev,
-                  quantity: qty,
-                  total: qty * prev.unitPrice,
-                }));
-              }}
-            />
-            <InputField
-              label="Image URL"
-              name="image"
-              placeholder="https://example.com/image.jpg"
-              value={newItem.image}
-              onChange={(e) =>
-                setNewItem({ ...newItem, image: e.target.value })
-              }
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <InputField
+                label="Item name"
+                name="name"
+                placeholder="e.g. Fire Extinguisher"
+                value={newItem.name}
+                onChange={(e) =>
+                  setNewItem({ ...newItem, name: e.target.value })
+                }
+              />
+              <InputField
+                label="Unit"
+                name="unit"
+                placeholder="e.g. piece, kg"
+                value={newItem.unit}
+                onChange={(e) =>
+                  setNewItem({ ...newItem, unit: e.target.value })
+                }
+              />
+              <InputField
+                label="Unit price (GHS)"
+                name="unitPrice"
+                type="number"
+                placeholder="e.g. 45.00"
+                value={newItem.unitPrice}
+                onChange={(e) => {
+                  const price = parseFloat(e.target.value) || 0;
+                  setNewItem((prev) => ({
+                    ...prev,
+                    unitPrice: price,
+                    total: price * prev.quantity,
+                  }));
+                }}
+              />
+              <InputField
+                label="Quantity"
+                name="quantity"
+                type="number"
+                placeholder="e.g. 3"
+                value={newItem.quantity}
+                onChange={(e) => {
+                  const qty = parseInt(e.target.value) || 1;
+                  setNewItem((prev) => ({
+                    ...prev,
+                    quantity: qty,
+                    total: qty * prev.unitPrice,
+                  }));
+                }}
+              />
+              <InputField
+                label="Image URL"
+                name="image"
+                placeholder="https://example.com/image.jpg"
+                value={newItem.image}
+                onChange={(e) =>
+                  setNewItem({ ...newItem, image: e.target.value })
+                }
+              />
+            </div>
 
             <div className="flex justify-end gap-3 pt-2">
               <Button outline={true} onClick={() => setShowAddItemModal(false)}>
@@ -142,7 +149,7 @@ export default function EditOrderModal({
               </Button>
             </div>
           </div>
-        </DialogWrapper>
+        </ModalLayout>
       )}
 
       {/* Action Bar */}
@@ -211,12 +218,11 @@ export default function EditOrderModal({
       {/* Action Buttons */}
       {showAddItemModal ? null : (
         <div className=" absolute bottom-4 right-4 pt-4 flex justify-end gap-3 z-50 h-fit">
-          <Button outline={true} onClick={onClose}>
-            Cancel
+          <Button onClick={handleSave} className="px-10">
+            Save
           </Button>
-          <Button onClick={handleSave}>Save</Button>
         </div>
       )}
-    </DialogWrapper>
+    </ModalLayout>
   );
 }

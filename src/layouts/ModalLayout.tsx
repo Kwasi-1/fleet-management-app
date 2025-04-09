@@ -7,6 +7,7 @@ interface ModalLayoutProps {
   description?: string;
   tabs?: string[];
   children: ReactNode;
+  className?: string;
 }
 
 const ModalLayout: React.FC<ModalLayoutProps> = ({
@@ -16,6 +17,7 @@ const ModalLayout: React.FC<ModalLayoutProps> = ({
   description,
   tabs = [],
   children,
+  className,
 }) => {
   const [activeTab, setActiveTab] = useState(0);
   const childArray = React.Children.toArray(children); // Ensure children are an array
@@ -51,7 +53,7 @@ const ModalLayout: React.FC<ModalLayoutProps> = ({
       <div
         className={`fixed top-0 right-0 h-full bg-white shadow-lg w-1/2 transition-transform duration-300 overflow-auto ${
           isOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        } ${className}`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Icon */}
