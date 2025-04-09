@@ -115,15 +115,6 @@ export default function EditOrderModal({
                   }));
                 }}
               />
-              <InputField
-                label="Image URL"
-                name="image"
-                placeholder="https://example.com/image.jpg"
-                value={newItem.image}
-                onChange={(e) =>
-                  setNewItem({ ...newItem, image: e.target.value })
-                }
-              />
             </div>
 
             <div className="flex justify-end gap-3 pt-2">
