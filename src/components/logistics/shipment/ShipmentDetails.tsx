@@ -1,4 +1,4 @@
-import { MouseEvent, useState } from "react";
+import { useState } from "react";
 import { ClockIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Icon } from "@iconify/react";
 import ShipmentMap from "./ShipmentMap";
