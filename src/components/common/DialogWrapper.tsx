@@ -27,6 +27,18 @@ export default function DialogWrapper({
     return () => document.removeEventListener("keydown", handleEsc);
   }, [open, onClose]);
 
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [open]);
+
   const handleBackdropClick = (e: MouseEvent<HTMLDivElement>) => {
     if ((e.target as HTMLElement).id === "backdrop") {
       onClose();
@@ -42,7 +54,7 @@ export default function DialogWrapper({
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
     >
       <div
-        className={`bg-white rounded-xl p-6 w-full max-w-xl shadow-xl ${className}`}
+        className={`bg-white rounded-xl p-6 w-full h-[90%] max-w-2xl shadow-xl ${className}`}
       >
         {title && <h2 className="text-lg font-semibold mb-4">{title}</h2>}
         <button
