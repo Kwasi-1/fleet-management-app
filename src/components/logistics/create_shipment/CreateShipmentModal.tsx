@@ -5,6 +5,7 @@ import SelectField from "../../common/SelectField";
 import mapboxgl from "mapbox-gl";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
+import { dummy_data } from "../../../db";
 
 // Define props for the modal
 interface CreateShipmentModalProps {
@@ -70,39 +71,88 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
       style: "mapbox://styles/mapbox/streets-v11",
       center: [0, 0],
       zoom: 1,
-      interactive: false, // We don't need interaction for this
+      interactive: false,
     });
 
-    // Initialize pickup geocoder
+    // Flatten all businesses from dummy data
+    const allBusinesses = [
+      ...dummy_data["foundry-ecosytem"].wholesalers,
+      ...dummy_data["foundry-ecosytem"].microfinance,
+      ...dummy_data["foundry-ecosytem"].market_businesses,
+    ];
+
+    // Custom function to search businesses
+    const searchBusinesses = (query: string) => {
+      if (!query) return [];
+
+      const results = allBusinesses.filter((business) =>
+        business.name.toLowerCase().includes(query.toLowerCase())
+      );
+
+      return results.map((business) => ({
+        id: business.id || business.name,
+        type: "Feature",
+        text: business.name,
+        place_name: business.name,
+        center: [business.location.lng, business.location.lat],
+        geometry: {
+          type: "Point",
+          coordinates: [business.location.lng, business.location.lat],
+        },
+        properties: {},
+      }));
+    };
+
+    // Initialize pickup geocoder with custom search
     const pickupGeocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl,
-      placeholder: "Search pickup location...",
+      placeholder: "Search pickup location or business...",
       marker: false,
+      localGeocoder: searchBusinesses,
+      localGeocoderOnly: false, // Allow both Mapbox and local searches
+      reverseGeocode: false,
     });
 
-    // Initialize destination geocoder
+    // Initialize destination geocoder with custom search
     const destinationGeocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl,
-      placeholder: "Search destination...",
+      placeholder: "Search destination or business...",
       marker: false,
+      localGeocoder: searchBusinesses,
+      localGeocoderOnly: false,
+      reverseGeocode: false,
     });
 
     if (pickupGeocoderRef.current) {
       pickupGeocoderRef.current.appendChild(pickupGeocoder.onAdd(map));
+      pickupGeocoder.on("result", (e) => {
+        setFormData((prev) => ({
+          ...prev,
+          pickupAddress: e.result.place_name,
+          pickupCompany: e.result.text, // Auto-fill company name if business is selected
+        }));
+      });
     }
 
     if (destinationGeocoderRef.current) {
       destinationGeocoderRef.current.appendChild(
         destinationGeocoder.onAdd(map)
       );
+      destinationGeocoder.on("result", (e) => {
+        setFormData((prev) => ({
+          ...prev,
+          destinationAddress: e.result.place_name,
+          deliveryName: e.result.text, // Auto-fill delivery name if business is selected
+        }));
+      });
     }
 
     return () => {
       pickupGeocoder.onRemove();
       destinationGeocoder.onRemove();
-      map.remove(); // Clean up the map instance
+      map.remove();
     };
   }, [isOpen]);
 
@@ -176,14 +226,14 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
           onChange={handleChange}
         />
 
-        <div className="space-y-1">
+        <div className="space-y-1 w-full">
           <label className="block text-sm font-medium text-gray-700">
             Pickup Address
           </label>
           <div ref={pickupGeocoderRef} className="w-full" />
         </div>
 
-        <div className="space-y-1">
+        <div className="space-y-1 w-full">
           <label className="block text-sm font-medium text-gray-700">
             Destination Address
           </label>
