@@ -6,20 +6,12 @@ import mapboxgl from "mapbox-gl";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import { dummy_data } from "../../../db";
+import OrderItems from "./OrderItems";
 
 // Define props for the modal
 interface CreateShipmentModalProps {
   isOpen: boolean;
   onClose: () => void;
-}
-
-// Define the shape of a parcel
-interface Parcel {
-  length: string;
-  width: string;
-  height: string;
-  weight: string;
-  count: string;
 }
 
 // Define the shape of a delivery note
@@ -37,7 +29,7 @@ interface FormData {
   pickupContact: string;
   deliveryType: string;
   deliveryName: string;
-  parcels: Parcel[];
+  orderId: string;
   notes: DeliveryNote[];
 }
 
@@ -55,7 +47,7 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
     pickupContact: "",
     deliveryType: "",
     deliveryName: "",
-    parcels: [{ length: "", width: "", height: "", weight: "", count: "" }],
+    orderId: "",
     notes: [{ note: "", value: "" }],
   });
 
@@ -166,16 +158,6 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
     }));
   };
 
-  const handleParcelChange = (
-    index: number,
-    e: ChangeEvent<HTMLInputElement>
-  ) => {
-    const { name, value } = e.target;
-    const updatedParcels = [...formData.parcels];
-    updatedParcels[index][name as keyof Parcel] = value;
-    setFormData((prev) => ({ ...prev, parcels: updatedParcels }));
-  };
-
   const handleNoteChange = (
     index: number,
     e: ChangeEvent<HTMLInputElement>
@@ -185,15 +167,6 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
     updatedNotes[index][name as keyof DeliveryNote] = value;
     setFormData((prev) => ({ ...prev, notes: updatedNotes }));
   };
-
-  const addParcelRow = () =>
-    setFormData((prev) => ({
-      ...prev,
-      parcels: [
-        ...prev.parcels,
-        { length: "", width: "", height: "", weight: "", count: "" },
-      ],
-    }));
 
   const addNoteRow = () =>
     setFormData((prev) => ({
@@ -207,7 +180,7 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
       onClose={onClose}
       title="New Shipment"
       description="Enter shipment details step by step"
-      tabs={["Pickup & Delivery", "Parcels", "Delivery Note", "Review"]}
+      tabs={["Pickup & Delivery", "Package", "Delivery Note"]}
     >
       {/* Step 1: Pickup & Delivery */}
       <div className="grid grid-cols-2 gap-4">
@@ -227,14 +200,14 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
         />
 
         <div className="space-y-1 w-full">
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block px-1 text-[11px] font-semibold text-gray-500 uppercase">
             Pickup Address
           </label>
           <div ref={pickupGeocoderRef} className="w-full" />
         </div>
 
         <div className="space-y-1 w-full">
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block px-1 text-[11px] font-semibold text-gray-500 uppercase">
             Destination Address
           </label>
           <div ref={destinationGeocoderRef} className="w-full" />
@@ -261,44 +234,17 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
           value={formData.deliveryName}
           onChange={handleChange}
         />
+        <InputField
+          label="Order ID"
+          name="orderId"
+          placeholder="e.g. ORD123456"
+          value={formData.orderId}
+          onChange={handleChange}
+        />
       </div>
 
       {/* Step 2: Parcels */}
-      <div className="space-y-4">
-        {formData.parcels.map((parcel, index) => (
-          <div key={index} className="grid grid-cols-5 gap-4">
-            {(
-              [
-                "length",
-                "width",
-                "height",
-                "weight",
-                "count",
-              ] as (keyof Parcel)[]
-            ).map((field) => (
-              <InputField
-                key={field}
-                label={`${field.charAt(0).toUpperCase() + field.slice(1)}${
-                  field === "count"
-                    ? ""
-                    : field === "weight"
-                    ? " (kg)"
-                    : " (cm)"
-                }`}
-                name={field}
-                value={parcel[field]}
-                onChange={(e) => handleParcelChange(index, e)}
-              />
-            ))}
-          </div>
-        ))}
-        <button
-          onClick={addParcelRow}
-          className="text-sm text-[#619B7D] border border-[#619B7D] rounded-md px-2 py-1 hover:bg-[#619B7D] hover:text-white transition duration-300 ease-in-out"
-        >
-          + Add Row
-        </button>
-      </div>
+      <OrderItems />
 
       {/* Step 3: Delivery Notes */}
       <div className="space-y-4">
@@ -324,42 +270,6 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
         >
           + Add Row
         </button>
-      </div>
-
-      {/* Step 4: Review */}
-      <div className="space-y-4 text-gray-700 text-[13px]">
-        <div>
-          <h4 className="font-semibold mb-1 text-black text-sm">
-            Pickup & Delivery
-          </h4>
-          <p>
-            {formData.pickupType} - {formData.pickupCompany} <br />
-            {formData.pickupAddress}, Contact: {formData.pickupContact} <br />
-            Delivery To: {formData.deliveryType} - {formData.deliveryName}
-          </p>
-        </div>
-
-        <div>
-          <h4 className="font-semibold mb-1 text-black text-sm">Parcels</h4>
-          <ul className="list-disc pl-6">
-            {formData.parcels.map((p, i) => (
-              <li key={i}>
-                {p.length}x{p.width}x{p.height} cm, {p.weight}kg x {p.count}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div>
-          <h4 className="font-semibold mb-1 text-black text-sm">Notes</h4>
-          <ul className="list-disc pl-6">
-            {formData.notes.map((n, i) => (
-              <li key={i}>
-                {n.note} - ${n.value}
-              </li>
-            ))}
-          </ul>
-        </div>
       </div>
     </ModalLayout>
   );
