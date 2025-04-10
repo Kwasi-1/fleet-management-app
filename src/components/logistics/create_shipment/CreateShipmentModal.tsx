@@ -355,7 +355,7 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
         </div>
 
         {/* Accounting Dimensions Section */}
-        <div className="mt-6 border-t border-gray-200 pt-4">
+        {/* <div className="mt-6 border-t border-gray-200 pt-4">
           <h3 className="font-semibold mb-2">Accounting Dimensions</h3>
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -385,13 +385,13 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Activity Section */}
-        <div className="mt-4 text-xs text-gray-500">
+        {/* <div className="mt-4 text-xs text-gray-500">
           <p>platform@access88.com</p>
           <p>last edited this: 3 months ago</p>
-        </div>
+        </div> */}
       </div>
     </ModalLayout>
   );
