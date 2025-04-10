@@ -79,14 +79,18 @@ const ordersData = [
 ];
 
 const OrdersTable = () => {
-  const navigate = useNavigate(); // ✅ Hook must be inside the function body
+  const navigate = useNavigate();
 
   const handleButtonClick = () => {
     navigate("/order_management/order_entry");
   };
 
-  const handleRowClick = () => {
-    navigate(`/order_management/order`);
+  const handleRowClick = (row: any) => {
+    navigate(`/order_management/order`, {
+      state: {
+        orderData: row,
+      },
+    });
   };
 
   return (
