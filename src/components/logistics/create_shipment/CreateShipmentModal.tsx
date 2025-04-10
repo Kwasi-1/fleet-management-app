@@ -7,7 +7,6 @@ import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import { dummy_data } from "../../../db";
 import OrderItems from "./OrderItems";
-import { useLocation } from "react-router-dom";
 
 // Define props for the modal
 interface CreateShipmentModalProps {
@@ -33,6 +32,8 @@ interface FormData {
   deliveryName: string;
   deliveryMethod: string;
   orderId: string;
+  deliveryDate: string;
+  deliveryTime: string;
   notes: DeliveryNote[];
 }
 
@@ -53,6 +54,12 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
     deliveryName: "",
     deliveryMethod: "Standard",
     orderId: orderId || "",
+    deliveryDate: new Date().toISOString().split("T")[0],
+    deliveryTime: new Date().toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }),
     notes: [{ note: "", value: "" }],
   });
 
@@ -248,6 +255,21 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
           value={formData.deliveryName}
           onChange={handleChange}
         />
+        <SelectField
+          label="Delivery Method"
+          name="deliveryMethod"
+          options={[
+            "Truck",
+            "Train",
+            "tricycle",
+            "Motorcycle",
+            "Air",
+            "Ship",
+            "Drone",
+          ]}
+          value={formData.deliveryMethod}
+          onChange={handleChange}
+        />
         <InputField
           label="Order ID"
           name="orderId"
@@ -255,11 +277,19 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
           value={formData.orderId}
           onChange={handleChange}
         />
-        <SelectField
-          label="Delivery Method"
-          name="deliveryMethod"
-          options={["Standard", "Express"]}
-          value={formData.deliveryMethod}
+
+        <InputField
+          label="Delivery Date"
+          name="deliveryDate"
+          type="date"
+          value={formData.deliveryDate}
+          onChange={handleChange}
+        />
+        <InputField
+          label="Delivery Time"
+          name="deliveryTime"
+          type="time"
+          value={formData.deliveryTime}
           onChange={handleChange}
         />
       </div>
