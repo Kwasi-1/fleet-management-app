@@ -139,7 +139,7 @@ const ShipmentDetails: React.FC<Props> = ({ shipment, onClose }) => {
 
   return (
     <div>
-      <div className="fixed right-0 top-0 h-screen overflow-auto max-w-md mx-auto bg-white shadow-lg border border-[#e0e6e9] p-6 z-50">
+      <div className="fixed right-0 top-0 h-screen overflow-auto max-w-md mx-auto bg-white shadow-lg border border-[#e0e6e9] p-6 z-50 text-gray-700">
         <div className="flex justify-between items-start mb-4">
           <div>
             <h2 className="text-lg font-semibold">{shipment.id}</h2>
