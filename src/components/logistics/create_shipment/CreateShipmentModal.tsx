@@ -7,11 +7,13 @@ import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import { dummy_data } from "../../../db";
 import OrderItems from "./OrderItems";
+import { useLocation } from "react-router-dom";
 
 // Define props for the modal
 interface CreateShipmentModalProps {
   isOpen: boolean;
   onClose: () => void;
+  orderId?: string; // Add this line
 }
 
 // Define the shape of a delivery note
@@ -29,6 +31,7 @@ interface FormData {
   pickupContact: string;
   deliveryType: string;
   deliveryName: string;
+  deliveryMethod: string;
   orderId: string;
   notes: DeliveryNote[];
 }
@@ -36,6 +39,7 @@ interface FormData {
 const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
   isOpen,
   onClose,
+  orderId,
 }) => {
   const pickupGeocoderRef = useRef<HTMLDivElement>(null);
   const destinationGeocoderRef = useRef<HTMLDivElement>(null);
@@ -47,9 +51,19 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
     pickupContact: "",
     deliveryType: "",
     deliveryName: "",
-    orderId: "",
+    deliveryMethod: "Standard",
+    orderId: orderId || "",
     notes: [{ note: "", value: "" }],
   });
+
+  useEffect(() => {
+    if (orderId) {
+      setFormData((prev) => ({
+        ...prev,
+        orderId: orderId,
+      }));
+    }
+  }, [orderId]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -239,6 +253,13 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
           name="orderId"
           placeholder="e.g. ORD123456"
           value={formData.orderId}
+          onChange={handleChange}
+        />
+        <SelectField
+          label="Delivery Method"
+          name="deliveryMethod"
+          options={["Standard", "Express"]}
+          value={formData.deliveryMethod}
           onChange={handleChange}
         />
       </div>

@@ -361,6 +361,7 @@ function OrderDetails() {
       <CreateShipmentModal
         isOpen={fulfillmentModalOpen}
         onClose={() => setFulfillmentModalOpen(false)}
+        orderId={orderData?.orderNumber || "#27"} // Add this line
       />
     </div>
   );
