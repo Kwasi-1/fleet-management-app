@@ -51,7 +51,7 @@ const ModalLayout: React.FC<ModalLayoutProps> = ({
       onClick={handleBackdropClick}
     >
       <div
-        className={`fixed top-0 right-0 h-full bg-white shadow-lg w-1/2 transition-transform duration-300 overflow-auto ${
+        className={`fixed top-0 right-0 h-full bg-white shadow-lg w-1/2 transition-transform duration-300 ${
           isOpen ? "translate-x-0" : "translate-x-full"
         } ${className}`}
         onClick={(e) => e.stopPropagation()}
@@ -103,7 +103,7 @@ const ModalLayout: React.FC<ModalLayoutProps> = ({
         )}
 
         {/* Tab Content / Children */}
-        <div className="px-6 py-4">
+        <div className="px-6 pb-10 mt-4 h-[70vh] overflow-y-auto scrollbar-hide">
           {tabs.length > 0 ? childArray[activeTab] : children}
         </div>
 
