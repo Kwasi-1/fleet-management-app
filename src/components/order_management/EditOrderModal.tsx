@@ -2,6 +2,7 @@ import Button from "../common/Button";
 import { useState } from "react";
 import InputField from "../common/InputField";
 import ModalLayout from "../../layouts/ModalLayout";
+import { MoreHorizontal, Trash2 } from "lucide-react";
 
 interface OrderItem {
   name: string;
@@ -35,6 +36,9 @@ export default function EditOrderModal({
     image: "",
     unit: "",
   });
+  const [activeDeleteIndex, setActiveDeleteIndex] = useState<number | null>(
+    null
+  );
 
   const updateQuantity = (index: number, delta: number) => {
     setItems((prev) => {
@@ -46,18 +50,19 @@ export default function EditOrderModal({
     });
   };
 
+  const handleDeleteItem = (index: number) => {
+    setItems((prev) => prev.filter((_, i) => i !== index));
+    setActiveDeleteIndex(null); // Close delete confirmation
+  };
+
   const handleSave = () => {
     onSave(items);
     onClose();
   };
 
   return (
-    <ModalLayout
-      title="Edit Order"
-      isOpen={open}
-      onClose={onClose}
-      // className="max-w-2xl w-full relative"
-    >
+    <ModalLayout title="Edit Order" isOpen={open} onClose={onClose}>
+      {/* Add Item Modal (existing code remains the same) */}
       {showAddItemModal && (
         <ModalLayout
           title="Add New Item"
@@ -142,6 +147,7 @@ export default function EditOrderModal({
           </div>
         </ModalLayout>
       )}
+
       <div className="relative flex flex-col gap-4 p-4 h-full overflow-hidden">
         {/* Action Bar */}
         <div className="absolute top-0 right-0 left-0 flex justify-between items-center h-fit">
@@ -163,7 +169,7 @@ export default function EditOrderModal({
           {items.map((item, index) => (
             <div
               key={index}
-              className="grid grid-cols-2 items-center justify-between gap-4 pb-4 text-gray-600"
+              className="grid grid-cols-2 items-center justify-between gap-4 pb-4 text-gray-600 relative"
             >
               <div className="flex items-center gap-4">
                 <img
@@ -201,6 +207,37 @@ export default function EditOrderModal({
                     GHS {item.total.toFixed(2)}
                   </span>
                 </span>
+
+                {/* Delete Button with Confirmation */}
+                <div className="relative">
+                  <button
+                    title="delete"
+                    className="text-gray-400 hover:text-gray-600 transition duration-300"
+                    onClick={() =>
+                      setActiveDeleteIndex(
+                        activeDeleteIndex === index ? null : index
+                      )
+                    }
+                  >
+                    {activeDeleteIndex === index ? (
+                      <Trash2 size={16} className="text-red-500" />
+                    ) : (
+                      <MoreHorizontal size={16} />
+                    )}
+                  </button>
+
+                  {activeDeleteIndex === index && (
+                    <div className="absolute right-0 top-6 bg-white shadow-lg rounded-md p-2 z-10 border border-gray-200">
+                      <button
+                        className="text-red-500 text-xs whitespace-nowrap flex items-center gap-1 px-2 py-1 hover:bg-red-50 rounded"
+                        onClick={() => handleDeleteItem(index)}
+                      >
+                        <Trash2 size={14} />
+                        Confirm Delete
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           ))}
@@ -209,7 +246,7 @@ export default function EditOrderModal({
 
       {/* Action Buttons */}
       {showAddItemModal ? null : (
-        <div className=" absolute bottom-4 right-4 pt-4 flex justify-end gap-3 z-50 h-fit">
+        <div className="absolute bottom-4 right-4 pt-4 flex justify-end gap-3 z-50 h-fit">
           <Button onClick={handleSave} className="px-10">
             Save
           </Button>

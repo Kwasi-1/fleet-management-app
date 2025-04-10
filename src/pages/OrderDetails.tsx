@@ -116,9 +116,11 @@ function OrderDetails() {
         <div className="lg:col-span-3 space-y-5">
           {/* Order Summary */}
           <div className={styles.card}>
-            <div className={styles.sectionTitle}>
-              <div className="flex items-center justify-between">
-                <h2>{orderData?.orderNumber || "#27"}</h2>
+            <div className="mb-4">
+              <div className="flex items-center justify-between mb-1">
+                <h2 className="font-semibold">
+                  {orderData?.orderNumber || "#27"}
+                </h2>
                 <div className="flex items-center space-x-2">
                   <span className="text-sm text-muted-foreground font-thin">
                     {orderData?.status || "Processing"}
