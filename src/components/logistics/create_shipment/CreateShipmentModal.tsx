@@ -6,8 +6,8 @@ import mapboxgl from "mapbox-gl";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import { dummy_data } from "../../../db";
+import orderItems from "../../../db/orderItems";
 import OrderItems from "./OrderItems";
-import Textarea from "../../common/Textarea";
 
 // Define props for the modal
 interface CreateShipmentModalProps {
@@ -39,6 +39,7 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
 }) => {
   const pickupGeocoderRef = useRef<HTMLDivElement>(null);
   const destinationGeocoderRef = useRef<HTMLDivElement>(null);
+  const [items] = useState(orderItems);
   const [formData, setFormData] = useState<FormData>({
     pickupType: "",
     pickupCompany: "",
@@ -47,7 +48,7 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
     pickupContact: "",
     deliveryType: "",
     deliveryName: "",
-    deliveryMethod: "Standard",
+    deliveryMethod: "truck",
     orderId: orderId || "",
     deliveryDate: new Date().toISOString().split("T")[0],
     deliveryTime: new Date().toLocaleTimeString([], {
@@ -265,7 +266,7 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
           onChange={handleChange}
         />
         <InputField
-          label="Delivery Time"
+          label="Pickup Time"
           name="deliveryTime"
           type="time"
           value={formData.deliveryTime}
@@ -277,15 +278,120 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
       <OrderItems />
 
       {/* Step 3: Delivery Notes */}
-      <div className="space-y-4">
-        <Textarea
-          label="Delivery Note"
-          name="note"
-          value={formData.note}
-          onChange={handleChange}
-          placeholder="Eg. Handle with care"
-          rows={4}
-        />
+
+      <div className="text-gray-600">
+        <div className="grid grid-cols-2 gap-4 mb-8">
+          <InputField
+            label="Customer Name"
+            name="deliveryName"
+            placeholder="e.g. Jane Smith"
+            value={formData.deliveryName}
+            onChange={handleChange}
+          />
+          <InputField
+            label="Delivery Date"
+            name="deliveryDate"
+            type="date"
+            value={formData.deliveryDate}
+            onChange={handleChange}
+          />
+          <InputField
+            label="Delivery Time"
+            name="deliveryTime"
+            type="time"
+            value={formData.deliveryTime}
+            onChange={handleChange}
+          />
+          <SelectField
+            label="Source Warehouse"
+            name="pickupCompany"
+            options={["Cepodek", "Nampo", "Main Warehouse"]}
+            value={formData.pickupCompany}
+            onChange={handleChange}
+          />
+        </div>
+
+        <h2 className="text-[15px] font-semibold mb-4">Delivery Items</h2>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm border-collapse">
+            <thead>
+              <tr className="border-b border-gray-200 text-[13px]">
+                <th className="text-left py-2 px-4 font-medium">No.</th>
+                <th className="text-left py-2 px-4 font-medium">Item Code</th>
+                <th className="text-left py-2 px-4 font-medium">Quantity</th>
+                <th className="text-left py-2 px-4 font-medium">UOM</th>
+                <th className="text-left py-2 px-4 font-medium">Rate (GHS)</th>
+                <th className="text-left py-2 px-4 font-medium">
+                  Amount (GHS)
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {items.map((item, idx) => (
+                <tr
+                  key={idx}
+                  className="border-b border-gray-200 hover:bg-gray-50 text-xs"
+                >
+                  <td className="py-3 px-4">{idx + 1}</td>
+                  <td className="py-3 px-4">
+                    <div className="flex items-center gap-4">
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-8 h-8 object-cover rounded"
+                      />
+                      <span>{item.name}</span>
+                    </div>
+                  </td>
+                  <td className="py-3 px-4">{item.quantity}</td>
+                  <td className="py-3 px-4">{item.unit}</td>
+                  <td className="py-3 px-4">GHS {item.unitPrice.toFixed(2)}</td>
+                  <td className="py-3 px-4">GHS {item.total.toFixed(2)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Accounting Dimensions Section */}
+        <div className="mt-6 border-t border-gray-200 pt-4">
+          <h3 className="font-semibold mb-2">Accounting Dimensions</h3>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <h4 className="text-sm font-medium mb-2">
+                Currency and Price List
+              </h4>
+              <div className="text-xs text-gray-500">
+                Foundry-platform@access88.com
+                <br />
+                created this: 3 months ago
+              </div>
+            </div>
+            <div>
+              <div className="flex gap-4">
+                <div>
+                  <h4 className="text-sm font-medium mb-2">Items</h4>
+                  <button className="text-xs text-[#619B7D] border border-[#619B7D] rounded px-2 py-1">
+                    Scan Barcode
+                  </button>
+                </div>
+                <div>
+                  <h4 className="text-sm font-medium mb-2">
+                    Set Source Warehouse
+                  </h4>
+                  <div className="text-xs">Nampo - C</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Activity Section */}
+        <div className="mt-4 text-xs text-gray-500">
+          <p>platform@access88.com</p>
+          <p>last edited this: 3 months ago</p>
+        </div>
       </div>
     </ModalLayout>
   );
