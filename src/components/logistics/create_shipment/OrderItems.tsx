@@ -9,9 +9,9 @@ function OrderItems() {
   const total = subtotal + shipping + tax;
 
   return (
-    <div>
-      <h2 className="text-lg font-semibold text-gray-600">Order Items</h2>
-      <table className="w-full text-sm text-gray-600">
+    <div className="text-gray-600">
+      <h2 className="text-lg font-semibold ">Order Items</h2>
+      <table className="w-full text-sm">
         <tbody>
           {items.map((item, idx) => (
             <tr key={idx} className="align-top">
@@ -37,7 +37,7 @@ function OrderItems() {
         </tbody>
       </table>
       {/* Totals */}
-      <div className="pt-6 mt space-y-3 text-sm pl-3">
+      <div className="pt-6 mt space-y-3 text-sm pl-5">
         <div className="flex justify-between">
           <p className="text-muted-foreground">Subtotal</p>
           <p className="font-medium text-gray-700">GHS {subtotal.toFixed(2)}</p>
