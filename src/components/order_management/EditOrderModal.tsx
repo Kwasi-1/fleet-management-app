@@ -142,68 +142,69 @@ export default function EditOrderModal({
           </div>
         </ModalLayout>
       )}
-
-      {/* Action Bar */}
-      <div className="flex justify-between items-center pb-10 h-fit">
-        <input
-          type="text"
-          placeholder="Search anything..."
-          className="p-2 border border-[#e5e7eb] appearance-none outline-none rounded-lg focus:outline-none focus:ring-2 focus:ring-[#619B7D] text-sm text-gray-600 w-1/2 bg-inherit"
-        />
-        <Button
-          className="px-4 py-2 text-sm"
-          onClick={() => setShowAddItemModal(true)}
-        >
-          Add items
-        </Button>
-      </div>
-
-      {/* Item List */}
-      <div className="flex flex-col gap-4 h-[60vh] overflow-y-auto scrollbar-hide">
-        {items.map((item, index) => (
-          <div
-            key={index}
-            className="grid grid-cols-2 items-center justify-between gap-4 pb-4 text-gray-600"
+      <div className="relative flex flex-col gap-4 p-4 h-full overflow-hidden">
+        {/* Action Bar */}
+        <div className="absolute top-0 right-0 left-0 flex justify-between items-center h-fit">
+          <input
+            type="text"
+            placeholder="Search anything..."
+            className="p-2 border border-[#e5e7eb] appearance-none outline-none rounded-lg focus:outline-none focus:ring-2 focus:ring-[#619B7D] text-sm text-gray-600 w-1/2 bg-inherit"
+          />
+          <Button
+            className="px-4 py-2 text-sm"
+            onClick={() => setShowAddItemModal(true)}
           >
-            <div className="flex items-center gap-4">
-              <img
-                src={item.image}
-                alt={item.name}
-                className="w-10 h-10 object-cover rounded"
-              />
-              <div>
-                <p className="font-semibold text-xs">{item.name}</p>
-                <p className="text-xs text-muted-foreground">{item.unit}</p>
-              </div>
-            </div>
+            Add items
+          </Button>
+        </div>
 
-            <div className="flex items-center gap-3 text-gray-400">
-              <div className="flex items-center">
-                <button
-                  onClick={() => updateQuantity(index, -1)}
-                  className="px-2 hover:text-gray-700 text-lg cursor-pointer"
-                >
-                  −
-                </button>
-                <span className="w-6 text-center text-sm text-gray-800">
-                  {item.quantity}
-                </span>
-                <button
-                  onClick={() => updateQuantity(index, 1)}
-                  className="px-2 rounded text-lg hover:text-gray-700 cursor-pointer"
-                >
-                  +
-                </button>
+        {/* Item List */}
+        <div className="flex flex-col mt-12 gap-4 h-full overflow-y-auto scrollbar-hide">
+          {items.map((item, index) => (
+            <div
+              key={index}
+              className="grid grid-cols-2 items-center justify-between gap-4 pb-4 text-gray-600"
+            >
+              <div className="flex items-center gap-4">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="w-10 h-10 object-cover rounded"
+                />
+                <div>
+                  <p className="font-semibold text-xs">{item.name}</p>
+                  <p className="text-xs text-muted-foreground">{item.unit}</p>
+                </div>
               </div>
-              <span className="text-sm text-gray-600 whitespace-nowrap">
-                × GHS {item.unitPrice.toFixed(2)} ={" "}
-                <span className="font-semibold">
-                  GHS {item.total.toFixed(2)}
+
+              <div className="flex items-center gap-3 text-gray-400">
+                <div className="flex items-center">
+                  <button
+                    onClick={() => updateQuantity(index, -1)}
+                    className="px-2 hover:text-gray-700 text-lg cursor-pointer"
+                  >
+                    −
+                  </button>
+                  <span className="w-6 text-center text-sm text-gray-800">
+                    {item.quantity}
+                  </span>
+                  <button
+                    onClick={() => updateQuantity(index, 1)}
+                    className="px-2 rounded text-lg hover:text-gray-700 cursor-pointer"
+                  >
+                    +
+                  </button>
+                </div>
+                <span className="text-sm text-gray-600 whitespace-nowrap">
+                  × GHS {item.unitPrice.toFixed(2)} ={" "}
+                  <span className="font-semibold">
+                    GHS {item.total.toFixed(2)}
+                  </span>
                 </span>
-              </span>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       {/* Action Buttons */}
