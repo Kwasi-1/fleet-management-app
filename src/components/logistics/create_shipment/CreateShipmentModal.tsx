@@ -7,18 +7,13 @@ import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import { dummy_data } from "../../../db";
 import OrderItems from "./OrderItems";
+import Textarea from "../../common/Textarea";
 
 // Define props for the modal
 interface CreateShipmentModalProps {
   isOpen: boolean;
   onClose: () => void;
   orderId?: string; // Add this line
-}
-
-// Define the shape of a delivery note
-interface DeliveryNote {
-  note: string;
-  value: string;
 }
 
 // Define the overall form data
@@ -34,7 +29,7 @@ interface FormData {
   orderId: string;
   deliveryDate: string;
   deliveryTime: string;
-  notes: DeliveryNote[];
+  note: string;
 }
 
 const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
@@ -60,7 +55,7 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
       minute: "2-digit",
       hour12: false,
     }),
-    notes: [{ note: "", value: "" }],
+    note: "",
   });
 
   useEffect(() => {
@@ -170,7 +165,7 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
   }, [isOpen]);
 
   const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -178,22 +173,6 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
       [name]: value,
     }));
   };
-
-  const handleNoteChange = (
-    index: number,
-    e: ChangeEvent<HTMLInputElement>
-  ) => {
-    const { name, value } = e.target;
-    const updatedNotes = [...formData.notes];
-    updatedNotes[index][name as keyof DeliveryNote] = value;
-    setFormData((prev) => ({ ...prev, notes: updatedNotes }));
-  };
-
-  const addNoteRow = () =>
-    setFormData((prev) => ({
-      ...prev,
-      notes: [...prev.notes, { note: "", value: "" }],
-    }));
 
   return (
     <ModalLayout
@@ -299,28 +278,14 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
 
       {/* Step 3: Delivery Notes */}
       <div className="space-y-4">
-        {formData.notes.map((note, index) => (
-          <div key={index} className="grid grid-cols-2 gap-4">
-            <InputField
-              label="Delivery Note"
-              name="note"
-              value={note.note}
-              onChange={(e) => handleNoteChange(index, e)}
-            />
-            <InputField
-              label="Value"
-              name="value"
-              value={note.value}
-              onChange={(e) => handleNoteChange(index, e)}
-            />
-          </div>
-        ))}
-        <button
-          onClick={addNoteRow}
-          className="text-sm text-[#619B7D] border border-[#619B7D] rounded-md px-2 py-1 hover:bg-[#619B7D] hover:text-white transition duration-300 ease-in-out"
-        >
-          + Add Row
-        </button>
+        <Textarea
+          label="Delivery Note"
+          name="note"
+          value={formData.note}
+          onChange={handleChange}
+          placeholder="Eg. Handle with care"
+          rows={4}
+        />
       </div>
     </ModalLayout>
   );
