@@ -21,6 +21,7 @@ interface Props {
 const Status: React.FC<{ shipment: Shipment }> = ({ shipment }) => {
   const location = useLocation();
   const isBooking = location.pathname.includes("booking");
+  const [isBooked, setIsBooked] = useState(shipment.status === "Booked"); // Initialize based on current status
 
   const pickupLngLat = new mapboxgl.LngLat(
     shipment.pickupCoordinates[0],
@@ -31,6 +32,11 @@ const Status: React.FC<{ shipment: Shipment }> = ({ shipment }) => {
     shipment.destinationCoordinates[0],
     shipment.destinationCoordinates[1]
   );
+
+  const handleBookClick = () => {
+    setIsBooked(!isBooked);
+    console.log(`Shipment ${isBooked ? "canceled" : "booked"}`);
+  };
 
   return (
     <>
@@ -72,7 +78,7 @@ const Status: React.FC<{ shipment: Shipment }> = ({ shipment }) => {
             </div>
             <div>
               <p className="font-semibold">Status</p>
-              <StatusText text={shipment.status} />
+              <StatusText text={isBooked ? "Booked" : "Available"} />
             </div>
             <div>
               <p className="font-semibold">Pickup</p>
@@ -91,9 +97,10 @@ const Status: React.FC<{ shipment: Shipment }> = ({ shipment }) => {
       {isBooking && (
         <Button
           className="w-full mt-12"
-          onClick={() => console.log("shipment booked")}
+          onClick={handleBookClick}
+          outline={isBooked ? true : false}
         >
-          Book
+          {isBooked ? "Cancel" : "Book"}
         </Button>
       )}
 
@@ -106,7 +113,6 @@ const Status: React.FC<{ shipment: Shipment }> = ({ shipment }) => {
     </>
   );
 };
-
 const Details: React.FC<{ shipment: Shipment }> = ({ shipment }) => (
   <div className="mt-4">
     <h3 className="text-lg font-semibold mb-2">Shipment details</h3>
