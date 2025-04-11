@@ -2,7 +2,7 @@ import Button from "../common/Button";
 import { useState } from "react";
 import InputField from "../common/InputField";
 import ModalLayout from "../../layouts/ModalLayout";
-import { MoreHorizontal, Trash2 } from "lucide-react";
+// import { MoreHorizontal, Trash2 } from "lucide-react";
 
 interface OrderItem {
   name: string;
@@ -36,9 +36,9 @@ export default function EditOrderModal({
     image: "",
     unit: "",
   });
-  const [activeDeleteIndex, setActiveDeleteIndex] = useState<number | null>(
-    null
-  );
+  // const [activeDeleteIndex, setActiveDeleteIndex] = useState<number | null>(
+  //   null
+  // );
 
   const updateQuantity = (index: number, delta: number) => {
     setItems((prev) => {
@@ -50,10 +50,10 @@ export default function EditOrderModal({
     });
   };
 
-  const handleDeleteItem = (index: number) => {
-    setItems((prev) => prev.filter((_, i) => i !== index));
-    setActiveDeleteIndex(null); // Close delete confirmation
-  };
+  // const handleDeleteItem = (index: number) => {
+  //   setItems((prev) => prev.filter((_, i) => i !== index));
+  //   setActiveDeleteIndex(null); // Close delete confirmation
+  // };
 
   const handleSave = () => {
     onSave(items);
@@ -209,7 +209,7 @@ export default function EditOrderModal({
                 </span>
 
                 {/* Delete Button with Confirmation */}
-                <div className="relative">
+                {/* <div className="relative">
                   <button
                     title="delete"
                     className="text-gray-400 hover:text-gray-600 transition duration-300"
@@ -237,7 +237,7 @@ export default function EditOrderModal({
                       </button>
                     </div>
                   )}
-                </div>
+                </div> */}
               </div>
             </div>
           ))}
