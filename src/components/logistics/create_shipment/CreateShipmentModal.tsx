@@ -28,7 +28,7 @@ interface FormData {
   deliveryMethod: string;
   orderId: string;
   deliveryDate: string;
-  deliveryTime: string;
+  pickupTime: string;
   note: string;
 }
 
@@ -51,7 +51,7 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
     deliveryMethod: "truck",
     orderId: orderId || "",
     deliveryDate: new Date().toISOString().split("T")[0],
-    deliveryTime: new Date().toLocaleTimeString([], {
+    pickupTime: new Date().toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit",
       hour12: false,
@@ -267,9 +267,9 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
         />
         <InputField
           label="Pickup Time"
-          name="deliveryTime"
+          name="pickupTime"
           type="time"
-          value={formData.deliveryTime}
+          value={formData.pickupTime}
           onChange={handleChange}
         />
       </div>
@@ -296,10 +296,10 @@ const CreateShipmentModal: React.FC<CreateShipmentModalProps> = ({
             onChange={handleChange}
           />
           <InputField
-            label="Delivery Time"
-            name="deliveryTime"
+            label="Pickup Time"
+            name="pickupTime"
             type="time"
-            value={formData.deliveryTime}
+            value={formData.pickupTime}
             onChange={handleChange}
           />
           <SelectField
