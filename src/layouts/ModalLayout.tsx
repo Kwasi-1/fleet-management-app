@@ -103,7 +103,7 @@ const ModalLayout: React.FC<ModalLayoutProps> = ({
         )}
 
         {/* Tab Content / Children */}
-        <div className="px-6 pb-10 mt-4 h-[70vh] overflow-y-auto scrollbar-hide">
+        <div className="px-6 pb-40 mt-4 h-[85vh] overflow-y-auto scrollbar-hide">
           {tabs.length > 0 ? (
             <div className="relative">
               {childArray.map((child, index) => (
