@@ -114,6 +114,7 @@ const DeliveryStopsTable = () => {
       <Table
         columns={deliveryStopsColumns}
         data={enhancedData}
+        buttonLabel="Create Delivery Trip"
         searchPlaceholder="Search Delivery Stops"
       />
 
