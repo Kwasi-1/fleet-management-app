@@ -9,6 +9,8 @@ import {
 } from "../../../types/shipmentDetailsTypes";
 import mapboxgl from "mapbox-gl";
 import Timeline from "./Timeline";
+import { useLocation } from "react-router-dom";
+import Button from "../../common/Button";
 
 interface Props {
   shipment: Shipment;
@@ -16,6 +18,9 @@ interface Props {
 }
 
 const Status: React.FC<{ shipment: Shipment }> = ({ shipment }) => {
+  const location = useLocation();
+  const isBooking = location.pathname.includes("booking");
+
   const pickupLngLat = new mapboxgl.LngLat(
     shipment.pickupCoordinates[0],
     shipment.pickupCoordinates[1]
@@ -30,30 +35,69 @@ const Status: React.FC<{ shipment: Shipment }> = ({ shipment }) => {
     <>
       <ShipmentMap pickup={pickupLngLat} destination={destinationLngLat} />
 
-      <div className="grid grid-cols-2 gap-3 text-sm mt-5">
-        <div>
-          <p className="font-semibold">Status</p>
-          <p className="text-blue-500">{shipment.status}</p>
-        </div>
-        <div>
-          <p className="font-semibold">Last known position</p>
-          <p>{shipment.lastKnownPosition.location}</p>
-          <p className="text-gray-400 text-xs">
-            {shipment.lastKnownPosition.timestamp}
-          </p>
-        </div>
-        <div>
-          <p className="font-semibold">ETA</p>
-          <p>{shipment.eta.location}</p>
-          <p className="text-gray-400 text-xs">{shipment.eta.timestamp}</p>
-        </div>
+      <div className="text-sm mt-5">
+        {!isBooking ? (
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <p className="font-semibold">Status</p>
+              <p className="text-blue-500">{shipment.status}</p>
+            </div>
+            <div>
+              <p className="font-semibold">Last known position</p>
+              <p>{shipment.lastKnownPosition.location}</p>
+              <p className="text-gray-400 text-xs">
+                {shipment.lastKnownPosition.timestamp}
+              </p>
+            </div>
+            <div>
+              <p className="font-semibold">ETA</p>
+              <p>{shipment.eta.location}</p>
+              <p className="text-gray-400 text-xs">{shipment.eta.timestamp}</p>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <p className="font-semibold">Customer Name</p>
+              <p className="text-blue-500">{shipment.customerName}</p>
+            </div>
+            <div>
+              <p className="font-semibold">Rate</p>
+              <p className="text-blue-500">{shipment.rate}</p>
+            </div>
+            <div>
+              <p className="font-semibold">Weight</p>
+              <p>{shipment.weight}</p>
+            </div>
+            <div>
+              <p className="font-semibold">Pickup</p>
+              <p>{shipment.pickupCoordinates.join(", ")}</p>
+              <p className="text-gray-400 text-xs">{shipment.pickup}</p>
+            </div>
+            <div>
+              <p className="font-semibold">Destination</p>
+              <p>{shipment.destinationCoordinates.join(", ")}</p>
+              <p className="text-gray-400 text-xs">{shipment.destination}</p>
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Timeline */}
-      <div className="py-4 px-3">
-        <h3 className="font-semibold text-lg my-4">Shipment Progress</h3>
-        <Timeline events={shipment.progress} />
-      </div>
+      {isBooking && (
+        <Button
+          className="w-full mt-12"
+          onClick={() => console.log("shipment booked")}
+        >
+          Book
+        </Button>
+      )}
+
+      {!isBooking && (
+        <div className="py-4 px-3">
+          <h3 className="font-semibold text-lg my-4">Shipment Progress</h3>
+          <Timeline events={shipment.progress} />
+        </div>
+      )}
     </>
   );
 };
