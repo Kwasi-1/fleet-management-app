@@ -23,8 +23,8 @@ const shipmentData = [
     order: "ORD-789",
     pickup: "Accra",
     destination: "Kumasi",
-    pickupCoordinates: [-118.2437, 34.0522],
-    destinationCoordinates: [-87.6298, 41.8781],
+    pickupCoordinates: [-118.2437, 34.0522] as [number, number],
+    destinationCoordinates: [-87.6298, 41.8781] as [number, number],
     date: "20/03/2025",
     status: "In Transit",
     reference: "ME #12345678",
@@ -76,8 +76,8 @@ const shipmentData = [
     order: "ORD-456",
     pickup: "Tema",
     destination: "Takoradi",
-    pickupCoordinates: [-118.2437, 34.0522], // Los Angeles
-    destinationCoordinates: [-87.6298, 41.8781], // Chicago
+    pickupCoordinates: [-118.2437, 34.0522] as [number, number], // Los Angeles
+    destinationCoordinates: [-87.6298, 41.8781] as [number, number], // Chicago
     date: "19/03/2025",
     status: "Delivered",
     reference: "ME #87654321",
@@ -135,8 +135,6 @@ const ShipmentTable: React.FC<ShipmentTableProps> = ({ onShipmentClick }) => {
     <div>
       <Table<Shipment>
         columns={shipmentColumns}
-        // @ts-ignore
-
         data={shipmentData}
         searchPlaceholder="Search Shipments..."
         buttonLabel="Add Shipment"
