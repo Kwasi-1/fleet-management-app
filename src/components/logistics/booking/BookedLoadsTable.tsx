@@ -26,7 +26,7 @@ const shipmentData = [
     weight: "500 kg",
     date: "20/03/2025",
     customerName: "John Doe",
-    status: "Unbooked",
+    status: "Booked",
     order: "ORD-789",
     pickupCoordinates: [-118.2437, 34.0522] as [number, number],
     destinationCoordinates: [-87.6298, 41.8781] as [number, number],
@@ -83,7 +83,7 @@ const shipmentData = [
     weight: "400 kg",
     date: "19/03/2025",
     customerName: "Jane Smith",
-    status: "unbooked",
+    status: "booked",
     order: "ORD-456",
     pickupCoordinates: [-118.2437, 34.0522] as [number, number],
     destinationCoordinates: [-87.6298, 41.8781] as [number, number],
@@ -126,7 +126,9 @@ const shipmentData = [
   },
 ];
 
-const BookingTable: React.FC<ShipmentTableProps> = ({ onShipmentClick }) => {
+const BookedLoadsTable: React.FC<ShipmentTableProps> = ({
+  onShipmentClick,
+}) => {
   return (
     <div>
       <Table<Shipment>
@@ -139,4 +141,4 @@ const BookingTable: React.FC<ShipmentTableProps> = ({ onShipmentClick }) => {
   );
 };
 
-export default BookingTable;
+export default BookedLoadsTable;

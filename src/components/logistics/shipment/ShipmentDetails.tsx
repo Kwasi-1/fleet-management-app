@@ -11,6 +11,7 @@ import mapboxgl from "mapbox-gl";
 import Timeline from "./Timeline";
 import { useLocation } from "react-router-dom";
 import Button from "../../common/Button";
+import StatusText from "../../common/StatusText";
 
 interface Props {
   shipment: Shipment;
@@ -40,7 +41,7 @@ const Status: React.FC<{ shipment: Shipment }> = ({ shipment }) => {
           <div className="grid grid-cols-2 gap-3">
             <div>
               <p className="font-semibold">Status</p>
-              <p className="text-blue-500">{shipment.status}</p>
+              <StatusText text={shipment.status} />
             </div>
             <div>
               <p className="font-semibold">Last known position</p>
@@ -59,15 +60,19 @@ const Status: React.FC<{ shipment: Shipment }> = ({ shipment }) => {
           <div className="grid grid-cols-2 gap-3">
             <div>
               <p className="font-semibold">Customer Name</p>
-              <p className="text-blue-500">{shipment.customerName}</p>
+              <p className="">{shipment.customerName}</p>
             </div>
             <div>
               <p className="font-semibold">Rate</p>
-              <p className="text-blue-500">{shipment.rate}</p>
+              <p className="">{shipment.rate}</p>
             </div>
             <div>
               <p className="font-semibold">Weight</p>
               <p>{shipment.weight}</p>
+            </div>
+            <div>
+              <p className="font-semibold">Status</p>
+              <StatusText text={shipment.status} />
             </div>
             <div>
               <p className="font-semibold">Pickup</p>
