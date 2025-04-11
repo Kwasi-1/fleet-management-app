@@ -106,6 +106,11 @@ const MenuItems = (): MenuItem[] => [
         icon: "emojione-monotone:package",
         link: "/logistics/shipment",
       },
+      {
+        title: "Booking",
+        icon: "emojione-monotone:package",
+        link: "/logistics/booking",
+      },
     ],
   },
   {

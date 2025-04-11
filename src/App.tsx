@@ -20,6 +20,7 @@ import Invoice from "./pages/Invoice";
 import ShipmentTracking from "./pages/ShipmentTracking";
 import ReminderDetails from "./pages/ReminderDetails";
 import OrderDetails from "./pages/OrderDetails";
+import Booking from "./pages/Booking";
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function AppContent() {
           <Route path="/fleet" element={<Fleet />} />
           <Route path="/logistics" element={<ShipmentTracking />} />
           <Route path="/logistics/shipment" element={<Shipment />} />
+          <Route path="/logistics/booking" element={<Booking />} />
           <Route path="/fleet/drivers" element={<Drivers />} />
           <Route
             path="/fleet/drivers/driver_info"
