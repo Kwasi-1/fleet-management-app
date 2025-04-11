@@ -146,9 +146,7 @@ const BookingTable: React.FC<ShipmentTableProps> = ({ onShipmentClick }) => {
         columns={shipmentColumns}
         data={shipmentData}
         searchPlaceholder="Search Shipments..."
-        buttonLabel="Add Shipment"
-        onButtonClick={handleOpenModal}
-        onRowClick={onShipmentClick} // Now types match perfectly
+        onRowClick={onShipmentClick}
       />
       <CreateShipmentModal
         isOpen={isCreateShipmentModalOpen}
