@@ -31,6 +31,10 @@ export interface Shipment {
   destinationCoordinates: [number, number];
   date: string;
   status: string;
+  rate: string;
+  distance: string;
+  customerName: string;
+  weight: string;
   reference: string;
   primaryReference: string;
   lastKnownPosition: {
