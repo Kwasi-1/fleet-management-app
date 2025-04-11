@@ -24,6 +24,7 @@ const StatusText = ({ text, textClassName = "" }: StatusTextProps) => {
         "transferred",
         "paid",
         "approved",
+        "accepted",
         "booked",
         "actioned",
         "yes",
