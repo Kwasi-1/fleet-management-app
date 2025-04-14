@@ -302,7 +302,7 @@ const MapComponent = () => {
         <div
           id="map-container"
           ref={mapContainerRef}
-          className="h-[65vh] md:h-[75vh] rounded-xl border"
+          className="h-[65vh] md:h-[75vh] rounded-xl border border-gray-200"
         />
       </div>
 

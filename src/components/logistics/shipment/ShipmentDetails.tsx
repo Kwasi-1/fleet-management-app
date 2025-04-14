@@ -178,7 +178,7 @@ const Documents: React.FC<{ documents: DocumentType[] }> = ({ documents }) => (
               <p className="font-semibold">{doc.name}</p>
               <p className="text-gray-500 text-sm">Created {doc.date}</p>
             </div>
-            <button className="p-2 bg-gray-300 rounded-full hover:bg-gray-400">
+            <button type="button" title="Download document" className="p-2 bg-gray-300 rounded-full hover:bg-gray-400">
               <Icon icon="mdi:download" className="h-5 w-5 text-gray-700" />
             </button>
           </li>
@@ -230,6 +230,8 @@ const ShipmentDetails: React.FC<Props> = ({ shipment, onClose }) => {
               View in ▼
             </button>
             <button
+              type="button"
+              title="Close"
               onClick={onClose}
               className="bg-gray-200 p-2 rounded-full hover:bg-gray-300"
             >

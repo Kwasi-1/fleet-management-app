@@ -44,7 +44,7 @@ const Navbar: React.FC<NavbarProps> = ({
     <nav className="px-4 py-3 w-[95%] h-[10vh] md:w-[90%] mx-auto flex items-center justify-between dark:border-white/10 relative z-50">
       {isOnMapPage ? (
         <button
-          className="text-sm border rounded-lg p-2 flex items-center gap-1 text-gray-400 hover:text-gray-600 hover:border-gray-300 transition duration-300 mb-1"
+          className="text-sm border rounded-lg px-3 py-[7px] flex items-center gap-1 text-gray-400 border-gray-200 hover:text-gray-600 hover:border-gray-300 transition duration-300 mb-1"
           onClick={handleBackClick}
         >
           <Icon icon="weui:back-outlined" className="text-sm" />
@@ -79,6 +79,8 @@ const Navbar: React.FC<NavbarProps> = ({
       <div className="flex items-center space-x-4">
         {/* Search */}
         <button
+          type="button"
+          title="Search"
           onClick={onSearchClick}
           className={`p-3 rounded-md transition duration-300 group ${
             isDarkMode ? "hover:bg-white/10" : "hover:bg-gray-100"
@@ -92,6 +94,8 @@ const Navbar: React.FC<NavbarProps> = ({
 
         {/* Theme Toggle */}
         <button
+          type="button"
+          title={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
           onClick={onToggleTheme}
           className={`p-3 rounded-md transition duration-300 group ${
             isDarkMode ? "hover:bg-white/10" : "hover:bg-gray-100"
@@ -105,6 +109,8 @@ const Navbar: React.FC<NavbarProps> = ({
 
         {/* Mobile Menu Toggle */}
         <button
+          type="button"
+          title={menuOpen ? "Close menu" : "Open menu"}
           onClick={() => setMenuOpen(!menuOpen)}
           className="lg:hidden p-2 rounded-md hover:bg-gray-100 dark:hover:bg-white/10"
         >
