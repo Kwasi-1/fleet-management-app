@@ -108,7 +108,7 @@ const MenuItems = (): MenuItem[] => [
       },
       {
         title: "Booking",
-        icon: "emojione-monotone:package",
+        icon: "solar:book-broken",
         link: "/logistics/booking",
       },
     ],
