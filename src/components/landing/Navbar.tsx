@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import logo from "../../assets/foundry_logo.png";
 import logoWhite from "../../assets/foundry_logo_white.png";
-import { NavLink } from "react-router";
+import { NavLink, useLocation, useNavigate } from "react-router";
 
 // Define the type for the navLinks array
 interface NavLinkItem {
@@ -32,29 +32,48 @@ const Navbar: React.FC<NavbarProps> = ({
   isDarkMode,
 }) => {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
+  const location = useLocation();
+  const isOnMapPage = location.pathname === "/map";
+  const navigate = useNavigate();
+
+  const handleBackClick = () => {
+    navigate(-1);
+  };
 
   return (
     <nav className="px-4 py-3 w-[95%] h-[10vh] md:w-[90%] mx-auto flex items-center justify-between dark:border-white/10 relative z-50">
-      {/* Left - Logo */}
-      <div className="flex items-center space-x-4">
-        <img
-          src={isDarkMode ? logoWhite : logo}
-          alt="logo"
-          className="w-4 h-5"
-        />
-        {/* Desktop Links */}
-        <ul className="hidden lg:flex space-x-6 text-sm font-medium">
-          {navLinks.map((link, index) => (
-            <NavLink
-              to={link.to}
-              key={index}
-              className="hover:text-gray-500 dark:hover:text-gray-400 cursor-pointer"
-            >
-              {link.label}
-            </NavLink>
-          ))}
-        </ul>
-      </div>
+      {isOnMapPage ? (
+        <button
+          className="text-sm border rounded-lg p-2 flex items-center gap-1 text-gray-400 hover:text-gray-600 hover:border-gray-300 transition duration-300 mb-1"
+          onClick={handleBackClick}
+        >
+          <Icon icon="weui:back-outlined" className="text-sm" />
+          Back
+        </button>
+      ) : (
+        <div>
+          {/* Left - Logo */}
+          <div className="flex items-center space-x-4">
+            <img
+              src={isDarkMode ? logoWhite : logo}
+              alt="logo"
+              className="w-4 h-5"
+            />
+            {/* Desktop Links */}
+            <ul className="hidden lg:flex space-x-6 text-sm font-medium">
+              {navLinks.map((link, index) => (
+                <NavLink
+                  to={link.to}
+                  key={index}
+                  className="hover:text-gray-500 dark:hover:text-gray-400 cursor-pointer"
+                >
+                  {link.label}
+                </NavLink>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
 
       {/* Right - Icons & Mobile Toggle */}
       <div className="flex items-center space-x-4">
