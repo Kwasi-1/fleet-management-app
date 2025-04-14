@@ -16,3 +16,18 @@ declare module '@mapbox/mapbox-gl-geocoder' {
     onRemove(): void;
   }
 }
+
+interface ShipmentCoordinates {
+  pickup: [number, number];
+  destination: [number, number];
+}
+
+interface ShipmentDetails {
+  id: string;
+  status: string;
+  pickup: string;
+  destination: string;
+  customerName: string;
+  rate: string;
+  weight: string;
+}

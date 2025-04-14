@@ -12,6 +12,7 @@ import Timeline from "./Timeline";
 import { useLocation } from "react-router-dom";
 import Button from "../../common/Button";
 import StatusText from "../../common/StatusText";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   shipment: Shipment;
@@ -188,9 +189,30 @@ const Documents: React.FC<{ documents: DocumentType[] }> = ({ documents }) => (
 );
 
 const ShipmentDetails: React.FC<Props> = ({ shipment, onClose }) => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<
     "Status" | "Details" | "Comments" | "Documents"
   >("Status");
+
+  const handleViewInMapClick = () => {
+    navigate("/", {
+      state: {
+        shipmentCoordinates: {
+          pickup: shipment.pickupCoordinates,
+          destination: shipment.destinationCoordinates,
+        },
+        shipmentDetails: {
+          id: shipment.id,
+          status: shipment.status,
+          pickup: shipment.pickup,
+          destination: shipment.destination,
+          customerName: shipment.customerName,
+          rate: shipment.rate,
+          weight: shipment.weight,
+        },
+      },
+    });
+  };
 
   return (
     <div>
@@ -201,7 +223,10 @@ const ShipmentDetails: React.FC<Props> = ({ shipment, onClose }) => {
             <p className="text-gray-500 text-sm">{shipment.primaryReference}</p>
           </div>
           <div className="flex items-center space-x-2">
-            <button className="bg-gray-100 px-3 py-1 rounded-md text-sm shadow">
+            <button
+              onClick={handleViewInMapClick}
+              className="bg-gray-100 px-3 py-1 rounded-md text-sm shadow"
+            >
               View in ▼
             </button>
             <button

@@ -1,4 +1,6 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 interface DetailItemProps {
   title: string;
@@ -20,9 +22,11 @@ const DetailItem: React.FC<DetailItemProps> = ({
   iconColor,
 }) => (
   <div className="w-full sm:w-fit">
-    <p className="text-sm sm:text-base text-gray-500 font-sans mb-1">{title}</p>
+    <p className="text-sm sm:text-base text-gray-500 font-sans mb-1 capitalize">
+      {title}
+    </p>
     <p
-      className="text-xl sm:text-2xl font-semibold text-black pb-2 border-b-4"
+      className="text-xl sm:text-2xl font-semibold text-black pb-2 border-b-4 capitalize"
       style={{ borderColor: borderColour }}
     >
       {icon && (
@@ -36,11 +40,15 @@ const DetailItem: React.FC<DetailItemProps> = ({
       {value}
     </p>
     {subtitle && (
-      <p className="text-sm sm:text-base text-black font-semibold mt-1">
+      <p className="text-sm sm:text-base text-black font-semibold mt-1 capitalize">
         {subtitle}
       </p>
     )}
-    {extra && <p className="text-xs sm:text-sm text-gray-500 mt-1">{extra}</p>}
+    {extra && (
+      <p className="text-xs sm:text-sm text-gray-500 mt-1 capitalize">
+        {extra}
+      </p>
+    )}
   </div>
 );
 
@@ -55,10 +63,19 @@ interface DeliveryItem {
 }
 
 const DeliveryInfo = () => {
+  const location = useLocation();
+  const [shipmentDetails, setShipmentDetails] = useState<any>(null);
+
+  useEffect(() => {
+    if (location.state?.shipmentDetails) {
+      setShipmentDetails(location.state.shipmentDetails);
+    }
+  }, [location.state]);
+
   const deliveryData: Record<string, DeliveryItem> = {
     status: {
       title: "Status",
-      value: "In Transit",
+      value: shipmentDetails?.status || "In Transit",
       subtitle: "Driver Assigned",
       extra: "Mike Tyson",
       borderColour: "#619B7D",
@@ -67,13 +84,13 @@ const DeliveryInfo = () => {
       title: "Vehicle",
       value: "KIA F5",
       subtitle: "Order",
-      extra: "MAT-MR-2025-00315",
+      extra: shipmentDetails?.id || "MAT-MR-2025-00315",
       borderColour: "#619B7D",
     },
     pickup: {
       title: "Pickup",
-      value: "Oyarifa WH",
-      subtitle: "In Transit",
+      value: shipmentDetails?.pickup || "Oyarifa WH",
+      subtitle: shipmentDetails?.status || "In Transit",
       extra: "11 Nov 2:30PM",
       icon: "ri:arrow-up-circle-fill",
       iconColor: "text-black",
@@ -81,8 +98,11 @@ const DeliveryInfo = () => {
     },
     destination: {
       title: "Destination",
-      value: "Cepodek",
-      subtitle: "Arriving",
+      value: shipmentDetails?.destination || "Cepodek",
+      subtitle:
+        shipmentDetails?.status === "unbooked"
+          ? "Not Accepted"
+          : shipmentDetails?.status || "Arriving",
       icon: "ri:arrow-down-circle-fill",
       iconColor: "text-[#8DB6A2]",
       borderColour: "#929292",

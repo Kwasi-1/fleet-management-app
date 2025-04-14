@@ -3,10 +3,14 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import BusinessLayer from "./BusinessLayer";
 import GeocoderComponent from "./GeocoderComponent";
-// import TruckSimulation from "./TruckSimulation";
 import DeliveryInfo from "./DeliveryInfo";
 import Navbar from "./Navbar";
 import { dummy_data } from "../../db";
+import { useLocation } from "react-router-dom";
+
+// Set Mapbox access token
+mapboxgl.accessToken =
+  "pk.eyJ1Ijoia3dhc2ktMSIsImEiOiJjbThkNG15anAyYXF2MmtzOGJneW55cmVnIn0.uRUn_veAFyZ8u1CxkRGnWg";
 
 const INITIAL_CENTER: [number, number] = [
   -0.16912933535458255, 5.678395107981338,
@@ -21,15 +25,232 @@ interface Business {
   };
 }
 
+interface ShipmentCoordinates {
+  pickup: [number, number];
+  destination: [number, number];
+}
+
+interface ShipmentDetails {
+  id: string;
+  status: string;
+  pickup: string;
+  destination: string;
+  customerName: string;
+  rate: string;
+  weight: string;
+}
+
 const MapComponent = () => {
-  const mapRef = useRef<mapboxgl.Map>(null!); // Note the non-null assertion
-  const mapContainerRef = useRef<HTMLDivElement>(null!);
-  const geocoderContainerRef = useRef<HTMLDivElement>(null!);
+  const mapRef = useRef<mapboxgl.Map | null>(null);
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const geocoderContainerRef = useRef<HTMLDivElement>(null);
   const [businesses, setBusinesses] = useState<Business[]>([]);
   const [showGeocoder, setShowGeocoder] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(() => {
     return localStorage.getItem("theme") === "dark";
   });
+  const location = useLocation();
+
+  const [shipmentData, setShipmentData] = useState<{
+    coordinates: ShipmentCoordinates | null;
+    details: ShipmentDetails | null;
+  }>({ coordinates: null, details: null });
+
+  // Handle location state changes
+  useEffect(() => {
+    if (location.state) {
+      setShipmentData({
+        coordinates: location.state.shipmentCoordinates,
+        details: location.state.shipmentDetails,
+      });
+    }
+  }, [location.state]);
+
+  // Helper function to fit map to both points
+  const fitMapToPoints = (
+    pickup: [number, number],
+    destination: [number, number]
+  ) => {
+    if (!mapRef.current) return;
+
+    const bounds = new mapboxgl.LngLatBounds()
+      .extend(pickup)
+      .extend(destination);
+
+    const padding = {
+      top: 100,
+      bottom: 100,
+      left: 100,
+      right: 100,
+    };
+
+    mapRef.current.fitBounds(bounds, {
+      padding: padding,
+      maxZoom: 15,
+    });
+  };
+
+  // Helper function to add shipment markers and route
+  const addShipmentMarkersAndRoute = () => {
+    if (!mapRef.current || !shipmentData.coordinates) return;
+
+    const { pickup, destination } = shipmentData.coordinates;
+
+    // Clear existing markers (if any)
+    const markers = document.querySelectorAll(".mapboxgl-marker");
+    markers.forEach((marker) => marker.remove());
+
+    // Add Pickup Marker
+    new mapboxgl.Marker({ color: "blue" })
+      .setLngLat(new mapboxgl.LngLat(...pickup))
+      .setPopup(
+        new mapboxgl.Popup().setText(
+          "Pickup: " + (shipmentData.details?.pickup || "")
+        )
+      )
+      .addTo(mapRef.current);
+
+    // Add Destination Marker
+    new mapboxgl.Marker({ color: "black" })
+      .setLngLat(new mapboxgl.LngLat(...destination))
+      .setPopup(
+        new mapboxgl.Popup().setText(
+          "Destination: " + (shipmentData.details?.destination || "")
+        )
+      )
+      .addTo(mapRef.current);
+
+    // Draw Route Line
+    mapRef.current.addSource("route", {
+      type: "geojson",
+      data: {
+        type: "Feature",
+        properties: {},
+        geometry: {
+          type: "LineString",
+          coordinates: [pickup, destination],
+        },
+      },
+    });
+
+    mapRef.current.addLayer({
+      id: "route",
+      type: "line",
+      source: "route",
+      layout: {
+        "line-join": "round",
+        "line-cap": "round",
+      },
+      paint: {
+        "line-color": "#619B7D",
+        "line-width": 4,
+      },
+    });
+
+    // Fit map to show both points
+    fitMapToPoints(pickup, destination);
+  };
+
+  // Initialize and manage the map
+  useEffect(() => {
+    if (!mapContainerRef.current) return;
+
+    // Initialize the map if it doesn't exist
+    if (!mapRef.current) {
+      mapRef.current = new mapboxgl.Map({
+        container: mapContainerRef.current,
+        style: isDarkMode
+          ? "mapbox://styles/mapbox/dark-v11"
+          : "mapbox://styles/mapbox/light-v11",
+        pitch: 60,
+        bearing: -20,
+        antialias: true,
+        center: INITIAL_CENTER,
+        zoom: INITIAL_ZOOM,
+      });
+
+      mapRef.current.addControl(new mapboxgl.NavigationControl());
+
+      mapRef.current.on("load", () => {
+        if (!mapRef.current) return;
+
+        // Add 3D buildings layer
+        mapRef.current.addLayer({
+          id: "3d-buildings",
+          source: "composite",
+          "source-layer": "building",
+          type: "fill-extrusion",
+          minzoom: 15,
+          paint: {
+            "fill-extrusion-color": "#aaa",
+            "fill-extrusion-height": [
+              "interpolate",
+              ["linear"],
+              ["zoom"],
+              15,
+              0,
+              16,
+              ["get", "height"],
+            ],
+            "fill-extrusion-base": [
+              "case",
+              ["has", "min_height"],
+              ["get", "min_height"],
+              0,
+            ],
+            "fill-extrusion-opacity": 0.6,
+          },
+        });
+
+        // Load business data
+        const data = { ...dummy_data["foundry-ecosytem"] };
+        setBusinesses([
+          ...data.wholesalers,
+          ...data.microfinance,
+          ...data.market_businesses,
+        ]);
+
+        // Add shipment markers and route if coordinates exist
+        if (shipmentData.coordinates) {
+          addShipmentMarkersAndRoute();
+        }
+      });
+    } else {
+      // If map already exists, just update its style
+      mapRef.current.setStyle(
+        isDarkMode
+          ? "mapbox://styles/mapbox/dark-v11"
+          : "mapbox://styles/mapbox/light-v11"
+      );
+
+      if (shipmentData.coordinates) {
+        // Remove existing route layer if it exists
+        if (mapRef.current.getLayer("route")) {
+          mapRef.current.removeLayer("route");
+        }
+        if (mapRef.current.getSource("route")) {
+          mapRef.current.removeSource("route");
+        }
+
+        addShipmentMarkersAndRoute();
+      } else {
+        // If no coordinates, reset to initial view
+        mapRef.current.flyTo({
+          center: INITIAL_CENTER,
+          zoom: INITIAL_ZOOM,
+          essential: true,
+        });
+      }
+    }
+
+    return () => {
+      // Cleanup on unmount
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
+    };
+  }, [isDarkMode, shipmentData.coordinates]);
 
   const toggleTheme = () => {
     setIsDarkMode((prev) => {
@@ -45,71 +266,6 @@ const MapComponent = () => {
     } else {
       document.documentElement.classList.remove("dark");
     }
-  }, [isDarkMode]);
-
-  useEffect(() => {
-    mapboxgl.accessToken =
-      "pk.eyJ1Ijoia3dhc2ktMSIsImEiOiJjbThkNG15anAyYXF2MmtzOGJneW55cmVnIn0.uRUn_veAFyZ8u1CxkRGnWg";
-
-    if (!mapContainerRef.current) return;
-
-    mapRef.current = new mapboxgl.Map({
-      container: mapContainerRef.current,
-      style: isDarkMode
-        ? "mapbox://styles/mapbox/dark-v11"
-        : "mapbox://styles/mapbox/light-v11",
-      pitch: 60,
-      bearing: -20,
-      antialias: true,
-      center: INITIAL_CENTER,
-      zoom: INITIAL_ZOOM,
-    });
-
-    mapRef.current.addControl(new mapboxgl.NavigationControl());
-
-    mapRef.current.on("load", () => {
-      if (!mapRef.current) return;
-
-      mapRef.current.addLayer({
-        id: "3d-buildings",
-        source: "composite",
-        "source-layer": "building",
-        type: "fill-extrusion",
-        minzoom: 15,
-        paint: {
-          "fill-extrusion-color": "#aaa",
-          "fill-extrusion-height": [
-            "interpolate",
-            ["linear"],
-            ["zoom"],
-            15,
-            0,
-            16,
-            ["get", "height"],
-          ],
-          "fill-extrusion-base": [
-            "case",
-            ["has", "min_height"],
-            ["get", "min_height"],
-            0,
-          ],
-          "fill-extrusion-opacity": 0.6,
-        },
-      });
-
-      const data = { ...dummy_data["foundry-ecosytem"] };
-      setBusinesses([
-        ...data.wholesalers,
-        ...data.microfinance,
-        ...data.market_businesses,
-      ]);
-    });
-
-    return () => {
-      if (mapRef.current) {
-        mapRef.current.remove();
-      }
-    };
   }, [isDarkMode]);
 
   return (
@@ -133,13 +289,12 @@ const MapComponent = () => {
         />
       )}
 
-      <div className="h-[65vh] md:h-[75vh] mx-5 md:mx-10  relative">
+      <div className="h-[65vh] md:h-[75vh] mx-5 md:mx-10 relative">
         <BusinessLayer mapRef={mapRef} businesses={businesses} />
-        {/* <TruckSimulation mapRef={mapRef} /> */}
         <div
           id="map-container"
           ref={mapContainerRef}
-          className=" h-[65vh] md:h-[75vh] rounded-xl border"
+          className="h-[65vh] md:h-[75vh] rounded-xl border"
         />
       </div>
 
