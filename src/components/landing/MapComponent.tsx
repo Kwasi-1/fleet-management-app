@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, RefObject } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import BusinessLayer from "./BusinessLayer";
@@ -40,10 +40,15 @@ interface ShipmentDetails {
   weight: string;
 }
 
+const useNonNullableRef = <T,>(initialValue: T) => {
+  const ref = useRef<T>(initialValue);
+  return ref as RefObject<T>;
+};
+
 const MapComponent = () => {
   const mapRef = useRef<mapboxgl.Map | null>(null);
-  const mapContainerRef = useRef<HTMLDivElement>(null);
-  const geocoderContainerRef = useRef<HTMLDivElement>(null);
+  const mapContainerRef = useNonNullableRef<HTMLDivElement>(null!);
+  const geocoderContainerRef = useNonNullableRef<HTMLDivElement>(null!);
   const [businesses, setBusinesses] = useState<Business[]>([]);
   const [showGeocoder, setShowGeocoder] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -216,7 +221,7 @@ const MapComponent = () => {
         }
       });
     } else {
-      // If map already exists, just update its style
+      // If map already exists, just update its style and position
       mapRef.current.setStyle(
         isDarkMode
           ? "mapbox://styles/mapbox/dark-v11"
@@ -282,7 +287,7 @@ const MapComponent = () => {
 
       {showGeocoder && (
         <GeocoderComponent
-          mapRef={mapRef}
+          mapRef={mapRef as RefObject<mapboxgl.Map>}
           businesses={businesses}
           geocoderContainerRef={geocoderContainerRef}
           styleProps="absolute top-[1.4vw] right-[10vw] z-100"
@@ -290,7 +295,10 @@ const MapComponent = () => {
       )}
 
       <div className="h-[65vh] md:h-[75vh] mx-5 md:mx-10 relative">
-        <BusinessLayer mapRef={mapRef} businesses={businesses} />
+        <BusinessLayer
+          mapRef={mapRef as RefObject<mapboxgl.Map>}
+          businesses={businesses}
+        />
         <div
           id="map-container"
           ref={mapContainerRef}
