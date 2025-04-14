@@ -6,7 +6,6 @@ import SideBar from "./components/common/Sidebar";
 import Shipment from "./pages/Shipment";
 import DriverDetails from "./pages/DriverDetails";
 import VehicleDetails from "./pages/VehicleDetails";
-// import CreateShipment from "./pages/CreateShipment";
 import Issues from "./pages/Issues";
 import Reminders from "./pages/Reminders";
 import Fuel from "./pages/Fuel";
@@ -21,6 +20,7 @@ import ShipmentTracking from "./pages/ShipmentTracking";
 import ReminderDetails from "./pages/ReminderDetails";
 import OrderDetails from "./pages/OrderDetails";
 import Booking from "./pages/Booking";
+import FullPageMap from "./pages/FullPageMap";
 
 function App() {
   return (
@@ -32,7 +32,7 @@ function App() {
 
 function AppContent() {
   const location = useLocation();
-  const isLanding = location.pathname === "/";
+  const isLanding = location.pathname === "/" || location.pathname === "/map";
 
   return (
     <div className="flex">
@@ -44,6 +44,7 @@ function AppContent() {
           <Route path="/logistics" element={<ShipmentTracking />} />
           <Route path="/logistics/shipment" element={<Shipment />} />
           <Route path="/logistics/booking" element={<Booking />} />
+          <Route path="/map" element={<FullPageMap />} />
           <Route path="/fleet/drivers" element={<Drivers />} />
           <Route
             path="/fleet/drivers/driver_info"
