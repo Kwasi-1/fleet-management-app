@@ -273,6 +273,8 @@ const MapComponent = () => {
     }
   }, [isDarkMode]);
 
+  const isMap = location.pathname === "/map";
+
   return (
     <div
       className={`min-h-screen ${
@@ -294,7 +296,13 @@ const MapComponent = () => {
         />
       )}
 
-      <div className="h-[65vh] md:h-[75vh] mx-5 md:mx-10 relative">
+      <div
+        className={` ${
+          isMap
+            ? "mx-0 md:mx-0 h-[100vh]"
+            : "mx-5 md:mx-10 h-[65vh] md:h-[75vh] "
+        } relative`}
+      >
         <BusinessLayer
           mapRef={mapRef as RefObject<mapboxgl.Map>}
           businesses={businesses}
@@ -302,7 +310,9 @@ const MapComponent = () => {
         <div
           id="map-container"
           ref={mapContainerRef}
-          className="h-[65vh] md:h-[75vh] rounded-xl border border-gray-200"
+          className={` ${
+            isMap ? "h-full" : "h-[65vh] md:h-[75vh]"
+          } rounded-xl border border-gray-200`}
         />
       </div>
 

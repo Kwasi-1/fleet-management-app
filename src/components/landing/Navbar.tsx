@@ -41,12 +41,16 @@ const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <nav className="px-4 py-3 w-[95%] h-[10vh] md:w-[90%] mx-auto flex items-center justify-between dark:border-white/10 relative z-50">
+    <nav
+      className={`px-4 py-3 w-[95%] ${
+        isOnMapPage ? " h-[7vh]" : "h-[10vh]"
+      } md:w-[90%] mx-auto flex items-center justify-between dark:border-white/10 relative z-50`}
+    >
       {isOnMapPage ? (
         <button
           type="button"
           title="Go back"
-          className="text-sm border rounded-lg px-3 py-[7px] flex items-center gap-1 text-gray-400 border-gray-200 hover:text-gray-600 hover:border-gray-300 transition duration-300 mb-1"
+          className="text-sm border rounded-lg px-3 py-[7px] flex items-center gap-1 text-gray-400 border-gray-200 hover:text-gray-600 hover:border-gray-300 transition duration-300"
           onClick={handleBackClick}
         >
           <Icon icon="weui:back-outlined" className="text-sm" />
