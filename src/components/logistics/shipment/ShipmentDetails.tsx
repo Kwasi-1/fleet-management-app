@@ -195,7 +195,7 @@ const ShipmentDetails: React.FC<Props> = ({ shipment, onClose }) => {
   >("Status");
 
   const handleViewInMapClick = () => {
-    navigate("/", {
+    navigate("/map", {
       state: {
         shipmentCoordinates: {
           pickup: shipment.pickupCoordinates,
