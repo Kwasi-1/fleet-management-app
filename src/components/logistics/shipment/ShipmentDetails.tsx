@@ -1,3 +1,4 @@
+// ShipmentDetails.tsx
 import { useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Icon } from "@iconify/react";
@@ -12,6 +13,7 @@ import Timeline from "./Timeline";
 import { useLocation } from "react-router-dom";
 import Button from "../../common/Button";
 import StatusText from "../../common/StatusText";
+import FullScreenMapView from "../booking/FullScreenMap";
 
 interface Props {
   shipment: Shipment;
@@ -191,9 +193,18 @@ const ShipmentDetails: React.FC<Props> = ({ shipment, onClose }) => {
   const [activeTab, setActiveTab] = useState<
     "Status" | "Details" | "Comments" | "Documents"
   >("Status");
+  const [showMapView, setShowMapView] = useState(false);
 
   return (
     <div>
+      {showMapView && (
+        <FullScreenMapView
+          pickupCoordinates={shipment.pickupCoordinates}
+          destinationCoordinates={shipment.destinationCoordinates}
+          onClose={() => setShowMapView(false)}
+        />
+      )}
+
       <div className="fixed right-0 top-0 h-screen overflow-auto max-w-md mx-auto bg-white shadow-lg border border-[#e0e6e9] p-6 z-50 text-gray-700">
         <div className="flex justify-between items-start mb-4">
           <div>
@@ -201,8 +212,11 @@ const ShipmentDetails: React.FC<Props> = ({ shipment, onClose }) => {
             <p className="text-gray-500 text-sm">{shipment.primaryReference}</p>
           </div>
           <div className="flex items-center space-x-2">
-            <button className="bg-gray-100 px-3 py-1 rounded-md text-sm shadow">
-              View in ▼
+            <button
+              onClick={() => setShowMapView(true)}
+              className="bg-gray-100 px-3 py-1 rounded-md text-sm shadow hover:bg-gray-200"
+            >
+              View in Map
             </button>
             <button
               onClick={onClose}
