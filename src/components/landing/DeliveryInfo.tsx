@@ -116,14 +116,14 @@ const DeliveryInfo = () => {
     <div
       className={
         isMap
-          ? "fixed left-0 right-0 top-0 h-screen pt-[90vh] overflow-y-auto z-10 pointer-events-none"
+          ? "fixed left-0 right-0 top-0 h-screen pt-[70vh] overflow-y-auto z-10 pointer-events-none"
           : ""
       }
     >
       <div
         className={`flex flex-col items-center justify-center z-20 ${
           isMap
-            ? "pt-130 inset-x-0 pb-6 sm:mb-10 px-4 pointer-events-auto"
+            ? "inset-x-0 pb-6 sm:mb-10 px-4 pointer-events-auto"
             : "relative mt-10 md:mt-0 sm:absolute bottom-0 inset-x-0 pb-6 sm:mb-10 px-4"
         }`}
       >
