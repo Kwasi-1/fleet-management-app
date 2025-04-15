@@ -16,7 +16,7 @@ const ShipmentDetails = () => {
     <div className="mb-6">
       {/* <div></div>
       <h2 className="text-2xl font-semibold mb-2">{title}</h2> */}
-      <p className="text-xl flex items-center sm:text-2xl font-semibold text-black pb-2 border-b border-gray-200 capitalize mb-4">
+      <p className="text-xl flex items-center sm:text-2xl font-semibold text-black pb-2 border-b border-gray-200/80 capitalize mb-4">
         {icon && (
           <Icon
             icon={icon}
