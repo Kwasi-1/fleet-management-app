@@ -127,12 +127,6 @@ const DeliveryInfo = () => {
             : "relative mt-10 md:mt-0 sm:absolute bottom-0 inset-x-0 pb-6 sm:mb-10 px-4"
         }`}
       >
-        {isMap && (
-          <button className="ml-auto mr-[17.5%] flex right0 items-center justify-end p-3 bg-white text-black border rounded border-gray-200/40 mb-4 shadow">
-            <Icon icon="ic:baseline-share" className="text-xl mr-2" />
-            share shipment
-          </button>
-        )}
         <div
           className={`w-[90%] sm:w-[60%] md:max-w-[80%] ${
             isMap
@@ -140,6 +134,14 @@ const DeliveryInfo = () => {
               : " xl:w-[60%] rounded-md  shadow-lg"
           } mx-auto bg-white grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 py-6 px-4 sm:px-8 mb-4`}
         >
+          {isMap && (
+            <button className="absolute -mt-4 mr-[17.5%] flex right-5 items-center justify-end px-[10px] py-[9px] text-black border rounded-lg border-gray-300 bg-white hover:bg-gray-100 cursor-pointer transsition duration-200 ease-in-out shadow-md">
+              <Icon
+                icon="ic:baseline-share"
+                className="text-xl text-gray-600"
+              />
+            </button>
+          )}
           {Object.values(deliveryData).map((item, index) => (
             <DetailItem
               key={index}
