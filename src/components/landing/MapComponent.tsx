@@ -92,6 +92,8 @@ const MapComponent = () => {
     mapRef.current.fitBounds(bounds, {
       padding: padding,
       maxZoom: 15,
+      pitch: 60,
+      bearing: -20,
     });
   };
 
@@ -244,6 +246,8 @@ const MapComponent = () => {
           center: INITIAL_CENTER,
           zoom: INITIAL_ZOOM,
           essential: true,
+          pitch: 60,
+          bearing: -20,
         });
       }
     }
@@ -277,7 +281,7 @@ const MapComponent = () => {
 
   return (
     <div
-      className={`min-h-screen ${
+      className={`min-h-screen md:h-screen  h-screen w-screen overflow-hidden ${
         isDarkMode ? "dark bg-black/80 text-gray-200" : "bg-white text-gray-900"
       }`}
     >
@@ -292,16 +296,18 @@ const MapComponent = () => {
           mapRef={mapRef as RefObject<mapboxgl.Map>}
           businesses={businesses}
           geocoderContainerRef={geocoderContainerRef}
-          styleProps="absolute top-[1.4vw] right-[10vw] z-100"
+          styleProps={`absolute ${
+            isMap ? "top-[0.5vw]" : "top-[1.4vw]"
+          } right-[10vw] z-100`}
         />
       )}
 
       <div
         className={` ${
           isMap
-            ? "mx-0 md:mx-0 h-[100vh]"
+            ? "mx-0 md:mx-0 h-[92vh]"
             : "mx-5 md:mx-10 h-[65vh] md:h-[75vh] "
-        } relative`}
+        } relative overflow-hidden`}
       >
         <BusinessLayer
           mapRef={mapRef as RefObject<mapboxgl.Map>}
@@ -311,8 +317,8 @@ const MapComponent = () => {
           id="map-container"
           ref={mapContainerRef}
           className={` ${
-            isMap ? "h-full" : "h-[65vh] md:h-[75vh]"
-          } rounded-xl border border-gray-200`}
+            isMap ? "h-full border-t" : "h-[65vh] md:h-[75vh] rounded-xl border"
+          } border-gray-200`}
         />
       </div>
 
