@@ -235,11 +235,7 @@ const Navbar: React.FC<NavbarProps> = ({
                       key={notification.id}
                       className={`p-3 border-b ${
                         isDarkMode ? "border-gray-700" : "border-gray-100"
-                      } last:border-b-0  ${
-                        notification.read
-                          ? ""
-                          : "bg-blue-50 dark:bg-blue-300/20"
-                      }`}
+                      } last:border-b-0 `}
                     >
                       <div className="flex">
                         <div
