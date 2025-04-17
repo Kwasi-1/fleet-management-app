@@ -18,6 +18,12 @@ const INITIAL_CENTER: [number, number] = [
 ];
 const INITIAL_ZOOM = 17.12;
 
+interface RouteData {
+  coordinates: [number, number][];
+  distance: number;
+  duration: number;
+}
+
 interface Business {
   name: string;
   location: {
@@ -56,6 +62,28 @@ const MapComponent = () => {
     return localStorage.getItem("theme") === "dark";
   });
   const location = useLocation();
+
+  const [routeData, setRouteData] = useState<RouteData | null>(null);
+
+  const getOptimalRoute = async (
+    pickup: [number, number],
+    destination: [number, number]
+  ) => {
+    try {
+      const response = await fetch(
+        `https://api.mapbox.com/directions/v5/mapbox/driving/${pickup[0]},${pickup[1]};${destination[0]},${destination[1]}?geometries=geojson&access_token=${mapboxgl.accessToken}`
+      );
+      const data = await response.json();
+      return {
+        coordinates: data.routes[0].geometry.coordinates,
+        distance: data.routes[0].distance,
+        duration: data.routes[0].duration,
+      };
+    } catch (error) {
+      console.error("Error fetching route:", error);
+      return null;
+    }
+  };
 
   const [shipmentData, setShipmentData] = useState<{
     coordinates: ShipmentCoordinates | null;
@@ -109,36 +137,44 @@ const MapComponent = () => {
   };
 
   // Helper function to add shipment markers and route
-  const addShipmentMarkersAndRoute = () => {
+  const addShipmentMarkersAndRoute = async () => {
     if (!mapRef.current || !shipmentData.coordinates) return;
 
     const { pickup, destination } = shipmentData.coordinates;
 
-    // Clear existing markers (if any)
-    const markers = document.querySelectorAll(".mapboxgl-marker");
-    markers.forEach((marker) => marker.remove());
+    // Get optimal route
+    const optimalRoute = await getOptimalRoute(pickup, destination);
+    if (!optimalRoute) return;
 
-    // Add Pickup Marker
+    setRouteData(optimalRoute);
+
+    // Clear existing markers and route
+    document
+      .querySelectorAll(".mapboxgl-marker")
+      .forEach((marker) => marker.remove());
+    if (mapRef.current.getLayer("route")) mapRef.current.removeLayer("route");
+    if (mapRef.current.getSource("route")) mapRef.current.removeSource("route");
+
+    // Add markers
     new mapboxgl.Marker({ color: "blue" })
-      .setLngLat(new mapboxgl.LngLat(...pickup))
+      .setLngLat(pickup)
       .setPopup(
         new mapboxgl.Popup().setText(
-          "Pickup: " + (shipmentData.details?.pickup || "")
+          `Pickup: ${shipmentData.details?.pickup || ""}`
         )
       )
       .addTo(mapRef.current);
 
-    // Add Destination Marker
     new mapboxgl.Marker({ color: "black" })
-      .setLngLat(new mapboxgl.LngLat(...destination))
+      .setLngLat(destination)
       .setPopup(
         new mapboxgl.Popup().setText(
-          "Destination: " + (shipmentData.details?.destination || "")
+          `Destination: ${shipmentData.details?.destination || ""}`
         )
       )
       .addTo(mapRef.current);
 
-    // Draw Route Line
+    // Add route layer
     mapRef.current.addSource("route", {
       type: "geojson",
       data: {
@@ -146,7 +182,7 @@ const MapComponent = () => {
         properties: {},
         geometry: {
           type: "LineString",
-          coordinates: [pickup, destination],
+          coordinates: optimalRoute.coordinates,
         },
       },
     });
@@ -162,12 +198,29 @@ const MapComponent = () => {
       paint: {
         "line-color": "#619B7D",
         "line-width": 4,
+        "line-opacity": 0.75,
       },
     });
 
-    // Fit map to show both points
-    fitMapToPoints(pickup, destination);
+    // Fit map to show the entire route
+    const bounds = optimalRoute.coordinates.reduce((bounds, coord) => {
+      return bounds.extend(coord);
+    }, new mapboxgl.LngLatBounds(optimalRoute.coordinates[0], optimalRoute.coordinates[0]));
+
+    mapRef.current.fitBounds(bounds, {
+      padding: { top: 100, bottom: 100, left: 100, right: 100 },
+      maxZoom: 15,
+      pitch: 60,
+      bearing: -20,
+    });
   };
+
+  // Modified useEffect for handling shipment data changes
+  useEffect(() => {
+    if (shipmentData.coordinates && mapRef.current?.loaded()) {
+      addShipmentMarkersAndRoute();
+    }
+  }, [shipmentData.coordinates]);
 
   // Initialize and manage the map
   useEffect(() => {
