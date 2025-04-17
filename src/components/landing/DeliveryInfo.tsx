@@ -63,15 +63,40 @@ interface DeliveryItem {
   iconColor?: string;
 }
 
-const DeliveryInfo = () => {
+interface DeliveryInfoProps {
+  shipmentData?: {
+    details: {
+      id: string;
+      status: string;
+      pickup: string;
+      destination: string;
+    };
+  };
+}
+
+interface DeliveryInfoProps {
+  shipmentData?: {
+    details: {
+      id: string;
+      status: string;
+      pickup: string;
+      destination: string;
+    };
+  };
+}
+
+const DeliveryInfo = ({ shipmentData }: DeliveryInfoProps) => {
   const location = useLocation();
   const [shipmentDetails, setShipmentDetails] = useState<any>(null);
 
   useEffect(() => {
-    if (location.state?.shipmentDetails) {
+    // Get details either from props or location state
+    if (shipmentData?.details) {
+      setShipmentDetails(shipmentData.details);
+    } else if (location.state?.shipmentDetails) {
       setShipmentDetails(location.state.shipmentDetails);
     }
-  }, [location.state]);
+  }, [location.state, shipmentData]);
 
   const deliveryData: Record<string, DeliveryItem> = {
     status: {

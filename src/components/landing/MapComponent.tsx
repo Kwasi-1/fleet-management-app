@@ -7,6 +7,7 @@ import DeliveryInfo from "./DeliveryInfo";
 import Navbar from "./Navbar";
 import { dummy_data } from "../../db";
 import { useLocation } from "react-router-dom";
+import ShipmentNotificationCard from "./ShipmentNotificationCard";
 
 // Set Mapbox access token
 mapboxgl.accessToken =
@@ -60,6 +61,16 @@ const MapComponent = () => {
     coordinates: ShipmentCoordinates | null;
     details: ShipmentDetails | null;
   }>({ coordinates: null, details: null });
+
+  const handleShipmentSelect = (shipment: {
+    coordinates: ShipmentCoordinates;
+    details: ShipmentDetails;
+  }) => {
+    setShipmentData({
+      coordinates: shipment.coordinates,
+      details: shipment.details,
+    });
+  };
 
   // Handle location state changes
   useEffect(() => {
@@ -290,7 +301,6 @@ const MapComponent = () => {
         onToggleTheme={toggleTheme}
         isDarkMode={isDarkMode}
       />
-
       {showGeocoder && (
         <GeocoderComponent
           mapRef={mapRef as RefObject<mapboxgl.Map>}
@@ -301,7 +311,6 @@ const MapComponent = () => {
           } right-[10vw] z-100`}
         />
       )}
-
       <div
         className={` ${
           isMap
@@ -321,8 +330,8 @@ const MapComponent = () => {
           } border-gray-200`}
         />
       </div>
-
-      <DeliveryInfo />
+      <DeliveryInfo shipmentData={shipmentData} />
+      <ShipmentNotificationCard onShipmentSelect={handleShipmentSelect} />
     </div>
   );
 };
