@@ -321,7 +321,7 @@ const MapComponent = () => {
 
   return (
     <div
-      className={`min-h-screen md:h-screen h-screen w-screen overflow-hidden ${
+      className={`min-h-screen md:h-screen h-screen w-screen overflow-auto md:overflow-hidden ${
         isDarkMode ? "dark bg-black/80 text-gray-200" : "bg-white text-gray-900"
       }`}
     >
@@ -336,7 +336,7 @@ const MapComponent = () => {
           businesses={businesses}
           geocoderContainerRef={geocoderContainerRef}
           styleProps={`absolute ${
-            isMap ? "top-[0.5vw]" : "top-[1.4vw]"
+            isMap ? "top-[0.5vw]" : "top-[0.6vw]"
           } right-[10vw] z-100`}
         />
       )}
