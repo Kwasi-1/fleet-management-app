@@ -149,7 +149,7 @@ const DeliveryInfo = ({ shipmentData }: DeliveryInfoProps) => {
         className={`flex flex-col items-center justify-center z-20 ${
           isMap
             ? "inset-x-0 pb-6 sm:mb-10 px-4 pointer-events-auto"
-            : "relative mt-10 md:mt-0 sm:absolute bottom-0 inset-x-0 pb-6 sm:mb-10 px-4"
+            : "relative mt-10 md:mt-0 sm:absolute bottom-0 inset-x-0 mb-6 sm:mb-10 px-4"
         }`}
       >
         <div
@@ -160,7 +160,11 @@ const DeliveryInfo = ({ shipmentData }: DeliveryInfoProps) => {
           } mx-auto bg-white grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 py-6 px-4 sm:px-8 mb-4`}
         >
           {isMap && (
-            <button className="absolute -mt-4 mr-[17.5%] flex right-5 items-center justify-end px-[10px] py-[9px] text-black border rounded-lg border-gray-300 bg-white hover:bg-gray-100 cursor-pointer transsition duration-200 ease-in-out shadow-md">
+            <button
+              type="button"
+              title="Share"
+              className="absolute -mt-4 mr-[17.5%] flex right-5 items-center justify-end px-[10px] py-[9px] text-black border rounded-lg border-gray-300 bg-white hover:bg-gray-100 cursor-pointer transsition duration-200 ease-in-out shadow-md"
+            >
               <Icon
                 icon="ic:baseline-share"
                 className="text-xl text-gray-600"

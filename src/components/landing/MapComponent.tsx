@@ -366,9 +366,7 @@ const MapComponent = () => {
       )}
       <div
         className={` ${
-          isMap
-            ? "mx-0 md:mx-0 h-[92vh]"
-            : "mx-5 md:mx-10 h-[65vh] md:h-[75vh] "
+          isMap ? "mx-0 md:mx-0 h-[92vh]" : "mx-5 md:mx-0 h-[65vh] md:h-[92vh] "
         } relative overflow-hidden`}
       >
         <BusinessLayer
@@ -379,13 +377,18 @@ const MapComponent = () => {
           id="map-container"
           ref={mapContainerRef}
           className={` ${
-            isMap ? "h-full border-t" : "h-[65vh] md:h-[75vh] rounded-xl border"
+            isMap
+              ? "h-full border-t"
+              : "h-[65vh] md:h-[92vh] rounded-xl md:rounded-none border"
           } border-gray-200`}
         />
       </div>
       {shipmentData.details && (
         <DeliveryInfo shipmentData={{ details: shipmentData.details }} />
       )}
+
+      <DeliveryInfo />
+
       <ShipmentNotificationCard onShipmentSelect={handleShipmentSelect} />
     </div>
   );
