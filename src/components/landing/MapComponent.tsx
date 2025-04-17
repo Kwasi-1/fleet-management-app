@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, RefObject } from "react";
+import { useRef, useEffect, useState, RefObject, useCallback } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import BusinessLayer from "./BusinessLayer";
@@ -64,44 +64,47 @@ const MapComponent = () => {
   const location = useLocation();
 
   const [routeData, setRouteData] = useState<RouteData | null>(null);
-
-  const getOptimalRoute = async (
-    pickup: [number, number],
-    destination: [number, number]
-  ) => {
-    try {
-      const response = await fetch(
-        `https://api.mapbox.com/directions/v5/mapbox/driving/${pickup[0]},${pickup[1]};${destination[0]},${destination[1]}?geometries=geojson&access_token=${mapboxgl.accessToken}`
-      );
-      const data = await response.json();
-      return {
-        coordinates: data.routes[0].geometry.coordinates,
-        distance: data.routes[0].distance,
-        duration: data.routes[0].duration,
-      };
-    } catch (error) {
-      console.error("Error fetching route:", error);
-      return null;
-    }
-  };
-
   const [isShipmentClick, setIsShipmentClick] = useState(false);
-
   const [shipmentData, setShipmentData] = useState<{
     coordinates: ShipmentCoordinates | null;
     details: ShipmentDetails | null;
   }>({ coordinates: null, details: null });
 
-  const handleShipmentSelect = (shipment: {
-    coordinates: ShipmentCoordinates;
-    details: ShipmentDetails;
-  }) => {
-    setShipmentData({
-      coordinates: shipment.coordinates,
-      details: shipment.details,
-    });
-    setIsShipmentClick(true);
-  };
+  // Memoized function to get optimal route
+  const getOptimalRoute = useCallback(
+    async (pickup: [number, number], destination: [number, number]) => {
+      try {
+        const response = await fetch(
+          `https://api.mapbox.com/directions/v5/mapbox/driving/${pickup[0]},${pickup[1]};${destination[0]},${destination[1]}?geometries=geojson&access_token=${mapboxgl.accessToken}`
+        );
+        const data = await response.json();
+        return {
+          coordinates: data.routes[0].geometry.coordinates,
+          distance: data.routes[0].distance,
+          duration: data.routes[0].duration,
+        };
+      } catch (error) {
+        console.error("Error fetching route:", error);
+        return null;
+      }
+    },
+    []
+  );
+
+  // Handle shipment selection
+  const handleShipmentSelect = useCallback(
+    (shipment: {
+      coordinates: ShipmentCoordinates;
+      details: ShipmentDetails;
+    }) => {
+      setShipmentData({
+        coordinates: shipment.coordinates,
+        details: shipment.details,
+      });
+      setIsShipmentClick(true);
+    },
+    []
+  );
 
   // Handle location state changes
   useEffect(() => {
@@ -114,34 +117,128 @@ const MapComponent = () => {
   }, [location.state]);
 
   // Helper function to fit map to both points
-  const fitMapToPoints = (
-    pickup: [number, number],
-    destination: [number, number]
-  ) => {
-    if (!mapRef.current) return;
+  const fitMapToPoints = useCallback(
+    (pickup: [number, number], destination: [number, number]) => {
+      if (!mapRef.current) return;
 
-    const bounds = new mapboxgl.LngLatBounds()
-      .extend(pickup)
-      .extend(destination);
+      const bounds = new mapboxgl.LngLatBounds()
+        .extend(pickup)
+        .extend(destination);
 
-    const padding = {
-      top: 100,
-      bottom: 100,
-      left: 100,
-      right: 100,
-    };
+      const padding = {
+        top: 100,
+        bottom: 100,
+        left: 100,
+        right: 100,
+      };
 
-    mapRef.current.fitBounds(bounds, {
-      padding: padding,
-      maxZoom: 15,
+      mapRef.current.fitBounds(bounds, {
+        padding: padding,
+        maxZoom: 15,
+        pitch: 60,
+        bearing: -20,
+      });
+    },
+    []
+  );
+
+  // Initialize and manage the map - runs only once
+  useEffect(() => {
+    if (!mapContainerRef.current || mapRef.current) return;
+
+    mapRef.current = new mapboxgl.Map({
+      container: mapContainerRef.current,
+      style: isDarkMode
+        ? "mapbox://styles/mapbox/dark-v11"
+        : "mapbox://styles/mapbox/light-v11",
       pitch: 60,
       bearing: -20,
+      antialias: true,
+      center: INITIAL_CENTER,
+      zoom: INITIAL_ZOOM,
     });
-  };
 
-  // Helper function to add shipment markers and route
-  const addShipmentMarkersAndRoute = async () => {
-    if (!mapRef.current || !shipmentData.coordinates) return;
+    mapRef.current.addControl(new mapboxgl.NavigationControl());
+
+    mapRef.current.on("load", () => {
+      if (!mapRef.current) return;
+
+      // Add 3D buildings layer
+      mapRef.current.addLayer({
+        id: "3d-buildings",
+        source: "composite",
+        "source-layer": "building",
+        type: "fill-extrusion",
+        minzoom: 15,
+        paint: {
+          "fill-extrusion-color": "#aaa",
+          "fill-extrusion-height": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            15,
+            0,
+            16,
+            ["get", "height"],
+          ],
+          "fill-extrusion-base": [
+            "case",
+            ["has", "min_height"],
+            ["get", "min_height"],
+            0,
+          ],
+          "fill-extrusion-opacity": 0.6,
+        },
+      });
+
+      // Load business data
+      const data = { ...dummy_data["foundry-ecosytem"] };
+      setBusinesses([
+        ...data.wholesalers,
+        ...data.microfinance,
+        ...data.market_businesses,
+      ]);
+    });
+
+    return () => {
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
+    };
+  }, [isDarkMode, mapContainerRef]);
+
+  // Handle theme changes
+  useEffect(() => {
+    if (mapRef.current) {
+      mapRef.current.setStyle(
+        isDarkMode
+          ? "mapbox://styles/mapbox/dark-v11"
+          : "mapbox://styles/mapbox/light-v11"
+      );
+    }
+  }, [isDarkMode]);
+
+  // Updated clearMarkersAndRoute function
+  const clearMarkersAndRoute = useCallback(() => {
+    if (!mapRef.current) return;
+
+    // Clear existing markers
+    document
+      .querySelectorAll(".mapboxgl-marker")
+      .forEach((marker) => marker.remove());
+
+    // Clear existing route
+    if (mapRef.current.getLayer("route")) mapRef.current.removeLayer("route");
+    if (mapRef.current.getSource("route")) mapRef.current.removeSource("route");
+  }, []);
+
+  // Updated addShipmentMarkersAndRoute with proper dependencies
+  const addShipmentMarkersAndRoute = useCallback(async () => {
+    if (!mapRef.current || !shipmentData.coordinates || !shipmentData.details)
+      return;
+
+    await clearMarkersAndRoute(); // Wait for cleanup to complete
 
     const { pickup, destination } = shipmentData.coordinates;
 
@@ -151,20 +248,11 @@ const MapComponent = () => {
 
     setRouteData(optimalRoute);
 
-    // Clear existing markers and route
-    document
-      .querySelectorAll(".mapboxgl-marker")
-      .forEach((marker) => marker.remove());
-    if (mapRef.current.getLayer("route")) mapRef.current.removeLayer("route");
-    if (mapRef.current.getSource("route")) mapRef.current.removeSource("route");
-
-    // Add markers
+    // Add markers with proper details from shipmentData
     new mapboxgl.Marker({ color: "blue" })
       .setLngLat(pickup)
       .setPopup(
-        new mapboxgl.Popup().setText(
-          `Pickup: ${shipmentData.details?.pickup || ""}`
-        )
+        new mapboxgl.Popup().setText(`Pickup: ${shipmentData.details.pickup}`)
       )
       .addTo(mapRef.current);
 
@@ -172,7 +260,7 @@ const MapComponent = () => {
       .setLngLat(destination)
       .setPopup(
         new mapboxgl.Popup().setText(
-          `Destination: ${shipmentData.details?.destination || ""}`
+          `Destination: ${shipmentData.details.destination}`
         )
       )
       .addTo(mapRef.current);
@@ -216,100 +304,17 @@ const MapComponent = () => {
       pitch: 60,
       bearing: -20,
     });
-  };
+  }, [shipmentData, getOptimalRoute, clearMarkersAndRoute]); // Include full shipmentData in dependencies
 
-  // Modified useEffect for handling shipment data changes
+  // Updated shipment data effect
   useEffect(() => {
-    if (shipmentData.coordinates && mapRef.current?.loaded()) {
-      addShipmentMarkersAndRoute();
-    }
-  }, [shipmentData.coordinates]);
+    if (!mapRef.current) return;
 
-  // Initialize and manage the map
-  useEffect(() => {
-    if (!mapContainerRef.current) return;
-
-    // Initialize the map if it doesn't exist
-    if (!mapRef.current) {
-      mapRef.current = new mapboxgl.Map({
-        container: mapContainerRef.current,
-        style: isDarkMode
-          ? "mapbox://styles/mapbox/dark-v11"
-          : "mapbox://styles/mapbox/light-v11",
-        pitch: 60,
-        bearing: -20,
-        antialias: true,
-        center: INITIAL_CENTER,
-        zoom: INITIAL_ZOOM,
-      });
-
-      mapRef.current.addControl(new mapboxgl.NavigationControl());
-
-      mapRef.current.on("load", () => {
-        if (!mapRef.current) return;
-
-        // Add 3D buildings layer
-        mapRef.current.addLayer({
-          id: "3d-buildings",
-          source: "composite",
-          "source-layer": "building",
-          type: "fill-extrusion",
-          minzoom: 15,
-          paint: {
-            "fill-extrusion-color": "#aaa",
-            "fill-extrusion-height": [
-              "interpolate",
-              ["linear"],
-              ["zoom"],
-              15,
-              0,
-              16,
-              ["get", "height"],
-            ],
-            "fill-extrusion-base": [
-              "case",
-              ["has", "min_height"],
-              ["get", "min_height"],
-              0,
-            ],
-            "fill-extrusion-opacity": 0.6,
-          },
-        });
-
-        // Load business data
-        const data = { ...dummy_data["foundry-ecosytem"] };
-        setBusinesses([
-          ...data.wholesalers,
-          ...data.microfinance,
-          ...data.market_businesses,
-        ]);
-
-        // Add shipment markers and route if coordinates exist
-        if (shipmentData.coordinates) {
-          addShipmentMarkersAndRoute();
-        }
-      });
-    } else {
-      // If map already exists, just update its style and position
-      mapRef.current.setStyle(
-        isDarkMode
-          ? "mapbox://styles/mapbox/dark-v11"
-          : "mapbox://styles/mapbox/light-v11"
-      );
-
+    const handleMapLoad = () => {
       if (shipmentData.coordinates) {
-        // Remove existing route layer if it exists
-        if (mapRef.current.getLayer("route")) {
-          mapRef.current.removeLayer("route");
-        }
-        if (mapRef.current.getSource("route")) {
-          mapRef.current.removeSource("route");
-        }
-
         addShipmentMarkersAndRoute();
       } else {
-        // If no coordinates, reset to initial view
-        mapRef.current.flyTo({
+        mapRef.current?.flyTo({
           center: INITIAL_CENTER,
           zoom: INITIAL_ZOOM,
           essential: true,
@@ -317,16 +322,14 @@ const MapComponent = () => {
           bearing: -20,
         });
       }
-    }
-
-    return () => {
-      // Cleanup on unmount
-      if (mapRef.current) {
-        mapRef.current.remove();
-        mapRef.current = null;
-      }
     };
-  }, [isDarkMode, shipmentData.coordinates]);
+
+    if (mapRef.current.loaded()) {
+      handleMapLoad();
+    } else {
+      mapRef.current.once("load", handleMapLoad);
+    }
+  }, [shipmentData, addShipmentMarkersAndRoute]); // Trigger on full shipmentData change
 
   const toggleTheme = () => {
     setIsDarkMode((prev) => {
@@ -348,7 +351,7 @@ const MapComponent = () => {
 
   return (
     <div
-      className={`min-h-screen md:h-screen  h-screen w-screen overflow-hidden ${
+      className={`min-h-screen md:h-screen h-screen w-screen overflow-hidden ${
         isDarkMode ? "dark bg-black/80 text-gray-200" : "bg-white text-gray-900"
       }`}
     >
@@ -368,8 +371,8 @@ const MapComponent = () => {
         />
       )}
       <div
-        className={` ${
-          isMap ? "mx-0 md:mx-0 h-[92vh]" : "mx-5 md:mx-0 h-[65vh] md:h-[92vh] "
+        className={`${
+          isMap ? "mx-0 md:mx-0 h-[92vh]" : "mx-5 md:mx-0 h-[65vh] md:h-[92vh]"
         } relative overflow-hidden`}
       >
         <BusinessLayer
@@ -379,7 +382,7 @@ const MapComponent = () => {
         <div
           id="map-container"
           ref={mapContainerRef}
-          className={` ${
+          className={`${
             isMap
               ? "h-full border-t"
               : "h-[65vh] md:h-[92vh] rounded-xl md:rounded-none border"
