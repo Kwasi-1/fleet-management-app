@@ -130,8 +130,8 @@ const Navbar: React.FC<NavbarProps> = ({
   // Your existing navbar code would go here, with the notification button added
   return (
     <nav
-      className={`px-4 py-3 w-[95%] ${
-        isOnMapPage ? " h-[7vh]" : "h-[10vh]"
+      className={`px-4 py-3 w-[95%] h-[7vh] ${
+        isOnMapPage ? " h-[7vh]" : "h-[8vh]"
       } md:w-[90%] mx-auto flex items-center justify-between dark:border-white/10 relative z-50
         ${isDarkMode ? "border-gray-700" : "border-gray-200"}
       }`}
@@ -265,6 +265,8 @@ const Navbar: React.FC<NavbarProps> = ({
                         <div className="flex flex-col space-y-1">
                           {!notification.read && (
                             <button
+                              type="button"
+                              title="Mark as read"
                               onClick={() => markAsRead(notification.id)}
                               className="text-blue-500 hover:text-blue-700"
                             >
@@ -272,6 +274,8 @@ const Navbar: React.FC<NavbarProps> = ({
                             </button>
                           )}
                           <button
+                            type="button"
+                            title="Delete notification"
                             onClick={() => deleteNotification(notification.id)}
                             className="text-gray-500 hover:text-gray-700"
                           >
