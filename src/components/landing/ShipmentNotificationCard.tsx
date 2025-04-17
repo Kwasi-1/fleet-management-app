@@ -32,7 +32,7 @@ export default function ShipmentNotificationCard({
       shipment.id.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleShipmentClick = (shipment: (typeof shipmentData)[0]) => {
+  const handleShipmentClick = async (shipment: (typeof shipmentData)[0]) => {
     onShipmentSelect({
       coordinates: {
         pickup: shipment.pickupCoordinates,
@@ -43,9 +43,9 @@ export default function ShipmentNotificationCard({
         status: shipment.status,
         pickup: shipment.pickup,
         destination: shipment.destination,
-        customerName: "Customer Name", // Add actual customer name if available
-        rate: "GHS 500", // Add actual rate if available
-        weight: "100kg", // Add actual weight if available
+        customerName: shipment.customerName || "Customer Name",
+        rate: shipment.rate || "GHS 500",
+        weight: shipment.weight || "100kg",
       },
     });
   };
