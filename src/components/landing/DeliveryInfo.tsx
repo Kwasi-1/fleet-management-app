@@ -83,9 +83,13 @@ interface DeliveryInfoProps {
       destination: string;
     };
   };
+  isShipment?: boolean;
 }
 
-const DeliveryInfo = ({ shipmentData }: DeliveryInfoProps) => {
+const DeliveryInfo = ({
+  shipmentData,
+  isShipment = false,
+}: DeliveryInfoProps) => {
   const location = useLocation();
   const [shipmentDetails, setShipmentDetails] = useState<any>(null);
 
@@ -140,26 +144,26 @@ const DeliveryInfo = ({ shipmentData }: DeliveryInfoProps) => {
   return (
     <div
       className={
-        isMap
+        isMap || isShipment
           ? "fixed left-0 right-0 top-0 h-screen pt-[70vh] overflow-y-auto z-10 pointer-events-none"
           : ""
       }
     >
       <div
         className={`flex flex-col items-center justify-center z-20 ${
-          isMap
+          isMap || isShipment
             ? "inset-x-0 pb-6 sm:mb-10 px-4 pointer-events-auto"
             : "relative mt-10 md:mt-0 sm:absolute bottom-0 inset-x-0 mb-6 sm:mb-10 px-4"
         }`}
       >
         <div
           className={`w-[90%] sm:w-[60%] md:max-w-[80%] ${
-            isMap
+            isMap || isShipment
               ? " xl:w-[65%] rounded shadow-md"
               : " xl:w-[60%] rounded-md  shadow-lg"
           } mx-auto bg-white grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 py-6 px-4 sm:px-8 mb-4`}
         >
-          {isMap && (
+          {(isMap || isShipment) && (
             <button
               type="button"
               title="Share"
@@ -184,7 +188,7 @@ const DeliveryInfo = ({ shipmentData }: DeliveryInfoProps) => {
             />
           ))}
         </div>
-        {isMap && <ShipmentDetails />}
+        {(isMap || isShipment) && <ShipmentDetails />}
       </div>
     </div>
   );

@@ -85,6 +85,8 @@ const MapComponent = () => {
     }
   };
 
+  const [isShipmentClick, setIsShipmentClick] = useState(false);
+
   const [shipmentData, setShipmentData] = useState<{
     coordinates: ShipmentCoordinates | null;
     details: ShipmentDetails | null;
@@ -98,6 +100,7 @@ const MapComponent = () => {
       coordinates: shipment.coordinates,
       details: shipment.details,
     });
+    setIsShipmentClick(true);
   };
 
   // Handle location state changes
@@ -383,13 +386,18 @@ const MapComponent = () => {
           } border-gray-200`}
         />
       </div>
-      {shipmentData.details && (
-        <DeliveryInfo shipmentData={{ details: shipmentData.details }} />
+      {shipmentData.details ? (
+        <DeliveryInfo
+          shipmentData={{ details: shipmentData.details }}
+          isShipment={isShipmentClick}
+        />
+      ) : (
+        <DeliveryInfo isShipment={isShipmentClick} />
       )}
 
-      <DeliveryInfo />
-
-      <ShipmentNotificationCard onShipmentSelect={handleShipmentSelect} />
+      {!isMap && (
+        <ShipmentNotificationCard onShipmentSelect={handleShipmentSelect} />
+      )}
     </div>
   );
 };
