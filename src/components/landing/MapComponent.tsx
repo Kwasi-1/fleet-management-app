@@ -330,7 +330,9 @@ const MapComponent = () => {
           } border-gray-200`}
         />
       </div>
-      <DeliveryInfo shipmentData={shipmentData} />
+      {shipmentData.details && (
+        <DeliveryInfo shipmentData={{ details: shipmentData.details }} />
+      )}
       <ShipmentNotificationCard onShipmentSelect={handleShipmentSelect} />
     </div>
   );
