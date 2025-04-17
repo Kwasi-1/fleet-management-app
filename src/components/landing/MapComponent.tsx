@@ -17,13 +17,6 @@ const INITIAL_CENTER: [number, number] = [
   -0.16912933535458255, 5.678395107981338,
 ];
 const INITIAL_ZOOM = 17.12;
-
-interface RouteData {
-  coordinates: [number, number][];
-  distance: number;
-  duration: number;
-}
-
 interface Business {
   name: string;
   location: {
@@ -63,7 +56,6 @@ const MapComponent = () => {
   });
   const location = useLocation();
 
-  const [routeData, setRouteData] = useState<RouteData | null>(null);
   const [isShipmentClick, setIsShipmentClick] = useState(false);
   const [shipmentData, setShipmentData] = useState<{
     coordinates: ShipmentCoordinates | null;
@@ -115,32 +107,6 @@ const MapComponent = () => {
       });
     }
   }, [location.state]);
-
-  // Helper function to fit map to both points
-  const fitMapToPoints = useCallback(
-    (pickup: [number, number], destination: [number, number]) => {
-      if (!mapRef.current) return;
-
-      const bounds = new mapboxgl.LngLatBounds()
-        .extend(pickup)
-        .extend(destination);
-
-      const padding = {
-        top: 100,
-        bottom: 100,
-        left: 100,
-        right: 100,
-      };
-
-      mapRef.current.fitBounds(bounds, {
-        padding: padding,
-        maxZoom: 15,
-        pitch: 60,
-        bearing: -20,
-      });
-    },
-    []
-  );
 
   // Initialize and manage the map - runs only once
   useEffect(() => {
@@ -238,15 +204,13 @@ const MapComponent = () => {
     if (!mapRef.current || !shipmentData.coordinates || !shipmentData.details)
       return;
 
-    await clearMarkersAndRoute(); // Wait for cleanup to complete
+    await clearMarkersAndRoute();
 
     const { pickup, destination } = shipmentData.coordinates;
 
     // Get optimal route
     const optimalRoute = await getOptimalRoute(pickup, destination);
     if (!optimalRoute) return;
-
-    setRouteData(optimalRoute);
 
     // Add markers with proper details from shipmentData
     new mapboxgl.Marker({ color: "blue" })
@@ -294,9 +258,15 @@ const MapComponent = () => {
     });
 
     // Fit map to show the entire route
-    const bounds = optimalRoute.coordinates.reduce((bounds, coord) => {
-      return bounds.extend(coord);
-    }, new mapboxgl.LngLatBounds(optimalRoute.coordinates[0], optimalRoute.coordinates[0]));
+    const bounds = optimalRoute.coordinates.reduce(
+      (bounds: mapboxgl.LngLatBounds, coord: [number, number]) => {
+        return bounds.extend(coord);
+      },
+      new mapboxgl.LngLatBounds(
+        optimalRoute.coordinates[0],
+        optimalRoute.coordinates[0]
+      )
+    );
 
     mapRef.current.fitBounds(bounds, {
       padding: { top: 100, bottom: 100, left: 100, right: 100 },
@@ -304,7 +274,7 @@ const MapComponent = () => {
       pitch: 60,
       bearing: -20,
     });
-  }, [shipmentData, getOptimalRoute, clearMarkersAndRoute]); // Include full shipmentData in dependencies
+  }, [shipmentData, getOptimalRoute, clearMarkersAndRoute]);
 
   // Updated shipment data effect
   useEffect(() => {
@@ -329,7 +299,7 @@ const MapComponent = () => {
     } else {
       mapRef.current.once("load", handleMapLoad);
     }
-  }, [shipmentData, addShipmentMarkersAndRoute]); // Trigger on full shipmentData change
+  }, [shipmentData, addShipmentMarkersAndRoute]);
 
   const toggleTheme = () => {
     setIsDarkMode((prev) => {
@@ -385,7 +355,7 @@ const MapComponent = () => {
           className={`${
             isMap
               ? "h-full border-t"
-              : "h-[65vh] md:h-[92vh] rounded-xl md:rounded-none border"
+              : "h-[65vh] md:h-[92vh] rounded-xl md:rounded-none border md:border-0 md:border-t"
           } border-gray-200`}
         />
       </div>
