@@ -348,6 +348,7 @@ const MapComponent = () => {
         <BusinessLayer
           mapRef={mapRef as RefObject<mapboxgl.Map>}
           businesses={businesses}
+          isDarkMode={isDarkMode}
         />
         <div
           id="map-container"
