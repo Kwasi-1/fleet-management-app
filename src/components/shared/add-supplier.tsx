@@ -2,13 +2,36 @@ import AutoComplete from "@/components/shared/form/AutoComplete";
 import SelectInput from "@/components/shared/form/SelectInput";
 import TextInputField from "@/components/shared/form/TextInputField";
 import { Button } from "@/components/ui/button";
-import { CreateDocument } from "@/lib/api/mutations.global";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { useMutation } from "@tanstack/react-query";
 import { useFormik } from "formik";
-import { useCallback } from "react";
+import { useCallback, useState } from "react"; // Import useState
 import { toast } from "sonner";
 import * as Y from "yup";
+
+// Mock function for CreateDocument
+const mockCreateDocument = async ({
+  url,
+  payload,
+}: {
+  url: string;
+  payload: any;
+}) => {
+  // Simulate a successful response after a short delay
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  console.log("Simulated API call to:", url, "with payload:", payload);
+  // Simulate success (you can add logic here to simulate errors based on payload)
+  return { data: { message: "Supplier added successfully (simulated)" } };
+};
+
+// Mock data for the Country AutoComplete
+const mockCountries = [
+  { value: "Ghana", description: "West African country" },
+  { value: "Nigeria", description: "West African giant" },
+  { value: "United Kingdom", description: "Island country in Europe" },
+  { value: "United States", description: "Country in North America" },
+  { value: "Canada", description: "North American neighbor" },
+];
+
 const AddSupplierModalBody = ({ onClose }: { onClose: () => void }) => {
   const formValidator = Y.object().shape({
     supplier_name: Y.string().required("Party name is required"),
@@ -22,6 +45,8 @@ const AddSupplierModalBody = ({ onClose }: { onClose: () => void }) => {
     city: Y.string().required("City is required"),
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false); // State to track submission
+
   const { ...form } = useFormik({
     initialValues: {
       supplier_name: "",
@@ -34,29 +59,27 @@ const AddSupplierModalBody = ({ onClose }: { onClose: () => void }) => {
     },
     validationSchema: formValidator,
     validateOnMount: false,
-    onSubmit: (value) => {
-      mutate({
-        url: "/accounting/create/supplier",
-        payload: { ...value },
-      });
+    onSubmit: async (value) => {
+      setIsSubmitting(true);
+      try {
+        const response = await mockCreateDocument({
+          url: "/accounting/create/supplier",
+          payload: { ...value },
+        });
+        console.log(response);
+        toast.success(
+          response?.data?.message || "Supplier added successfully (simulated)"
+        );
+        onClose();
+      } catch (error: any) {
+        console.error(error);
+        toast.error(error?.message || "An error occurred (simulated)");
+      } finally {
+        setIsSubmitting(false);
+      }
     },
   });
 
-  const { isPending, mutate } = useMutation({
-    mutationKey: ["create-supplier"],
-    mutationFn: CreateDocument,
-    onError: (error: any) => {
-      console.log(error);
-      toast.error(error?.message || "An error occured");
-    },
-    onSuccess: (data) => {
-      console.log(data);
-      toast.success("Supplier added succesfully");
-    },
-    onSettled: () => {
-      onClose();
-    },
-  });
   const fields = [
     {
       id: "supplier_name",
@@ -86,7 +109,6 @@ const AddSupplierModalBody = ({ onClose }: { onClose: () => void }) => {
       label: "Mobile Number",
       placeholder: "e.g. 02012312234",
     },
-
     {
       id: "country",
       type: "auto_complete",
@@ -95,6 +117,8 @@ const AddSupplierModalBody = ({ onClose }: { onClose: () => void }) => {
       doctype: "Country",
       reference_doctype: "Customer",
       filters: "",
+      // Pass the mock data here
+      mockItems: mockCountries,
     },
     {
       id: "city",
@@ -136,6 +160,7 @@ const AddSupplierModalBody = ({ onClose }: { onClose: () => void }) => {
     },
     [form]
   );
+
   return (
     <div className="h-full flex justify-between pb-6 flex-col">
       <div className="grid grid-cols-2 gap-3">
@@ -167,19 +192,21 @@ const AddSupplierModalBody = ({ onClose }: { onClose: () => void }) => {
                     {...field}
                     {...form}
                     extraClassName="text-[0.7rem] font-medium"
+                    // Pass the mock items as a prop
+                    items={field.mockItems}
                   />
                   {/* {field.addTitle && (
-                      <p
-                        className="text-primary-green text-[0.7rem] mt-1 cursor-pointer"
-                        onClick={(event) => {
-                          event.preventDefault();
-                          event.stopPropagation();
-                          field.onAddClick();
-                        }}
-                      >
-                        +{field.addTitle}
-                      </p>
-                    )} */}
+                                        <p
+                                            className="text-primary-green text-[0.7rem] mt-1 cursor-pointer"
+                                            onClick={(event) => {
+                                                event.preventDefault();
+                                                event.stopPropagation();
+                                                field.onAddClick();
+                                            }}
+                                        >
+                                            +{field.addTitle}
+                                        </p>
+                                    )} */}
                 </div>
               );
             case "select":
@@ -223,14 +250,14 @@ const AddSupplierModalBody = ({ onClose }: { onClose: () => void }) => {
           Cancel
         </Button>
         <Button
-          disabled={isPending}
+          disabled={isSubmitting}
           className="bg-primary-green text-white hover:bg-primary-green/hover flex items-center gap-2 rounded-xl"
           onClick={(e) => {
             e.preventDefault();
             form.handleSubmit();
           }}
         >
-          {isPending ? <Icon icon={"eos-icons:loading"} /> : "Add"}
+          {isSubmitting ? <Icon icon={"eos-icons:loading"} /> : "Add"}
         </Button>
       </div>
     </div>

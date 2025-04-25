@@ -1,6 +1,6 @@
-import { Autocomplete, AutocompleteItem } from '@nextui-org/autocomplete';
-import { Spinner } from '@nextui-org/react';
-import React from 'react';
+import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
+import { Spinner } from "@nextui-org/react";
+import React from "react";
 
 interface KSelectProps {
   placeholder?: string;
@@ -33,20 +33,19 @@ const AutoComplete = ({
   id,
   showDescription = false,
   boldenLabel = false,
-  bgColor = 'bg-form-bg',
-  labelColor = 'text-ash-text',
-  labelFontSize = 'text-[0.9rem]',
-  labelMarginBottom = 'mb-1',
+  bgColor = "bg-form-bg",
+  labelColor = "text-ash-text",
+  labelFontSize = "text-[0.9rem]",
+  labelMarginBottom = "mb-1",
   doctype,
-  reference_doctype,
   touched,
   filters = {},
   values = {},
   active = true,
-  query = '',
+  query = "",
   mockData = [], // Default to an empty array if no mock data is provided
 }: KSelectProps) => {
-  const [value, setValue] = React.useState('');
+  const [value, setValue] = React.useState("");
   // We're no longer using useQuery
   // const { data, isLoading } = useQuery({
   //   queryKey: [
@@ -80,7 +79,7 @@ const AutoComplete = ({
     <div className="">
       <p
         className={`${
-          boldenLabel ? 'font-medium' : ' font-extralight'
+          boldenLabel ? "font-medium" : " font-extralight"
         }  ${labelColor}  ${labelFontSize}  ${labelMarginBottom}`}
       >
         {label}
@@ -95,7 +94,7 @@ const AutoComplete = ({
         endContent={
           <>
             {isLoading && (
-              <Spinner size={'sm'} color="secondary" className="" />
+              <Spinner size={"sm"} color="secondary" className="" />
             )}
           </>
         }
@@ -103,8 +102,8 @@ const AutoComplete = ({
         placeholder={placeholder}
         inputProps={{
           classNames: {
-            input: 'h-10 ',
-            inputWrapper: 'h-10 rounded-md  border ',
+            input: "h-10 ",
+            inputWrapper: "h-10 rounded-md  border ",
           },
         }}
         aria-label="none"

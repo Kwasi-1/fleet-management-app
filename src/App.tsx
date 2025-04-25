@@ -21,6 +21,7 @@ import ReminderDetails from "./pages/ReminderDetails";
 import OrderDetails from "./pages/OrderDetails";
 import Booking from "./pages/Booking";
 import FullPageMap from "./pages/FullPageMap";
+import InvoicePage from "./pages/InvoicePage";
 
 function App() {
   return (
@@ -65,6 +66,7 @@ function AppContent() {
             element={<OrderEntry />}
           />
           <Route path="/invoices" element={<Invoice />} />
+          <Route path="/invoices/create-invoice" element={<InvoicePage />} />
         </Routes>
       </div>
     </div>

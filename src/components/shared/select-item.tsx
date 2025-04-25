@@ -1,13 +1,12 @@
 import useDebounce from "@/hooks/useDebounce";
-import { SearchList } from "@/lib/api/queries.global";
 import { cn } from "@/lib/utils";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
 import { Spinner } from "@nextui-org/react";
-import { useQuery } from "@tanstack/react-query";
+import React from "react";
+// import { useQuery } from "@tanstack/react-query"; // We'll remove this import
 
 interface KSelectProps {
   placeholder?: string;
-  // items: Items[];
   label: string;
   onChange: (value: string) => void;
   errors?: Record<string, string>;
@@ -24,9 +23,31 @@ interface KSelectProps {
   filters: {};
   active?: boolean;
 }
+
+// Mock data - replace this with your desired sample data
+const mockSearchResults = [
+  { value: "Apple", description: "A round fruit, often red or green" },
+  { value: "Banana", description: "A long curved yellow fruit" },
+  { value: "Orange", description: "A citrus fruit with a tough outer skin" },
+  { value: "Grape", description: "Small, round, and typically sweet" },
+  { value: "Strawberry", description: "A red, heart-shaped fruit" },
+];
+
+// Mock SearchList function
+const mockSearchList = async ({ payload }: { payload: any }) => {
+  const searchTerm = String(payload.txt).toLowerCase();
+  const filteredResults = mockSearchResults.filter(
+    (item) =>
+      item.value.toLowerCase().includes(searchTerm) ||
+      (item.description && item.description.toLowerCase().includes(searchTerm))
+  );
+  // Simulate a network delay (optional)
+  await new Promise((resolve) => setTimeout(resolve, 300));
+  return { data: { message: filteredResults } };
+};
+
 const SelectItem = ({
   placeholder,
-  // items,
   label,
   onChange,
   errors,
@@ -44,19 +65,29 @@ const SelectItem = ({
   active = true,
 }: KSelectProps) => {
   const { value, setValue } = useDebounce("", 500);
-  const { data, isLoading } = useQuery({
-    queryKey: ["search", value, doctype, reference_doctype, value],
-    queryFn: () =>
-      SearchList({
+  // Replace useQuery with a state to manage the search results and loading state
+  const [searchResults, setSearchResults] = React.useState(mockSearchResults);
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  React.useEffect(() => {
+    if (active) {
+      setIsLoading(true);
+      mockSearchList({
         payload: {
           filters,
           doctype: doctype,
           reference_doctype: reference_doctype,
           txt: String(value),
         },
-      }),
-    enabled: active,
-  });
+      }).then((res) => {
+        setSearchResults(res?.data?.message || []);
+        setIsLoading(false);
+      });
+    } else {
+      setSearchResults([]);
+      setIsLoading(false);
+    }
+  }, [value, doctype, reference_doctype, filters, active]);
 
   return (
     <div className={cn("w-[60%]", extraClassName)}>
@@ -96,21 +127,19 @@ const SelectItem = ({
           onChange(k as string);
         }}
       >
-        {data?.data?.message?.map((e: any) => {
-          return (
-            <AutocompleteItem
-              key={e.value}
-              description={e.description}
-              className="text-black"
-              title={e.value}
-              classNames={{
-                title: ["text-[0.75rem]"],
-                description: ["text-[0.5rem] leading-[10px]"],
-                wrapper: "",
-              }}
-            />
-          );
-        })}
+        {searchResults?.map((e: any) => (
+          <AutocompleteItem
+            key={e.value}
+            description={e.description}
+            className="text-black"
+            title={e.value}
+            classNames={{
+              title: ["text-[0.75rem]"],
+              description: ["text-[0.5rem] leading-[10px]"],
+              wrapper: "",
+            }}
+          />
+        ))}
       </Autocomplete>
 
       {errors?.[id] && touched?.[id] && (

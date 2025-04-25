@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Table from "../../common/Table";
 import DeliveryNotesModal from "./DeliveryNotesModal";
+import { useNavigate } from "react-router-dom";
 
 type Column = {
   key: string;
@@ -18,6 +19,7 @@ const deliveryStopsColumns: Column[] = [
 ];
 
 const DeliveryStopsTable = () => {
+  const navigate = useNavigate();
   const [deliveryStopsData, setDeliveryStopsData] = useState([
     {
       id: 1,
@@ -109,12 +111,17 @@ const DeliveryStopsTable = () => {
     ),
   }));
 
+  const handleButtonClick = () => {
+    navigate("/logistics/delivery-trips");
+  };
+
   return (
     <>
       <Table
         columns={deliveryStopsColumns}
         data={enhancedData}
         buttonLabel="Create Delivery Trip"
+        onButtonClick={handleButtonClick}
         searchPlaceholder="Search Delivery Stops"
       />
 

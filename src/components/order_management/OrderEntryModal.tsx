@@ -57,6 +57,7 @@ interface OrderForm {
   orderNumber: string;
   scheduleDate: string;
   status: string;
+  customerName: string;
   customerEmail: string;
   customerPhone: string;
   shippingAddress1: string;
@@ -85,6 +86,7 @@ const OrderEntryModal: React.FC<OrderEntryModalProps> = ({
     orderNumber: initialOrderData?.orderNumber || "",
     scheduleDate: initialOrderData?.scheduleDate || "",
     status: initialOrderData?.status || "Processing",
+    customerName: initialOrderData?.customerInfo?.email || "",
     customerEmail: initialOrderData?.customerInfo?.email || "",
     customerPhone: initialOrderData?.customerInfo?.phone || "",
     shippingAddress1: initialOrderData?.customerInfo?.shipping.address1 || "",
@@ -264,7 +266,7 @@ const OrderEntryModal: React.FC<OrderEntryModalProps> = ({
     {
       title: "Payment Details",
       content: (
-        <div className="space-y-4">
+        <div className="space-y-4 grid grid-cols-2">
           <InputField
             label="Payment ID"
             name="paymentId"
@@ -370,7 +372,7 @@ const OrderEntryModal: React.FC<OrderEntryModalProps> = ({
         "Order Items",
       ]}
     >
-      <div className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <InputField
           label="Order Number"
           name="orderNumber"
@@ -399,7 +401,15 @@ const OrderEntryModal: React.FC<OrderEntryModalProps> = ({
           ]}
         />
       </div>
-      <div className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <InputField
+          label="Customer Name"
+          name="customerName"
+          type="text"
+          placeholder="Nana Kwame Antwi"
+          value={orderForm.customerName}
+          onChange={handleInputChange}
+        />
         <InputField
           label="Customer Email"
           name="customerEmail"
@@ -439,7 +449,7 @@ const OrderEntryModal: React.FC<OrderEntryModalProps> = ({
         />
       </div>
 
-      <div className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <InputField
           label="Payment ID"
           name="paymentId"

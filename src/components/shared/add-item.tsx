@@ -2,18 +2,52 @@ import AutoComplete from "@/components/shared/form/AutoComplete";
 import TextInputField from "@/components/shared/form/TextInputField";
 import CustomModal from "@/components/shared/modal";
 import { Button } from "@/components/ui/button";
-import { CreateDocument } from "@/lib/api/mutations.global";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useDisclosure } from "@nextui-org/react";
-import { useMutation } from "@tanstack/react-query";
 import { useFormik } from "formik";
-import { useCallback } from "react";
+import { useCallback, useState } from "react"; // Import useState
 import { toast } from "sonner";
 import * as Y from "yup";
 
 import AddAssetCategory from "./add-asset-category";
 import Toggle from "@/components/shared/form/Toggle";
 import AddItemGroup from "./add-item-group";
+
+// Mock function for CreateDocument (reused)
+const mockCreateDocument = async ({
+  url,
+  payload,
+}: {
+  url: string;
+  payload: any;
+}) => {
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  console.log("Simulated API call to:", url, "with payload:", payload);
+  return { data: { message: "Item created successfully (simulated)" } };
+};
+
+// Mock data for Item Group
+const mockItemGroups = [
+  { value: "Service", description: "Professional services" },
+  { value: "Product", description: "Tangible goods" },
+  { value: "Expense", description: "Operational costs" },
+];
+
+// Mock data for Unit of Measure
+const mockUOMs = [
+  { value: "Units", description: "Standard units" },
+  { value: "Hours", description: "Time-based measurement" },
+  { value: "Pieces", description: "Individual items" },
+];
+
+// Mock data for Asset Category
+const mockAssetCategories = [
+  { value: "Electronics", description: "Computers, phones, etc." },
+  { value: "Machinery", description: "Industrial equipment" },
+  { value: "Vehicles", description: "Cars, trucks, etc." },
+  { value: "Furniture", description: "Desks, chairs, etc." },
+];
+
 const AddItemModalBody = ({
   onClose,
 }: {
@@ -34,16 +68,7 @@ const AddItemModalBody = ({
   });
   const addAssetCategoryModal = useDisclosure();
   const addItemGroupModal = useDisclosure();
-  const { mutate, isPending } = useMutation({
-    mutationKey: ["create-single-item"],
-    mutationFn: CreateDocument,
-    onSuccess: () => {
-      toast.success("Item created succesfully");
-    },
-    onSettled: () => {
-      onClose(true);
-    },
-  });
+  const [isSubmitting, setIsSubmitting] = useState(false); // State for submission
 
   const { ...form } = useFormik({
     initialValues: {
@@ -55,18 +80,31 @@ const AddItemModalBody = ({
     },
     validationSchema: formValidator,
     validateOnMount: false,
-    onSubmit: (value) => {
-      mutate({
-        url: "/accounting/create/item",
-        payload: {
-          stock_uom: value.default_unit_of_measure,
-          item_code: value.item_name,
-          item_group: value.item_group,
-          is_fixed_asset: Boolean(value.is_fixed_asset),
-          is_stock_item: !Boolean(value.is_fixed_asset),
-          asset_category: value.asset_category,
-        },
-      });
+    onSubmit: async (value) => {
+      setIsSubmitting(true);
+      try {
+        const response = await mockCreateDocument({
+          url: "/accounting/create/item",
+          payload: {
+            stock_uom: value.default_unit_of_measure,
+            item_code: value.item_name,
+            item_group: value.item_group,
+            is_fixed_asset: Boolean(value.is_fixed_asset),
+            is_stock_item: !Boolean(value.is_fixed_asset),
+            asset_category: value.asset_category,
+          },
+        });
+        console.log(response);
+        toast.success(
+          response?.data?.message || "Item created successfully (simulated)"
+        );
+        onClose(true);
+      } catch (error: any) {
+        console.error(error);
+        toast.error(error?.message || "An error occurred (simulated)");
+      } finally {
+        setIsSubmitting(false);
+      }
     },
   });
 
@@ -92,6 +130,8 @@ const AddItemModalBody = ({
       filters: {
         custom_is_expense_class: 0,
       },
+      // Pass mock data for Item Group
+      mockItems: mockItemGroups,
     },
     {
       id: "default_unit_of_measure",
@@ -100,6 +140,8 @@ const AddItemModalBody = ({
       placeholder: "e.g. Units",
       doctype: "UOM",
       reference_doctype: "Item",
+      // Pass mock data for UOM
+      mockItems: mockUOMs,
     },
     ...(Boolean(form.values.is_fixed_asset)
       ? [
@@ -114,6 +156,8 @@ const AddItemModalBody = ({
               addAssetCategoryModal.onOpen();
             },
             addTitle: "Add Asset Category",
+            // Pass mock data for Asset Category
+            mockItems: mockAssetCategories,
           },
         ]
       : []),
@@ -145,12 +189,13 @@ const AddItemModalBody = ({
                   label={field.label}
                   {...form}
                   extraClassName="w-full"
+                  key={field.id}
                 />
               );
 
             case "auto_complete":
               return (
-                <div>
+                <div key={field.id}>
                   <AutoComplete
                     filters={field.filters}
                     doctype={field.doctype}
@@ -162,6 +207,8 @@ const AddItemModalBody = ({
                     {...form}
                     key={field.id}
                     extraClassName="text-[0.7rem] font-medium"
+                    // Pass the mock items here
+                    items={field.mockItems}
                   />
                   {field.addTitle && (
                     <p
@@ -180,11 +227,10 @@ const AddItemModalBody = ({
 
             case "checkbox":
               return (
-                <div className=" flex items-end">
+                <div className=" flex items-end" key={field.id}>
                   <Toggle
                     {...field}
                     {...form}
-                    key={field.id}
                     extraClassName="text-[0.85rem] font-medium"
                   />
                 </div>
@@ -204,14 +250,14 @@ const AddItemModalBody = ({
           Cancel
         </Button>
         <Button
-          disabled={isPending}
+          disabled={isSubmitting}
           className="bg-primary-green text-white hover:bg-primary-green/hover flex items-center gap-2 rounded-xl"
           onClick={(e) => {
             e.preventDefault();
             form.handleSubmit();
           }}
         >
-          {isPending ? <Icon icon={"eos-icons:loading"} /> : "Add"}
+          {isSubmitting ? <Icon icon={"eos-icons:loading"} /> : "Add"}
         </Button>
       </div>
       <CustomModal

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Table from "../common/Table";
 import InvoiceModal from "./InvoiceModal";
+import { useNavigate } from "react-router-dom";
 
 // Invoice data type
 interface Invoice {
@@ -103,6 +104,13 @@ const columns: Column[] = [
 const InvoiceHistory: React.FC = () => {
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const navigate = useNavigate();
+
+  const handleButtonClick = () => {
+    navigate("/invoices/create-invoice", {
+      state: { invoice: selectedInvoice },
+    });
+  };
 
   const handleRowClick = (invoice: Invoice) => {
     setSelectedInvoice(invoice);
@@ -114,6 +122,8 @@ const InvoiceHistory: React.FC = () => {
       <Table
         columns={columns}
         data={invoiceData}
+        buttonLabel="Create Invoice"
+        onButtonClick={handleButtonClick}
         searchPlaceholder="Search invoices..."
         onRowClick={handleRowClick}
       />

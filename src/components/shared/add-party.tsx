@@ -2,13 +2,34 @@ import AutoComplete from "@/components/shared/form/AutoComplete";
 import SelectInput from "@/components/shared/form/SelectInput";
 import TextInputField from "@/components/shared/form/TextInputField";
 import { Button } from "@/components/ui/button";
-import { CreateDocument } from "@/lib/api/mutations.global";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { useMutation } from "@tanstack/react-query";
 import { useFormik } from "formik";
-import { useCallback } from "react";
+import React, { useCallback, useState } from "react"; // Import useState
 import { toast } from "sonner";
 import * as Y from "yup";
+
+// Mock function for CreateDocument (reused from before)
+const mockCreateDocument = async ({
+  url,
+  payload,
+}: {
+  url: string;
+  payload: any;
+}) => {
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  console.log("Simulated API call to:", url, "with payload:", payload);
+  return { data: { message: "Payment Party added successfully (simulated)" } };
+};
+
+// Mock data for the Country AutoComplete (reused from before)
+const mockCountries = [
+  { value: "Ghana", description: "West African country" },
+  { value: "Nigeria", description: "West African giant" },
+  { value: "United Kingdom", description: "Island country in Europe" },
+  { value: "United States", description: "Country in North America" },
+  { value: "Canada", description: "North American neighbor" },
+];
+
 const AddPartyModalBody = ({ onClose }: { onClose: () => void }) => {
   const formValidator = Y.object().shape({
     customer_name: Y.string().required("Supplier name is required"),
@@ -21,6 +42,9 @@ const AddPartyModalBody = ({ onClose }: { onClose: () => void }) => {
     country: Y.string().required("Country is required"),
     city: Y.string().required("City is required"),
   });
+
+  const [isSubmitting, setIsSubmitting] = useState(false); // State to track submission
+
   const { ...form } = useFormik({
     initialValues: {
       customer_name: "",
@@ -32,29 +56,28 @@ const AddPartyModalBody = ({ onClose }: { onClose: () => void }) => {
       city: "",
     },
     validationSchema: formValidator,
-    onSubmit: (value) => {
-      mutate({
-        url: "/accounting/create/customer",
-        payload: { ...value },
-      });
+    onSubmit: async (value) => {
+      setIsSubmitting(true);
+      try {
+        const response = await mockCreateDocument({
+          url: "/accounting/create/customer",
+          payload: { ...value },
+        });
+        console.log(response);
+        toast.success(
+          response?.data?.message ||
+            "Payment Party added successfully (simulated)"
+        );
+        onClose();
+      } catch (error: any) {
+        console.error(error);
+        toast.error(error?.message || "An error occurred (simulated)");
+      } finally {
+        setIsSubmitting(false);
+      }
     },
   });
 
-  const { isPending, mutate } = useMutation({
-    mutationKey: ["create-company"],
-    mutationFn: CreateDocument,
-    onError: (error: any) => {
-      console.log(error);
-      toast.error(error?.message || "An error occured");
-    },
-    onSuccess: (data) => {
-      console.log(data);
-      toast.success("Payment Party added succesfully");
-    },
-    onSettled: () => {
-      onClose();
-    },
-  });
   const fields = [
     {
       id: "customer_name",
@@ -84,7 +107,6 @@ const AddPartyModalBody = ({ onClose }: { onClose: () => void }) => {
       label: "Mobile Number",
       placeholder: "e.g. 02012312234",
     },
-
     {
       id: "country",
       type: "auto_complete",
@@ -92,7 +114,8 @@ const AddPartyModalBody = ({ onClose }: { onClose: () => void }) => {
       placeholder: "e.g. Ghana",
       doctype: "Country",
       reference_doctype: "Customer",
-      filters: "",
+      // Pass the mock data here
+      mockItems: mockCountries,
     },
     {
       id: "city",
@@ -148,12 +171,13 @@ const AddPartyModalBody = ({ onClose }: { onClose: () => void }) => {
                   label={field.label}
                   {...form}
                   extraClassName="w-full"
+                  key={field.id}
                 />
               );
 
             case "auto_complete":
               return (
-                <div>
+                <div key={field.id}>
                   <AutoComplete
                     filters={field?.filters}
                     doctype={field.doctype}
@@ -163,26 +187,15 @@ const AddPartyModalBody = ({ onClose }: { onClose: () => void }) => {
                     }}
                     {...field}
                     {...form}
-                    key={field.id}
                     extraClassName="text-[0.7rem] font-medium"
+                    // Pass the mock items here as well
+                    items={field.mockItems}
                   />
-                  {/* {field.addTitle && (
-                      <p
-                        className="text-primary-green text-[0.7rem] mt-1 cursor-pointer"
-                        onClick={(event) => {
-                          event.preventDefault();
-                          event.stopPropagation();
-                          field.onAddClick();
-                        }}
-                      >
-                        +{field.addTitle}
-                      </p>
-                    )} */}
                 </div>
               );
             case "select":
               return (
-                <>
+                <React.Fragment key={field.id}>
                   <SelectInput
                     items={field.options}
                     onChange={(value) => {
@@ -190,10 +203,9 @@ const AddPartyModalBody = ({ onClose }: { onClose: () => void }) => {
                     }}
                     {...field}
                     {...form}
-                    key={field.id}
                     extraClassName="text-[0.7rem] font-medium"
                   />
-                </>
+                </React.Fragment>
               );
             case "date":
               return (
@@ -204,6 +216,7 @@ const AddPartyModalBody = ({ onClose }: { onClose: () => void }) => {
                   {...form}
                   type="date"
                   extraClassName="w-full"
+                  key={field.id}
                 />
               );
           }
@@ -221,14 +234,14 @@ const AddPartyModalBody = ({ onClose }: { onClose: () => void }) => {
           Cancel
         </Button>
         <Button
-          disabled={isPending}
+          disabled={isSubmitting}
           className="bg-primary-green text-white hover:bg-primary-green/hover flex items-center gap-2 rounded-xl"
           onClick={(e) => {
             e.preventDefault();
             form.handleSubmit();
           }}
         >
-          {isPending ? <Icon icon={"eos-icons:loading"} /> : "Add"}
+          {isSubmitting ? <Icon icon={"eos-icons:loading"} /> : "Add"}
         </Button>
       </div>
     </div>
