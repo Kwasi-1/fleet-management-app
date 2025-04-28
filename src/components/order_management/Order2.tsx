@@ -508,7 +508,6 @@ const OrderEntryModal: React.FC<OrderEntryModalProps> = ({
             value={formData.paymentDetails.id ? "Paid" : "Unpaid"}
             onChange={() => {}}
             options={["Paid", "Unpaid"]}
-            disabled={true}
           />
         </div>
       </div>
