@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Table from "../common/Table";
-import InvoiceModal from "./InvoiceModal";
 import { useNavigate } from "react-router-dom";
 
 // Invoice data type
@@ -26,8 +25,8 @@ interface Column {
 
 const invoiceData = [
   {
-    id: "ACC-SINV-2025-00837",
     customer: "EAGNACIOUS - GINO",
+    id: "ACC-SINV-2025-00837",
     creation: "17/02/2025, 02:27 PM",
     dueDate: "31/03/2025, 10:52 AM",
     currency: "GHS",
@@ -39,8 +38,8 @@ const invoiceData = [
     totalAmount: 137.66,
   },
   {
-    id: "ACC-SINV-2025-00941",
     customer: "EAGNACIOUS - GINO",
+    id: "ACC-SINV-2025-00941",
     creation: "04/02/2025, 10:49 PM",
     dueDate: "31/03/2025, 10:50 AM",
     currency: "GHS",
@@ -49,8 +48,8 @@ const invoiceData = [
     status: "Paid",
   },
   {
-    id: "ACC-SINV-2025-00884",
     customer: "EAGNACIOUS - GINO",
+    id: "ACC-SINV-2025-00884",
     creation: "17/02/2025, 11:08 PM",
     dueDate: "31/03/2025, 10:49 AM",
     currency: "GHS",
@@ -59,8 +58,8 @@ const invoiceData = [
     status: "Paid",
   },
   {
-    id: "ACC-SINV-2025-00925",
     customer: "JOELLA ENT.",
+    id: "ACC-SINV-2025-00925",
     creation: "19/02/2025, 08:29 AM",
     dueDate: "30/03/2025, 04:49 PM",
     currency: "GHS",
@@ -69,8 +68,8 @@ const invoiceData = [
     status: "Paid",
   },
   {
-    id: "ACC-SINV-2025-01370",
     customer: "ENOCH",
+    id: "ACC-SINV-2025-01370",
     creation: "07/03/2025, 07:58 AM",
     dueDate: "30/03/2025, 04:44 PM",
     currency: "GHS",
@@ -79,8 +78,8 @@ const invoiceData = [
     status: "Paid",
   },
   {
-    id: "ACC-SINV-2025-00463",
     customer: "Mother’s Day",
+    id: "ACC-SINV-2025-00463",
     creation: "03/02/2025, 01:32 PM",
     dueDate: "30/03/2025, 04:37 PM",
     currency: "GHS",
@@ -91,8 +90,8 @@ const invoiceData = [
 ];
 
 const columns: Column[] = [
-  { key: "id", label: "Invoice" },
   { key: "customer", label: "Customer" },
+  { key: "id", label: "Invoice" },
   { key: "creation", label: "Creation" },
   { key: "dueDate", label: "Due Date" },
   { key: "currency", label: "Currency" },
@@ -102,8 +101,7 @@ const columns: Column[] = [
 ];
 
 const InvoiceHistory: React.FC = () => {
-  const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [selectedInvoice] = useState<Invoice | null>(null);
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
@@ -112,9 +110,10 @@ const InvoiceHistory: React.FC = () => {
     });
   };
 
-  const handleRowClick = (invoice: Invoice) => {
-    setSelectedInvoice(invoice);
-    setIsModalOpen(true);
+  const handleRowClick = () => {
+    navigate("/invoices/view", {
+      state: { invoice: selectedInvoice },
+    });
   };
 
   return (
@@ -126,13 +125,6 @@ const InvoiceHistory: React.FC = () => {
         onButtonClick={handleButtonClick}
         searchPlaceholder="Search invoices..."
         onRowClick={handleRowClick}
-      />
-
-      {/* Invoice Modal */}
-      <InvoiceModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        invoice={selectedInvoice}
       />
     </>
   );
