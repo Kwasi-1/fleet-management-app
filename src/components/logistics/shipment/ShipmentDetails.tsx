@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { MouseEvent, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Icon } from "@iconify/react";
 import ShipmentMap from "./ShipmentMap";
@@ -178,7 +178,11 @@ const Documents: React.FC<{ documents: DocumentType[] }> = ({ documents }) => (
               <p className="font-semibold">{doc.name}</p>
               <p className="text-gray-500 text-sm">Created {doc.date}</p>
             </div>
-            <button type="button" title="Download document" className="p-2 bg-gray-300 rounded-full hover:bg-gray-400">
+            <button
+              type="button"
+              title="Download document"
+              className="p-2 bg-gray-300 rounded-full hover:bg-gray-400"
+            >
               <Icon icon="mdi:download" className="h-5 w-5 text-gray-700" />
             </button>
           </li>
@@ -214,8 +218,18 @@ const ShipmentDetails: React.FC<Props> = ({ shipment, onClose }) => {
     });
   };
 
+  const handleBackdropClick = (e: MouseEvent<HTMLDivElement>) => {
+    if ((e.target as HTMLElement).id === "backdrop") {
+      onClose();
+    }
+  };
+
   return (
-    <div>
+    <div
+      id="backdrop"
+      className="fixed inset-0 bg-black/5 z-50"
+      onClick={handleBackdropClick}
+    >
       <div className="fixed right-0 top-0 h-screen overflow-auto max-w-md mx-auto bg-white shadow-lg border border-[#e0e6e9] p-6 z-50 text-gray-700">
         <div className="flex justify-between items-start mb-4">
           <div>
@@ -225,9 +239,9 @@ const ShipmentDetails: React.FC<Props> = ({ shipment, onClose }) => {
           <div className="flex items-center space-x-2">
             <button
               onClick={handleViewInMapClick}
-              className="bg-gray-100 px-3 py-1 rounded-md text-sm shadow"
+              className="bg-gray-100 px-3 py-2 rounded-md border border-gray-200/30 hover:bg-gray-100/50 cursor-pointer text-sm shadow"
             >
-              View in ▼
+              View on Map
             </button>
             <button
               type="button"

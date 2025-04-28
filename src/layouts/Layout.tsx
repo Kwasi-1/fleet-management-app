@@ -30,7 +30,7 @@ const Layout: React.FC<LayoutProps> = ({
   }, [activeTab, dashboardData]);
 
   return (
-    <div className="px-8 h-screen">
+    <div className="px-6 h-screen">
       {/* Header */}
       <div className="flex justify-between items-center py-5">
         <h1 className="font-semibold text-2xl">{title}</h1>
