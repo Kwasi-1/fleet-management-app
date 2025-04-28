@@ -51,7 +51,7 @@ const SelectInput = ({
         inputProps={{
           classNames: {
             input: 'h-10  bg-[#e0e6e9]/5',
-            inputWrapper: 'h-10 rounded-md hover:bg-form-bg border',
+            inputWrapper: 'h-10 rounded-md hover:bg-[#F5F6F7] border',
           },
         }}
         aria-label="none"

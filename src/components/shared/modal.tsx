@@ -78,7 +78,7 @@ const CustomModal: FC<CustomModalProps> = ({
           "border-[#161616] dark:bg-[#161616] dark:text-[#a8b0d3]",
           classNames.base
         ),
-        header: cn("dark:text-[#F5F5F5]", classNames.header),
+        header: cn("dark:text-[#F5F5F5] bg-[#619B7D]", classNames.header),
         closeButton: cn(
           "dark:hover:bg-white/5 active:bg-white/10 text-[18px]",
           classNames.closeButton
@@ -107,9 +107,7 @@ const CustomModal: FC<CustomModalProps> = ({
     >
       <ModalContent className="">
         <>
-          <ModalHeader className="flex flex-col gap-1 bg-[#619B7D]">
-            {header}
-          </ModalHeader>
+          <ModalHeader className="flex flex-col gap-1 ">{header}</ModalHeader>
           <ModalBody className="">{body}</ModalBody>
           {footer && <ModalFooter>{footer}</ModalFooter>}
         </>

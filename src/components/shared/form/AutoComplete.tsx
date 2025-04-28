@@ -33,16 +33,12 @@ const AutoComplete = ({
   id,
   showDescription = false,
   boldenLabel = false,
-  bgColor = "bg-form-bg",
   labelColor = "text-ash-text",
   labelFontSize = "text-[0.9rem]",
   labelMarginBottom = "mb-1",
-  doctype,
   touched,
-  filters = {},
   values = {},
   active = true,
-  query = "",
   mockData = [], // Default to an empty array if no mock data is provided
 }: KSelectProps) => {
   const [value, setValue] = React.useState("");

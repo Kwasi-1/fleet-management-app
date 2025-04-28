@@ -36,11 +36,11 @@ const Toggle = ({
           color="secondary"
           onValueChange={(isSelected) => setFieldValue(id, isSelected)}
         />
-        <p className={`font-light  text-ash-text ${extraClassName} `}>
+        <p className={`font-light  text-[#929292] ${extraClassName} `}>
           {label}
         </p>
       </div>
-      <p className="text-[0.65rem] font-extralight text-ash-text ">
+      <p className="text-[0.65rem] font-extralight text-[#929292] ">
         {hintText}
       </p>
     </div>

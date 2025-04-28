@@ -36,7 +36,7 @@ const AddItemGroup = ({ onClose }: { onClose: () => void }) => {
       expense_account: "",
       income_account: "",
     },
-    onSubmit: async (value) => {
+    onSubmit: async () => {
       setIsSubmitting(true);
       try {
         const response = await mockCreateDocument({
@@ -125,9 +125,9 @@ const AddItemGroup = ({ onClose }: { onClose: () => void }) => {
             case "auto_complete":
               return (
                 <AutoComplete
-                  filters={field?.filters}
-                  doctype={field.doctype}
-                  reference_doctype={field.reference_doctype}
+                  filters={field?.filters || {}}
+                  doctype={field.doctype || ""}
+                  reference_doctype={field.reference_doctype || ""}
                   onChange={(value) => {
                     handleSelectChange(field.id, value);
                   }}

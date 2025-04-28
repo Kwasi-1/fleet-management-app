@@ -1,160 +1,124 @@
-import { ArrowLeft } from "lucide-react";
-
 const InvoiceView = () => {
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-sm">
-      {/* Header */}
-      <div className="flex items-center mb-6">
-        <button className="flex items-center text-blue-600 hover:text-blue-800 mr-4">
-          <ArrowLeft className="w-5 h-5 mr-1" />
-          <span>Back</span>
+    <div className="min-h-screen bg-white">
+      <div className="p-4">
+        <button className="text-green-600 flex items-center gap-1 text-sm font-medium">
+          ← Back
         </button>
-        <h1 className="text-2xl font-bold text-gray-800">Accounting Master</h1>
       </div>
 
-      {/* Invoice Header */}
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold text-gray-700 mb-6">
-          Invoice #ACC-SINV-2025-00002
-        </h2>
+      <div className="flex px-8 pb-12 gap-8">
+        {/* Invoice Details */}
+        <div className="w-1/2 bg-gray-50 rounded shadow-sm border border-gray-200 p-6 text-sm space-y-4">
+          <h2 className="font-semibold text-base">
+            Invoice #ACC-SINV-2025-00002
+          </h2>
 
-        {/* Invoice Details Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          {/* First Column */}
-          <div className="space-y-4">
-            <div>
-              <p className="text-sm text-gray-500">Pooling Date</p>
-              <p className="font-medium">2025-04-25</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">Billed To</p>
-              <p className="font-medium">Access89</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">Amount Paid</p>
-              <p className="font-medium">GHS 0.00</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">Status</p>
-              <p className="font-medium text-red-600">Liposid</p>
-            </div>
+          <div className="grid grid-cols-2 gap-y-2">
+            <p>
+              <span className="font-medium">Posting Date</span>
+              <br />
+              2025-04-25
+            </p>
+            <p>
+              <span className="font-medium">Due Date</span>
+              <br />
+              2025-04-25
+            </p>
+
+            <p>
+              <span className="font-medium">Billed To</span>
+              <br />
+              Access89
+            </p>
+            <p>
+              <span className="font-medium">Subject</span>
+              <br />
+              Sales Invoice for Access89
+            </p>
+
+            <p>
+              <span className="font-medium">Amount Paid</span>
+              <br />
+              GHS 0.00
+            </p>
+            <p>
+              <span className="font-medium">Outstanding</span>
+              <br />
+              GHS 56.00
+            </p>
+
+            <p>
+              <span className="font-medium">Status</span>
+              <br />
+              <span className="text-yellow-600 font-semibold">Unpaid</span>
+            </p>
+            <p>
+              <span className="font-medium">Cost Center</span>
+              <br />
+              1231-Marketing-CF
+            </p>
+
+            <p>
+              <span className="font-medium">Project</span>
+              <br />
+              PROJ-0006
+            </p>
           </div>
 
-          {/* Second Column */}
-          <div className="space-y-4">
-            <div>
-              <p className="text-sm text-gray-500">Project</p>
-              <p className="font-medium">PROJ 0.005</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">Due Date</p>
-              <p className="font-medium">2025-04-25</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">Subject</p>
-              <p className="font-medium">SalesInvoice for Access89</p>
-            </div>
-          </div>
+          {/* Item Table */}
+          <table className="w-full mt-4 text-left text-sm border-t border-gray-300">
+            <thead className="text-gray-600">
+              <tr>
+                <th className="py-2">ITEM</th>
+                <th className="py-2">QUANTITY</th>
+                <th className="py-2">UNIT PRICE</th>
+                <th className="py-2">AMOUNT</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="text-gray-800">
+                <td className="py-2">Towel</td>
+                <td className="py-2">1</td>
+                <td className="py-2">56.00</td>
+                <td className="py-2">56.00</td>
+              </tr>
+            </tbody>
+          </table>
 
-          {/* Third Column */}
-          <div className="space-y-4">
-            <div>
-              <p className="text-sm text-gray-500">Outstanding</p>
-              <p className="font-medium">GHS 56.00</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">Cost Center</p>
-              <p className="font-medium">1231-Marketing-CF</p>
-            </div>
+          <div className="text-right font-medium pt-2">
+            Grand Amount &nbsp;{" "}
+            <span className="text-black font-semibold">GHS 56.00</span>
           </div>
         </div>
-
-        {/* Divider */}
-        <div className="border-t border-gray-200 my-6"></div>
 
         {/* Payments Section */}
-        <div className="mb-8">
-          <h3 className="text-lg font-semibold text-gray-700 mb-4">Payments</h3>
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    AMOUNT
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    DATE
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Proof of payment
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    STATUS
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    ACTIONS
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                <tr>
-                  <td
-                    colSpan={5}
-                    className="px-6 py-4 text-center text-sm text-gray-500"
-                  >
-                    No records found
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+        <div className="w-1/2">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="font-semibold text-base">Payments</h2>
+            <button className="bg-green-500 text-white text-sm px-3 py-1.5 rounded flex items-center gap-1">
+              Make Payment <span className="text-lg leading-none">+</span>
+            </button>
           </div>
-        </div>
 
-        {/* Items Section */}
-        <div>
-          <h3 className="text-lg font-semibold text-gray-700 mb-4">ITEM</h3>
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    QUANTITY
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    UNIT PRICE
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    AMOUNT
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                <tr>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
-                    Total
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    1
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    56.00
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    56.00
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* Grand Total */}
-        <div className="mt-6 flex justify-end">
-          <div className="text-right">
-            <p className="text-sm text-gray-500">Grand Amount</p>
-            <p className="text-lg font-bold">GHS 56.00</p>
-          </div>
+          <table className="w-full text-sm border-t border-gray-300">
+            <thead className="text-gray-600">
+              <tr>
+                <th className="py-2">AMOUNT</th>
+                <th className="py-2">DATE</th>
+                <th className="py-2">Proof of payment</th>
+                <th className="py-2">STATUS</th>
+                <th className="py-2">ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="py-6 text-center text-gray-400" colSpan={5}>
+                  No records found
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

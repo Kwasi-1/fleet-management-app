@@ -251,7 +251,7 @@ const AddItemModalBody = ({
         </Button>
         <Button
           disabled={isSubmitting}
-          className="bg-primary-green text-white hover:bg-primary-green/hover flex items-center gap-2 rounded-xl"
+          className="bg-[#619B7D] text-white hover:bg-[#619B7D]/90 flex items-center gap-2 rounded-xl"
           onClick={(e) => {
             e.preventDefault();
             form.handleSubmit();

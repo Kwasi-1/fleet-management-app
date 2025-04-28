@@ -150,9 +150,9 @@ const AddAssetCategory = ({ onClose }: { onClose: () => void }) => {
             case "auto_complete":
               return (
                 <AutoComplete
-                  filters={field?.filters}
-                  doctype={field.doctype}
-                  reference_doctype={field.reference_doctype}
+                  filters={field.filters || {}}
+                  doctype={field.doctype || ""}
+                  reference_doctype={field.reference_doctype || ""}
                   onChange={(value) => {
                     handleSelectChange(field.id, value);
                   }}

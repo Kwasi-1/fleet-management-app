@@ -1,7 +1,7 @@
-import { cn } from '@/lib/utils';
-import { Input } from '@nextui-org/react';
-import { Eye, EyeSlash } from 'iconsax-react';
-import React, { HTMLInputTypeAttribute, useState } from 'react';
+import { cn } from "@/lib/utils";
+import { Input } from "@nextui-org/react";
+import { Eye, EyeSlash } from "iconsax-react";
+import React, { HTMLInputTypeAttribute, useState } from "react";
 
 interface props {
   id: string;
@@ -29,15 +29,15 @@ const CustomDatePicker = ({
   handleChange,
   errors,
   values,
-  extraClassName = '',
+  extraClassName = "",
   leading,
   placeholder,
   type,
   boldenLabel = false,
-  bgColor = 'bg-form-bg',
-  labelColor = 'text-ash-text',
-  labelFontSize = 'text-[0.9rem]',
-  labelMarginBottom = 'mb-1',
+  bgColor = "bg-[#F5F6F7]",
+  labelColor = "text-ash-text",
+  labelFontSize = "text-[0.9rem]",
+  labelMarginBottom = "mb-1",
   touched,
   disabled = false,
 }: props) => {
@@ -52,8 +52,8 @@ const CustomDatePicker = ({
   return (
     <div>
       <p
-        className={`${
-          boldenLabel ? 'font-medium' : ' font-extralight'
+        className={`px-1 text-[13px] text-gray-500 ${
+          boldenLabel ? "font-medium" : " font-extralight"
         }  ${labelColor}  ${labelFontSize}  ${labelMarginBottom}`}
       >
         {label}
@@ -78,14 +78,14 @@ const CustomDatePicker = ({
           onChange={handleChange}
           classNames={{
             inputWrapper: cn(
-              'flex h-10 w-full rounded-md border dark:border-[#F5F5F580] shadow-0  dark:bg-[#161616] px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#619B7D] disabled:cursor-not-allowed disabled:opacity-50',
+              "flex h-10 w-full rounded-md border dark:border-[#F5F5F580] shadow-0  dark:bg-[#161616] px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#619B7D] disabled:cursor-not-allowed disabled:opacity-50",
               bgColor,
               extraClassName
             ),
           }}
         />
 
-        {type == 'password' && (
+        {type == "password" && (
           <div
             className="absolute h-full top-0 flex items-center justify-center right-0 pr-2 cursor-pointer"
             onClick={() => {
