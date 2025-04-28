@@ -133,51 +133,6 @@ const CreateInvoice = () => {
   const addPartyModal = useDisclosure();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // const fields = [
-  //   {
-  //     id: "posting_date",
-  //     type: "date",
-  //     label: "Posting Date",
-  //     placeholder: "",
-  //   },
-  //   {
-  //     id: "payment_due_date",
-  //     type: "date",
-  //     label: "Payment Due Date",
-  //     placeholder: "",
-  //   },
-  //   ...(invoiceType == "purchase"
-  //     ? [
-  //         {
-  //           id: "party",
-  //           type: "auto_complete",
-  //           label: "Supplier",
-  //           placeholder: "e.g. Access 89",
-  //           doctype: "Supplier",
-  //           reference_doctype: "Purchase Invoice",
-  //           addTitle: "Add Supplier",
-  //           onAddClick: () => {
-  //             addSupplierModal.onOpen();
-  //           },
-  //           filters: {},
-  //         },
-  //       ]
-  //     : [
-  //         {
-  //           id: "party",
-  //           type: "auto_complete",
-  //           label: "Party",
-  //           placeholder: "e.g. Access 89",
-  //           doctype: "Customer",
-  //           reference_doctype: "Sales Invoice",
-  //           addTitle: "Add Payment Party",
-  //           onAddClick: () => {
-  //             addPartyModal.onOpen();
-  //           },
-  //         },
-  //       ]),
-  // ];
-
   const handleSelectChange = useCallback(
     (id: string, value: string) => {
       form.setFieldValue(id, value);
@@ -260,6 +215,14 @@ const CreateInvoice = () => {
               onChange={(e) =>
                 handleSelectChange(e.target.name, e.target.value)
               }
+            />
+            <InputField
+              label="Customer Name"
+              name="customerName"
+              type="email"
+              placeholder="customer@example.com"
+              value={orderForm.customerName}
+              onChange={handleInputChange}
             />
 
             <InputField
@@ -452,19 +415,37 @@ const CreateInvoice = () => {
         </div>
       </div>
 
+      {/* Updated Preview Section */}
       <div className="flex-[1] bg-gray-200/30 rounded-lg p-4 text-sm font-[300] tracking-tight">
         <h4 className="text-[1.3rem] font-medium tracking-tighter border-b">
           Preview
         </h4>
 
         <div className="grid grid-cols-2 my-10 gap-4">
+          <PreviewTab label="Posting Date" value={orderForm.postingDate} />
+          <PreviewTab label="Schedule Date" value={orderForm.scheduleDate} />
+          <PreviewTab label="Invoice Type" value={orderForm.invoiceType} />
+          <PreviewTab label="Customer Name" value={orderForm.customerName} />
+          <PreviewTab label="Customer Email" value={orderForm.customerEmail} />
+          <PreviewTab label="Customer Phone" value={orderForm.customerPhone} />
+          <PreviewTab
+            label="Source Warehouse"
+            value={orderForm.sourceWarehouse}
+          />
+          <PreviewTab
+            label="Destination Address"
+            value={orderForm.destinationAddress}
+          />
           <PreviewTab label="Due Date" value={form.values.payment_due_date} />
-          <PreviewTab label="Billed To" value={form.values.party} />
+          <PreviewTab
+            label={invoiceType === "purchase" ? "Supplier" : "Customer"}
+            value={form.values.party}
+          />
           <PreviewTab
             label="Subject"
             value={`${
               invoiceType == "purchase" ? "Purchase Invoice" : "Sales Invoice"
-            } for ${form.values.party}`}
+            } for ${form.values.party || "New Customer"}`}
           />
         </div>
 
@@ -478,7 +459,7 @@ const CreateInvoice = () => {
 
           {isEmpty(items) ? (
             <div className="w-full text-center mt-4">
-              <p>No items</p>
+              <p>No items added yet</p>
             </div>
           ) : (
             <div>
@@ -502,12 +483,14 @@ const CreateInvoice = () => {
             <h2>Total Amount</h2>
             <p className="text-gray-500">
               GHS{" "}
-              {parseToMoney(
-                items.reduce(
-                  (acc, curr) => Number(curr.rate * curr.qty) + acc,
-                  0
-                )
-              )}
+              {items.length > 0
+                ? parseToMoney(
+                    items.reduce(
+                      (acc, curr) => Number(curr.rate * curr.qty) + acc,
+                      0
+                    )
+                  )
+                : "0.00"}
             </p>
           </div>
         </div>
@@ -583,11 +566,22 @@ const CreateInvoice = () => {
   );
 };
 
-function PreviewTab({ label, value }: { label: string; value: string }) {
+interface PreviewTabProps {
+  label: string;
+  value: string | number | undefined;
+}
+
+function PreviewTab({ label, value }: PreviewTabProps) {
   return (
     <div className="font-medium">
-      <p className="text-gray-400 font-thin text-[15px]">{label}</p>
-      <p>{String(value).trim() == "" ? "-" : value}</p>
+      <p className="text-gray-400 font-thin text-[14px]">{label}</p>
+      <p>
+        {value === undefined || value === null || String(value).trim() === ""
+          ? "-"
+          : typeof value === "number"
+          ? parseToMoney(value)
+          : value}
+      </p>
     </div>
   );
 }
