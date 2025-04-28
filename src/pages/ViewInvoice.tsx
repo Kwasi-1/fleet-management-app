@@ -108,19 +108,25 @@ const InvoiceView = () => {
               <p>STATUS</p>
               <p>ACTIONS</p>
             </div>
-            <tbody>
+            <div>
               {payments.length > 0 ? (
                 payments.map((payment, index) => (
-                  <tr key={index}>{/* Payment fields here */}</tr>
+                  <div key={index}>
+                    <p>{payment.amount}</p>
+                    <p>{payment.date}</p>
+                    <p className="col-span-2">{payment.proofOfPayment}</p>
+                    <p>{payment.status}</p>
+                    <p>{payment.actions}</p>
+                  </div>
                 ))
               ) : (
-                <tr>
-                  <td className="py-6 text-center text-gray-400" colSpan={5}>
+                <div>
+                  <p className="py-6 text-center text-gray-400 col-span-6">
                     No records found
-                  </td>
-                </tr>
+                  </p>
+                </div>
               )}
-            </tbody>
+            </div>
           </table>
         </div>
       </div>
