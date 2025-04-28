@@ -12,7 +12,6 @@ import Fuel from "./pages/Fuel";
 import Service from "./pages/Service";
 import OrderManagement from "./pages/OrderManagement";
 import Locations from "./pages/Locations";
-import OrderEntry from "./pages/OrderEntry";
 import Drivers from "./pages/Drivers";
 import Vehicles from "./pages/Vehicles";
 import Invoice from "./pages/Invoice";
@@ -22,6 +21,7 @@ import OrderDetails from "./pages/OrderDetails";
 import Booking from "./pages/Booking";
 import FullPageMap from "./pages/FullPageMap";
 import InvoicePage from "./pages/InvoicePage";
+import InvoiceView from "./pages/ViewInvoice";
 
 function App() {
   return (
@@ -36,7 +36,7 @@ function AppContent() {
   const isLanding = location.pathname === "/" || location.pathname === "/map";
 
   return (
-    <div className="flex">
+    <div className="flex tracking-tight">
       {!isLanding && <SideBar />}
       <div className={!isLanding ? "w-[85%] ml-[15%]" : "w-full"}>
         <Routes>
@@ -63,9 +63,11 @@ function AppContent() {
           <Route path="/locations" element={<Locations />} />
           <Route
             path="/order_management/order_entry"
-            element={<OrderEntry />}
+            element={<InvoicePage />}
           />
           <Route path="/invoices" element={<Invoice />} />
+          <Route path="/invoices/view" element={<InvoiceView />} />
+
           <Route path="/invoices/create-invoice" element={<InvoicePage />} />
         </Routes>
       </div>
