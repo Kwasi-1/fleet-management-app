@@ -1,20 +1,16 @@
-import TextInputField from "../shared/form/TextInputField";
-import CustomModal from "../shared/modal";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useDisclosure } from "@nextui-org/react";
 import { useFormik } from "formik";
 import { isEmpty } from "lodash";
 import React, { useCallback, useState } from "react";
-import AddSupplierModalBody from "@/components/shared/add-supplier";
 import { toast } from "sonner";
-import AddPartyModalBody from "@/components/shared/add-party";
-import AddItemModalBody from "@/components/shared/add-item";
 import * as Y from "yup";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import InputField from "../common/InputField";
 import SelectField from "../common/SelectField";
 import SimpleSelect from "./SimpleSelect";
+import TextInputField from "../common/TextInputField";
 
 type TInvoice = "purchase" | "sales";
 
@@ -127,11 +123,9 @@ const CreateInvoice = () => {
     },
   });
 
-  const addSupplierModal = useDisclosure();
   const addItemsModal = useDisclosure();
   const [items, setItems] = useState<any[]>([]);
   const [editMode, setEditMode] = useState(false);
-  const addPartyModal = useDisclosure();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSelectChange = useCallback(
@@ -493,73 +487,6 @@ const CreateInvoice = () => {
           </div>
         </div>
       </div>
-
-      {/* Modals remain the same */}
-      <CustomModal
-        size="2xl"
-        placement="right"
-        radius="none"
-        isOpen={addSupplierModal.isOpen}
-        classNames={{
-          header: "p-0 text-white",
-          closeButton: "text-white hover:text-black",
-          body: "px-6 pt-6",
-        }}
-        header={
-          <div className="bg-secondary px-6 p-8">
-            <div>New Supplier</div>
-            <p className="text-sm font-light">
-              Fill out the following requirements.
-            </p>
-          </div>
-        }
-        onOpenChange={addSupplierModal.onOpenChange}
-        body={<AddSupplierModalBody onClose={addSupplierModal.onClose} />}
-      />
-
-      <CustomModal
-        size="2xl"
-        placement="right"
-        radius="none"
-        isOpen={addItemsModal.isOpen}
-        classNames={{
-          header: "p-0 text-white",
-          closeButton: "text-white hover:text-black",
-          body: "px-6 pt-6",
-        }}
-        header={
-          <div className="bg-secondary px-6 p-8">
-            <div>New Item</div>
-            <p className="text-sm font-light">
-              Fill out the following requirements.
-            </p>
-          </div>
-        }
-        onOpenChange={addItemsModal.onOpenChange}
-        body={<AddItemModalBody {...addItemsModal} />}
-      />
-
-      <CustomModal
-        size="2xl"
-        placement="right"
-        radius="none"
-        isOpen={addPartyModal.isOpen}
-        classNames={{
-          header: "p-0 text-white",
-          closeButton: "text-white hover:text-black",
-          body: "px-6 pt-6",
-        }}
-        header={
-          <div className="bg-secondary px-6 p-8">
-            <div>New Payment Party</div>
-            <p className="text-sm font-light">
-              Fill out the following requirements.
-            </p>
-          </div>
-        }
-        onOpenChange={addPartyModal.onOpenChange}
-        body={<AddPartyModalBody onClose={addPartyModal.onClose} />}
-      />
     </div>
   );
 };
