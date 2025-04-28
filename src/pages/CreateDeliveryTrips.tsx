@@ -240,7 +240,12 @@ const CreateDeliveryTrip = () => {
             </label>
           </div>
 
-          <Button outline={true}>Delivery Note Estimated Arrival</Button>
+          <Button
+            onClick={() => console.log("button was clicked")}
+            outline={true}
+          >
+            Delivery Note Estimated Arrival
+          </Button>
         </div>
       </div>
 
