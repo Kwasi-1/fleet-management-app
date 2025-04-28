@@ -1,7 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import Table from "../common/Table";
-import OrderEntryModal from "./OrderEntryModal";
-import { useState } from "react";
 
 // Define table columns
 const columns = [
@@ -81,19 +79,11 @@ const ordersData = [
 ];
 
 const OrdersTable = () => {
-  const [isOrderEntryModalOpen, setIsOrderEntryModalOpen] = useState(false);
+  // const [isOrderEntryModalOpen, setIsOrderEntryModalOpen] = useState(false);
   const navigate = useNavigate();
 
-  // const handleButtonClick = () => {
-  //   navigate("/order_management/order_entry");
-  // };
-
-  const handleOpenModal = () => {
-    setIsOrderEntryModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsOrderEntryModalOpen(false);
+  const handleButtonClick = () => {
+    navigate("/order_management/order_entry");
   };
 
   const handleRowClick = (row: any) => {
@@ -112,14 +102,14 @@ const OrdersTable = () => {
         searchPlaceholder="eg. PUR-ORD-2024-00000"
         buttonLabel="Order Entry"
         onRowClick={handleRowClick}
-        onButtonClick={handleOpenModal} // Pass the click handler
+        onButtonClick={handleButtonClick} // Pass the click handler
         onOperatorClick={(row) => console.log("Operator clicked:", row)}
       />
 
-      <OrderEntryModal
+      {/* <OrderEntryModal
         isOpen={isOrderEntryModalOpen}
         onClose={handleCloseModal}
-      />
+      /> */}
     </div>
   );
 };
