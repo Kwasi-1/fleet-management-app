@@ -1,3 +1,6 @@
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
 interface InputFieldProps {
   label?: string;
   name: string;
@@ -16,15 +19,16 @@ function InputField({
   onChange,
 }: InputFieldProps) {
   return (
-    <div className="relative">
+    <div className="space-y-1.5">
       {label && (
-        <label className="bg-white px-1 text-[11px] font-semibold text-gray-500">
-          {label.toUpperCase()}
-        </label>
+        <Label htmlFor={name} className="text-[14px] font-thin text-[#929292]">
+          {label}
+        </Label>
       )}
-      <input
-        type={type}
+      <Input
+        id={name}
         name={name}
+        type={type}
         placeholder={placeholder}
         value={value}
         onChange={onChange}
