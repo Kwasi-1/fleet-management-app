@@ -9,7 +9,6 @@ import React, { useCallback, useState } from "react";
 import AddSupplierModalBody from "@/components/shared/add-supplier";
 import { toast } from "sonner";
 import AddPartyModalBody from "@/components/shared/add-party";
-import SelectItem from "@/components/shared/select-item";
 import AddItemModalBody from "@/components/shared/add-item";
 import * as Y from "yup";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -58,6 +57,7 @@ const CreateInvoice = () => {
     ),
     items: Y.string().required("At least one item has to be selected"),
   });
+
   const [orderForm, setOrderForm] = useState<OrderForm>({
     orderNumber: "",
     scheduleDate: "",
@@ -99,7 +99,6 @@ const CreateInvoice = () => {
     onSubmit: (values) => {
       form.setFieldTouched("items", true);
 
-      // Simulate form submission
       toast.promise(
         new Promise((resolve) => {
           setTimeout(() => {
@@ -130,54 +129,52 @@ const CreateInvoice = () => {
   const [items, setItems] = useState<any[]>([]);
   const [editMode, setEditMode] = useState(false);
   const addPartyModal = useDisclosure();
-
-  // Simulated loading state for form submission
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const fields = [
-    {
-      id: "posting_date",
-      type: "date",
-      label: "Posting Date",
-      placeholder: "",
-    },
-    {
-      id: "payment_due_date",
-      type: "date",
-      label: "Payment Due Date",
-      placeholder: "",
-    },
-    ...(invoiceType == "purchase"
-      ? [
-          {
-            id: "party",
-            type: "auto_complete",
-            label: "Supplier",
-            placeholder: "e.g. Access 89",
-            doctype: "Supplier",
-            reference_doctype: "Purchase Invoice",
-            addTitle: "Add Supplier",
-            onAddClick: () => {
-              addSupplierModal.onOpen();
-            },
-            filters: {},
-          },
-        ]
-      : [
-          {
-            id: "party",
-            type: "auto_complete",
-            label: "Party",
-            placeholder: "e.g. Access 89",
-            doctype: "Customer",
-            reference_doctype: "Sales Invoice",
-            addTitle: "Add Payment Party",
-            onAddClick: () => {
-              addPartyModal.onOpen();
-            },
-          },
-        ]),
-  ];
+  // const fields = [
+  //   {
+  //     id: "posting_date",
+  //     type: "date",
+  //     label: "Posting Date",
+  //     placeholder: "",
+  //   },
+  //   {
+  //     id: "payment_due_date",
+  //     type: "date",
+  //     label: "Payment Due Date",
+  //     placeholder: "",
+  //   },
+  //   ...(invoiceType == "purchase"
+  //     ? [
+  //         {
+  //           id: "party",
+  //           type: "auto_complete",
+  //           label: "Supplier",
+  //           placeholder: "e.g. Access 89",
+  //           doctype: "Supplier",
+  //           reference_doctype: "Purchase Invoice",
+  //           addTitle: "Add Supplier",
+  //           onAddClick: () => {
+  //             addSupplierModal.onOpen();
+  //           },
+  //           filters: {},
+  //         },
+  //       ]
+  //     : [
+  //         {
+  //           id: "party",
+  //           type: "auto_complete",
+  //           label: "Party",
+  //           placeholder: "e.g. Access 89",
+  //           doctype: "Customer",
+  //           reference_doctype: "Sales Invoice",
+  //           addTitle: "Add Payment Party",
+  //           onAddClick: () => {
+  //             addPartyModal.onOpen();
+  //           },
+  //         },
+  //       ]),
+  // ];
 
   const handleSelectChange = useCallback(
     (id: string, value: string) => {
@@ -194,44 +191,31 @@ const CreateInvoice = () => {
     );
   }
 
-  // // Simulate fetching item details
-  // const handleItemSelect = async (value: string) => {
-  //   form.setFieldValue("items", "selected");
+  // const availableItems = [
+  //   { name: "Laptop", unitPrice: 1200 },
+  //   { name: "Monitor", unitPrice: 300 },
+  // ];
 
-  //   // Simulate API delay
-  //   await new Promise((resolve) => setTimeout(resolve, 500));
+  // const handleItemSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   const value = e.target.value;
+  //   if (!value) return;
 
-  //   // Mock item data
-  //   const mockItem = {
-  //     item_name: `Item ${value.substring(0, 4)}`,
-  //     qty: 1,
-  //     rate: Math.floor(Math.random() * 100) + 10,
-  //     no: items.length + 1,
-  //   };
+  //   form.setFieldValue("items", value);
 
-  //   setItems((prev) => [...prev, mockItem]);
+  //   const selectedItem = availableItems.find((item) => item.name === value);
+  //   if (selectedItem) {
+  //     const newItem = {
+  //       item_name: selectedItem.name,
+  //       qty: 1,
+  //       rate: selectedItem.unitPrice,
+  //       no: items.length + 1,
+  //     };
+  //     setItems((prev) => [...prev, newItem]);
+  //   }
+
+  //   // Reset the select field
+  //   e.target.value = "";
   // };
-
-  const availableItems = [
-    { name: "Laptop", unitPrice: 1200 },
-    { name: "Monitor", unitPrice: 300 },
-  ];
-
-  // Handle item selection from the dropdown
-  const handleItemSelect = (value: string) => {
-    form.setFieldValue("items", value);
-
-    const selectedItem = availableItems.find((item) => item.name === value);
-    if (selectedItem) {
-      const newItem = {
-        item_name: selectedItem.name,
-        qty: 1,
-        rate: selectedItem.unitPrice,
-        no: items.length + 1,
-      };
-      setItems((prev) => [...prev, newItem]);
-    }
-  };
 
   return (
     <div className="flex gap-6 h-[90vh] mt-5">
@@ -239,16 +223,16 @@ const CreateInvoice = () => {
         <div>
           <button
             className="flex col-span-full items-center h-fit gap-2 text-[#619B7D] text-[0.9rem] mb-4 hover:underline"
-            onClick={() => {
-              navigate(-1);
-            }}
+            onClick={() => navigate(-1)}
           >
             <Icon icon={"hugeicons:arrow-turn-backward"} />
             <p>Back</p>
           </button>
+
           <h4 className="font-medium text-[1.2rem] mb-2 tracking-tighter">
             Invoice Details
           </h4>
+
           <form action="#" className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <InputField
               label="Schedule Date"
@@ -263,10 +247,9 @@ const CreateInvoice = () => {
               name="invoiceType"
               value={orderForm.invoiceType}
               options={["Purchase Order", "Sales Order"]}
-              onChange={handleSelectChange}
-              errors={form.errors}
-              touched={form.touched}
-              disabled={true} // Make it read-only since we're determining it from the tab
+              onChange={(e) =>
+                handleSelectChange(e.target.name, e.target.value)
+              }
             />
 
             <InputField
@@ -277,6 +260,7 @@ const CreateInvoice = () => {
               value={orderForm.customerEmail}
               onChange={handleInputChange}
             />
+
             <InputField
               label="Customer Phone"
               name="customerPhone"
@@ -285,6 +269,7 @@ const CreateInvoice = () => {
               value={orderForm.customerPhone}
               onChange={handleInputChange}
             />
+
             <InputField
               label="Source Warehouse"
               name="sourceWarehouse"
@@ -292,6 +277,7 @@ const CreateInvoice = () => {
               value={orderForm.sourceWarehouse}
               onChange={handleInputChange}
             />
+
             <InputField
               label="Destination Address"
               name="destinationAddress"
@@ -299,35 +285,27 @@ const CreateInvoice = () => {
               value={orderForm.destinationAddress}
               onChange={handleInputChange}
             />
-            {/* <InputField
-              label="Billing Address"
-              name="billingAddress"
-              placeholder="Same as shipping or enter billing address"
-              value={orderForm.billingAddress}
-              onChange={handleInputChange}
-            /> */}
           </form>
 
-          <div>
-            <h4 className="font-medium text-[1.2rem] mb-2 mt-6">
-              Items (Services)
-            </h4>
-            <SelectField
+          <div className="mt-6">
+            <h4 className="font-medium text-[1.2rem] mb-2">Items (Services)</h4>
+
+            {/* select item field */}
+            {/* <SelectField
               label="Select Item"
               name="selectedItem"
               value=""
-              options={availableItems.map((item) => item.name)}
-              onChange={(name, value) => handleItemSelect(value)}
-              errors={{}}
-              touched={{}}
+              options={["", ...availableItems.map((item) => item.name)]}
+              onChange={handleItemSelect}
+              errors={form.errors}
+              touched={form.touched}
               placeholder="Select an item"
-            />
+            /> */}
 
             <p
               className="text-[#619B7D] text-[0.7rem] mt-1 cursor-pointer"
-              onClick={(event) => {
-                event.preventDefault();
-                event.stopPropagation();
+              onClick={(e) => {
+                e.preventDefault();
                 addItemsModal.onOpen();
               }}
             >
@@ -335,129 +313,106 @@ const CreateInvoice = () => {
             </p>
           </div>
 
-          {/* items table */}
-          <div className="mt-1 border-b border-collapse rounded-md ">
-            <table className=" w-full text-xs ">
+          <div className="mt-4 border-b border-collapse rounded-md">
+            <table className="w-full text-xs">
               <thead className="text-default-500">
-                <tr className=" border-b-1 border-gray-300 font-semibold relative">
+                <tr className="border-b-1 border-gray-300 font-semibold relative">
                   <td className="px-2 py-3">Item Name</td>
                   <td className="px-2 py-3">Qty</td>
-                  <td className="px-2 py-3 flex gap-x-1 h-full items-center justify-between ">
-                    <div> Rate</div>
-                  </td>
+                  <td className="px-2 py-3">Rate</td>
                   <button
                     type="button"
+                    title={editMode ? "Close Edit Mode" : "Edit Items"}
                     onClick={() => setEditMode(!editMode)}
                     className="h-full absolute right-0 top-0"
                   >
                     <Icon
                       icon={editMode ? "carbon:close" : "flowbite:edit-outline"}
-                      className=" text-gray-400 text-2xl"
+                      className="text-gray-400 text-2xl"
                     />
                   </button>
                 </tr>
               </thead>
 
               <tbody className="divide-y-1">
-                {items?.map((item) => {
-                  return (
-                    <tr key={item?.no}>
-                      <td className="px-2 py-2 text-sm">
-                        {(item as any)?.item_name}
-                      </td>
-
-                      <td className="px-2 py-2 w-[25ch]">
-                        <TextInputField
-                          id={"qty"}
-                          values={{
-                            qty: items?.find(
-                              (fitem) => fitem.item_name == item?.item_name
-                            )?.qty,
-                          }}
-                          errors={{}}
-                          handleBlur={() => {}}
-                          handleChange={(
-                            event: React.ChangeEvent<HTMLInputElement>
-                          ) => {
-                            setItems((prev) =>
-                              prev.map((value) =>
-                                value?.item_name === item?.item_name
-                                  ? {
-                                      ...value,
-                                      qty: parseFloat(
-                                        event?.target?.value?.trim() == ""
-                                          ? "0"
-                                          : event?.target?.value
-                                      ),
-                                    }
-                                  : value
-                              )
-                            );
-                          }}
-                          placeholder={"1"}
-                          label={""}
-                          touched={{}}
-                          extraClassName="w-full h-8"
-                          disabled={!editMode}
+                {items.map((item) => (
+                  <tr key={item.no}>
+                    <td className="px-2 py-2 text-sm">{item.item_name}</td>
+                    <td className="px-2 py-2 w-[25ch]">
+                      <TextInputField
+                        id={"qty"}
+                        values={{ qty: item.qty }}
+                        errors={{}}
+                        handleBlur={() => {}}
+                        handleChange={(
+                          e: React.ChangeEvent<HTMLInputElement>
+                        ) => {
+                          setItems((prev) =>
+                            prev.map((i) =>
+                              i.no === item.no
+                                ? { ...i, qty: parseFloat(e.target.value) || 0 }
+                                : i
+                            )
+                          );
+                        }}
+                        placeholder="1"
+                        label=""
+                        touched={{}}
+                        extraClassName="w-full h-8"
+                        disabled={!editMode}
+                      />
+                    </td>
+                    <td className="px-2 py-2 w-[25ch]">
+                      <TextInputField
+                        id={"rate"}
+                        values={{ rate: item.rate }}
+                        errors={{}}
+                        handleBlur={() => {}}
+                        handleChange={(
+                          e: React.ChangeEvent<HTMLInputElement>
+                        ) => {
+                          setItems((prev) =>
+                            prev.map((i) =>
+                              i.no === item.no
+                                ? {
+                                    ...i,
+                                    rate: parseFloat(e.target.value) || 0,
+                                  }
+                                : i
+                            )
+                          );
+                        }}
+                        placeholder="1"
+                        label=""
+                        touched={{}}
+                        extraClassName="w-full h-8"
+                        disabled={!editMode}
+                      />
+                    </td>
+                    <td className="px-2 text-center w-[2ch]">
+                      <button
+                        type="button"
+                        title="Delete item"
+                        onClick={() =>
+                          setItems((prev) =>
+                            prev.filter((i) => i.no !== item.no)
+                          )
+                        }
+                        className="w-full grid"
+                      >
+                        <Icon
+                          icon="solar:trash-bin-trash-broken"
+                          className="m-auto text-lg hover:text-red-600 duration-700"
                         />
-                      </td>
-                      <td className="px-2 py-2 w-[25ch]">
-                        <TextInputField
-                          id={"rate"}
-                          values={{
-                            rate: items?.find(
-                              (fitem) => fitem.item_name == item?.item_name
-                            )?.rate,
-                          }}
-                          errors={{}}
-                          handleBlur={() => {}}
-                          handleChange={(
-                            event: React.ChangeEvent<HTMLInputElement>
-                          ) => {
-                            setItems((prev) =>
-                              prev.map((value) =>
-                                value?.item_name === item?.item_name
-                                  ? {
-                                      ...value,
-                                      rate: parseFloat(
-                                        event?.target?.value?.trim() == ""
-                                          ? "0"
-                                          : event?.target?.value
-                                      ),
-                                    }
-                                  : value
-                              )
-                            );
-                          }}
-                          placeholder={"1"}
-                          label={""}
-                          touched={{}}
-                          extraClassName="w-full h-8"
-                          disabled={!editMode}
-                        />
-                      </td>
-                      <td className="px-2 text-center w-[2ch]">
-                        <button
-                          onClick={() => {
-                            setItems((prev) =>
-                              prev.filter((i) => i.no !== item.no)
-                            );
-                          }}
-                          className="w-full grid"
-                        >
-                          <Icon
-                            icon="solar:trash-bin-trash-broken"
-                            className="m-auto text-lg hover:text-red-600 duration-700"
-                          />
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
         </div>
+
         <div className="grid grid-cols-3 gap-3 col-span-2 mb-4">
           <div className="col-span-1"></div>
           <Button
@@ -487,7 +442,7 @@ const CreateInvoice = () => {
         </div>
       </div>
 
-      <div className=" flex-[1] bg-gray-200/30 rounded-lg p-4 text-sm font-[300] tracking-tight">
+      <div className="flex-[1] bg-gray-200/30 rounded-lg p-4 text-sm font-[300] tracking-tight">
         <h4 className="text-[1.3rem] font-medium tracking-tighter border-b">
           Preview
         </h4>
@@ -502,6 +457,7 @@ const CreateInvoice = () => {
             } for ${form.values.party}`}
           />
         </div>
+
         <div className="mt-6">
           <div className="grid grid-cols-5 bg-gray-200 px-2 py-2 rounded-t-md uppercase text-[0.7rem] font-medium text-gray-500">
             <p className="col-span-2">Item</p>
@@ -516,31 +472,29 @@ const CreateInvoice = () => {
             </div>
           ) : (
             <div>
-              {items?.map((item) => {
-                return (
-                  <div
-                    key={item?.item_name}
-                    className="grid grid-cols-5 px-4 border-b py-2 text-[0.8rem]"
-                  >
-                    <p className="col-span-2 ">{item?.item_name}</p>
-                    <p>{item?.qty}</p>
-                    <p>{parseToMoney(item?.rate)}</p>
-                    <p>{parseToMoney(Number(item?.rate * item?.qty))}</p>
-                  </div>
-                );
-              })}
+              {items.map((item) => (
+                <div
+                  key={item.no}
+                  className="grid grid-cols-5 px-4 border-b py-2 text-[0.8rem]"
+                >
+                  <p className="col-span-2">{item.item_name}</p>
+                  <p>{item.qty}</p>
+                  <p>{parseToMoney(item.rate)}</p>
+                  <p>{parseToMoney(Number(item.rate * item.qty))}</p>
+                </div>
+              ))}
             </div>
           )}
         </div>
 
         <div className="flex items-center justify-end mt-10">
           <div className="gap-10 flex font-semibold">
-            <h2 className="">Total Amount</h2>
+            <h2>Total Amount</h2>
             <p className="text-gray-500">
               GHS{" "}
               {parseToMoney(
                 items.reduce(
-                  (acc, curr) => Number(curr?.rate * curr?.qty) + acc,
+                  (acc, curr) => Number(curr.rate * curr.qty) + acc,
                   0
                 )
               )}
@@ -549,6 +503,7 @@ const CreateInvoice = () => {
         </div>
       </div>
 
+      {/* Modals remain the same */}
       <CustomModal
         size="2xl"
         placement="right"
@@ -560,23 +515,15 @@ const CreateInvoice = () => {
           body: "px-6 pt-6",
         }}
         header={
-          <>
-            <div className="bg-secondary px-6 p-8">
-              <div>New Supplier</div>
-              <p className="text-sm font-light">
-                Fill out the following requirements.
-              </p>
-            </div>
-          </>
+          <div className="bg-secondary px-6 p-8">
+            <div>New Supplier</div>
+            <p className="text-sm font-light">
+              Fill out the following requirements.
+            </p>
+          </div>
         }
         onOpenChange={addSupplierModal.onOpenChange}
-        body={
-          <AddSupplierModalBody
-            onClose={() => {
-              addSupplierModal.onClose();
-            }}
-          />
-        }
+        body={<AddSupplierModalBody onClose={addSupplierModal.onClose} />}
       />
 
       <CustomModal
@@ -590,51 +537,37 @@ const CreateInvoice = () => {
           body: "px-6 pt-6",
         }}
         header={
-          <>
-            <div className="bg-secondary px-6 p-8">
-              <div>New Item</div>
-              <p className="text-sm font-light">
-                Fill out the following requirements.
-              </p>
-            </div>
-          </>
+          <div className="bg-secondary px-6 p-8">
+            <div>New Item</div>
+            <p className="text-sm font-light">
+              Fill out the following requirements.
+            </p>
+          </div>
         }
         onOpenChange={addItemsModal.onOpenChange}
-        body={
-          <>
-            <AddItemModalBody {...addItemsModal} />
-          </>
-        }
+        body={<AddItemModalBody {...addItemsModal} />}
       />
 
       <CustomModal
         size="2xl"
         placement="right"
         radius="none"
+        isOpen={addPartyModal.isOpen}
         classNames={{
           header: "p-0 text-white",
           closeButton: "text-white hover:text-black",
           body: "px-6 pt-6",
         }}
-        isOpen={addPartyModal.isOpen}
         header={
-          <>
-            <div className="bg-secondary px-6 p-8">
-              <div>New Payment Party</div>
-              <p className="text-sm font-light">
-                Fill out the following requirements.
-              </p>
-            </div>
-          </>
+          <div className="bg-secondary px-6 p-8">
+            <div>New Payment Party</div>
+            <p className="text-sm font-light">
+              Fill out the following requirements.
+            </p>
+          </div>
         }
         onOpenChange={addPartyModal.onOpenChange}
-        body={
-          <AddPartyModalBody
-            onClose={() => {
-              addPartyModal.onClose();
-            }}
-          />
-        }
+        body={<AddPartyModalBody onClose={addPartyModal.onClose} />}
       />
     </div>
   );
@@ -649,7 +582,6 @@ function PreviewTab({ label, value }: { label: string; value: string }) {
   );
 }
 
-// Mock implementation of parseToMoney if not already provided
 function parseToMoney(amount: number): string {
   return amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,");
 }
