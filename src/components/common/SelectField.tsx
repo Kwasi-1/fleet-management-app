@@ -1,12 +1,19 @@
-import { Icon } from "@iconify/react";
-import { ChangeEvent, useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { ChangeEvent } from "react";
 
 interface SelectFieldProps {
   label: string;
   name: string;
   options: string[];
   value: string;
-  onChange: (e: ChangeEvent<HTMLSelectElement>) => void; //r interface
+  onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
 }
 
 const SelectField: React.FC<SelectFieldProps> = ({
@@ -16,53 +23,33 @@ const SelectField: React.FC<SelectFieldProps> = ({
   value,
   onChange,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleDropdown = () => setIsOpen((prev) => !prev);
-
-  const handleOptionClick = (option: string) => {
-    const mockEvent = {
+  // since ShadCN's Select returns just the value string,
+  // we simulate a ChangeEvent for compatibility
+  const handleValueChange = (val: string) => {
+    const event = {
       target: {
         name,
-        value: option,
+        value: val,
       },
     } as ChangeEvent<HTMLSelectElement>;
-    onChange(mockEvent);
-    setIsOpen(false);
+    onChange(event);
   };
 
   return (
-    <div className="relative">
-      <label className="bg-white px-1 text-[11px] font-semibold text-gray-500">
-        {label.toUpperCase()}
-      </label>
-      <div
-        className="w-full border bg-[#F5F6F7] border-[#E5E7EB] px-3 py-2 rounded-md cursor-pointer focus:ring-2 focus:ring-[#619B7D]"
-        onClick={toggleDropdown}
-      >
-        <div className="flex justify-between items-center">
-          <span className="text-sm text-gray-600">{value || "Select"}</span>
-          <Icon
-            icon={isOpen ? "uiw:up" : "uiw:down"}
-            className="text-gray-400 text-xs"
-          />
-        </div>
-      </div>
-      {isOpen && (
-        <ul className="absolute w-full bg-white border border-gray-200 rounded-md mt-1 shadow-lg z-10 max-h-40 overflow-y-auto">
+    <div className="space-y-1.5">
+      <Label className="text-[14px] font-thin text-[#929292]">{label}</Label>
+      <Select value={value} onValueChange={handleValueChange}>
+        <SelectTrigger className="bg-[#F5F6F7] text-sm">
+          <SelectValue placeholder="Select" />
+        </SelectTrigger>
+        <SelectContent>
           {options.map((option) => (
-            <li
-              key={option}
-              onClick={() => handleOptionClick(option)}
-              className={`px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 cursor-pointer ${
-                value === option ? "bg-gray-100" : ""
-              }`}
-            >
+            <SelectItem key={option} value={option}>
               {option}
-            </li>
+            </SelectItem>
           ))}
-        </ul>
-      )}
+        </SelectContent>
+      </Select>
     </div>
   );
 };

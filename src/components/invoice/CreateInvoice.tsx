@@ -1,5 +1,3 @@
-import AutoComplete from "../shared/form/AutoComplete";
-import CustomDatePicker from "../shared/form/CustomDatePicker";
 import TextInputField from "../shared/form/TextInputField";
 import CustomModal from "../shared/modal";
 import { Button } from "@/components/ui/button";
@@ -15,8 +13,33 @@ import SelectItem from "@/components/shared/select-item";
 import AddItemModalBody from "@/components/shared/add-item";
 import * as Y from "yup";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import InputField from "../common/InputField";
+import SelectField from "../common/SelectField";
 
 type TInvoice = "purchase" | "sales";
+
+interface OrderForm {
+  orderNumber: string;
+  scheduleDate: string;
+  status: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  invoiceType: string;
+  sourceWarehouse: string;
+  destinationAddress: string;
+  billingAddress: string;
+  paymentId: string;
+  paymentDate: string;
+  paymentAmount: string;
+  paymentCurrency: string;
+  items: {
+    name: string;
+    unit: string;
+    unitPrice: string;
+    quantity: string;
+  }[];
+}
 
 const CreateInvoice = () => {
   const navigate = useNavigate();
@@ -33,6 +56,32 @@ const CreateInvoice = () => {
     ),
     items: Y.string().required("At least one item has to be selected"),
   });
+  const [orderForm, setOrderForm] = useState<OrderForm>({
+    orderNumber: "",
+    scheduleDate: "",
+    status: "",
+    customerName: "",
+    customerEmail: "",
+    customerPhone: "",
+    sourceWarehouse: "",
+    destinationAddress: "",
+    billingAddress: "",
+    paymentId: "",
+    paymentDate: "",
+    paymentAmount: "",
+    paymentCurrency: "",
+    items: [],
+  });
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setOrderForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   const { ...form } = useFormik({
     initialValues: {
@@ -161,85 +210,79 @@ const CreateInvoice = () => {
   };
 
   return (
-    <div className="flex gap-4 h-[90vh] mt-5">
-      <div className="flex-[0.9] flex justify-between flex-col">
-        <div className="pt-4">
+    <div className="flex gap-6 h-[90vh] mt-5">
+      <div className="flex-[0.9] flex justify-between flex-col tracking-tight">
+        <div>
           <button
-            className="flex col-span-full items-center h-fit gap-2 text-primary-green text-[1.1rem] mb-6 hover:underline"
+            className="flex col-span-full items-center h-fit gap-2 text-[#619B7D] text-[0.9rem] mb-4 hover:underline"
             onClick={() => {
-              navigate(
-                `/dashboard/accounting/masters/${
-                  invoiceType == "purchase"
-                    ? "account-payable"
-                    : "account-receivable"
-                }`
-              );
+              navigate(-1);
             }}
           >
             <Icon icon={"hugeicons:arrow-turn-backward"} />
             <p>Back</p>
           </button>
-          <h4 className="font-medium text-[1.2rem] mb-2">Invoice Details</h4>
+          <h4 className="font-medium text-[1.2rem] mb-2 tracking-tighter">
+            Invoice Details
+          </h4>
           <form action="#" className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {fields?.map((field) => {
-              switch (field.type) {
-                case "text":
-                  return (
-                    <TextInputField
-                      key={field.id}
-                      id={field.id}
-                      placeholder={field.placeholder}
-                      label={field.label}
-                      {...form}
-                      extraClassName="w-full bg-default-100"
-                    />
-                  );
+            <InputField
+              label="Schedule Date"
+              name="scheduleDate"
+              type="datetime-local"
+              value={orderForm.scheduleDate}
+              onChange={handleInputChange}
+            />
 
-                case "auto_complete":
-                  return (
-                    <div>
-                      <AutoComplete
-                        filters={field.filters}
-                        doctype={field.doctype}
-                        reference_doctype={field.reference_doctype}
-                        onChange={(value) => {
-                          handleSelectChange(field.id, value);
-                        }}
-                        {...field}
-                        {...form}
-                        key={field.id}
-                        extraClassName="text-[0.7rem] font-medium"
-                      />
-                      {field.addTitle && (
-                        <p
-                          className="text-primary-green text-[0.7rem] mt-1 cursor-pointer"
-                          onClick={(event) => {
-                            event.preventDefault();
-                            event.stopPropagation();
-                            field.onAddClick();
-                          }}
-                        >
-                          +{field.addTitle}
-                        </p>
-                      )}
-                    </div>
-                  );
+            <SelectField
+              label="Invoice Type"
+              name="invoiceType"
+              value={orderForm.invoiceType}
+              options={["Purchase", "Sales"]}
+              onChange={handleSelectChange}
+              errors={form.errors}
+              touched={form.touched}
+            />
 
-                case "date":
-                  return (
-                    <CustomDatePicker
-                      key={field.id}
-                      id={field.id}
-                      placeholder={field.placeholder}
-                      label={field.label}
-                      {...form}
-                      type="date"
-                      extraClassName="w-full"
-                    />
-                  );
-              }
-            })}
+            <InputField
+              label="Customer Email"
+              name="customerEmail"
+              type="email"
+              placeholder="customer@example.com"
+              value={orderForm.customerEmail}
+              onChange={handleInputChange}
+            />
+            <InputField
+              label="Customer Phone"
+              name="customerPhone"
+              type="tel"
+              placeholder="e.g., 020XXXXXXX"
+              value={orderForm.customerPhone}
+              onChange={handleInputChange}
+            />
+            <InputField
+              label="Source Warehouse"
+              name="sourceWarehouse"
+              placeholder="Cepodek"
+              value={orderForm.sourceWarehouse}
+              onChange={handleInputChange}
+            />
+            <InputField
+              label="Destination Address"
+              name="destinationAddress"
+              placeholder="Oyarifa Warehouse"
+              value={orderForm.destinationAddress}
+              onChange={handleInputChange}
+            />
+            {/* <InputField
+              label="Billing Address"
+              name="billingAddress"
+              placeholder="Same as shipping or enter billing address"
+              value={orderForm.billingAddress}
+              onChange={handleInputChange}
+            /> */}
           </form>
+
           <div>
             <h4 className="font-medium text-[1.2rem] mb-2 mt-6">
               Items (Services)
@@ -265,7 +308,7 @@ const CreateInvoice = () => {
               errors={form.errors}
             />
             <p
-              className="text-primary-green text-[0.7rem] mt-1 cursor-pointer"
+              className="text-[#619B7D] text-[0.7rem] mt-1 cursor-pointer"
               onClick={(event) => {
                 event.preventDefault();
                 event.stopPropagation();
@@ -397,7 +440,7 @@ const CreateInvoice = () => {
             </table>
           </div>
         </div>
-        <div className="fixed bottom-5 right-10 grid grid-cols-3 gap-3 col-span-2 ">
+        <div className="grid grid-cols-3 gap-3 col-span-2 mb-4">
           <div className="col-span-1"></div>
           <Button
             className="bg-white border-[0.85px] hover:bg-red-100 border-red-600 text-red-600 rounded-3xl"
@@ -426,8 +469,10 @@ const CreateInvoice = () => {
         </div>
       </div>
 
-      <div className=" flex-1 bg-gray-200/30 rounded-lg p-4">
-        <h4 className="text-[1.3rem] font-medium border-b">Preview</h4>
+      <div className=" flex-[1] bg-gray-200/30 rounded-lg p-4 text-sm font-[300] tracking-tight">
+        <h4 className="text-[1.3rem] font-medium tracking-tighter border-b">
+          Preview
+        </h4>
 
         <div className="grid grid-cols-2 my-10 gap-4">
           <PreviewTab label="Due Date" value={form.values.payment_due_date} />
@@ -580,7 +625,7 @@ const CreateInvoice = () => {
 function PreviewTab({ label, value }: { label: string; value: string }) {
   return (
     <div className="font-medium">
-      <p className="text-gray-400">{label}</p>
+      <p className="text-gray-400 font-thin text-[15px]">{label}</p>
       <p>{String(value).trim() == "" ? "-" : value}</p>
     </div>
   );
