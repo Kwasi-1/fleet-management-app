@@ -14,6 +14,7 @@ import * as Y from "yup";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import InputField from "../common/InputField";
 import SelectField from "../common/SelectField";
+import SimpleSelect from "./SimpleSelect";
 
 type TInvoice = "purchase" | "sales";
 
@@ -148,31 +149,31 @@ const CreateInvoice = () => {
     );
   }
 
-  // const availableItems = [
-  //   { name: "Laptop", unitPrice: 1200 },
-  //   { name: "Monitor", unitPrice: 300 },
-  // ];
+  const availableItems = [
+    { name: "Laptop", unitPrice: 1200 },
+    { name: "Monitor", unitPrice: 300 },
+  ];
 
-  // const handleItemSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  //   const value = e.target.value;
-  //   if (!value) return;
+  const handleItemSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    if (!value) return;
 
-  //   form.setFieldValue("items", value);
+    form.setFieldValue("items", value);
 
-  //   const selectedItem = availableItems.find((item) => item.name === value);
-  //   if (selectedItem) {
-  //     const newItem = {
-  //       item_name: selectedItem.name,
-  //       qty: 1,
-  //       rate: selectedItem.unitPrice,
-  //       no: items.length + 1,
-  //     };
-  //     setItems((prev) => [...prev, newItem]);
-  //   }
+    const selectedItem = availableItems.find((item) => item.name === value);
+    if (selectedItem) {
+      const newItem = {
+        item_name: selectedItem.name,
+        qty: 1,
+        rate: selectedItem.unitPrice,
+        no: items.length + 1,
+      };
+      setItems((prev) => [...prev, newItem]);
+    }
 
-  //   // Reset the select field
-  //   e.target.value = "";
-  // };
+    // Reset the select field
+    e.target.value = "";
+  };
 
   return (
     <div className="flex gap-6 h-[90vh] mt-5">
@@ -264,16 +265,13 @@ const CreateInvoice = () => {
             <h4 className="font-medium text-[1.2rem] mb-2">Items (Services)</h4>
 
             {/* select item field */}
-            {/* <SelectField
+            <SimpleSelect
               label="Select Item"
               name="selectedItem"
               value=""
-              options={["", ...availableItems.map((item) => item.name)]}
+              options={[...availableItems.map((item) => item.name)]}
               onChange={handleItemSelect}
-              errors={form.errors}
-              touched={form.touched}
-              placeholder="Select an item"
-            /> */}
+            />
 
             <p
               className="text-[#619B7D] text-[0.7rem] mt-1 cursor-pointer"
@@ -386,7 +384,7 @@ const CreateInvoice = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-3 col-span-2 mb-4">
+        <div className="grid grid-cols-3 gap-3 col-span-2 mt-4 pb-4">
           <div className="col-span-1"></div>
           <Button
             className="bg-white border-[0.85px] hover:bg-red-100 border-red-600 text-red-600 rounded-3xl"
