@@ -48,6 +48,8 @@ const CreateInvoice = () => {
   const iType = params.has("type") ? params.get("type") : "purchase";
   const [invoiceType] = useState<TInvoice>(iType as TInvoice);
 
+  const orderType = invoiceType === "sales" ? "Sales Order" : "Purchase Order";
+
   const formSchema = Y.object().shape({
     posting_date: Y.string().required("Posting Date is required"),
     payment_due_date: Y.string().required("Payment Due Date is required"),
@@ -67,6 +69,7 @@ const CreateInvoice = () => {
     destinationAddress: "",
     billingAddress: "",
     paymentId: "",
+    invoiceType: orderType,
     paymentDate: "",
     paymentAmount: "",
     paymentCurrency: "",
@@ -191,22 +194,43 @@ const CreateInvoice = () => {
     );
   }
 
-  // Simulate fetching item details
-  const handleItemSelect = async (value: string) => {
-    form.setFieldValue("items", "selected");
+  // // Simulate fetching item details
+  // const handleItemSelect = async (value: string) => {
+  //   form.setFieldValue("items", "selected");
 
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 500));
+  //   // Simulate API delay
+  //   await new Promise((resolve) => setTimeout(resolve, 500));
 
-    // Mock item data
-    const mockItem = {
-      item_name: `Item ${value.substring(0, 4)}`,
-      qty: 1,
-      rate: Math.floor(Math.random() * 100) + 10,
-      no: items.length + 1,
-    };
+  //   // Mock item data
+  //   const mockItem = {
+  //     item_name: `Item ${value.substring(0, 4)}`,
+  //     qty: 1,
+  //     rate: Math.floor(Math.random() * 100) + 10,
+  //     no: items.length + 1,
+  //   };
 
-    setItems((prev) => [...prev, mockItem]);
+  //   setItems((prev) => [...prev, mockItem]);
+  // };
+
+  const availableItems = [
+    { name: "Laptop", unitPrice: 1200 },
+    { name: "Monitor", unitPrice: 300 },
+  ];
+
+  // Handle item selection from the dropdown
+  const handleItemSelect = (value: string) => {
+    form.setFieldValue("items", value);
+
+    const selectedItem = availableItems.find((item) => item.name === value);
+    if (selectedItem) {
+      const newItem = {
+        item_name: selectedItem.name,
+        qty: 1,
+        rate: selectedItem.unitPrice,
+        no: items.length + 1,
+      };
+      setItems((prev) => [...prev, newItem]);
+    }
   };
 
   return (
@@ -238,10 +262,11 @@ const CreateInvoice = () => {
               label="Invoice Type"
               name="invoiceType"
               value={orderForm.invoiceType}
-              options={["Purchase", "Sales"]}
+              options={["Purchase Order", "Sales Order"]}
               onChange={handleSelectChange}
               errors={form.errors}
               touched={form.touched}
+              disabled={true} // Make it read-only since we're determining it from the tab
             />
 
             <InputField
@@ -287,26 +312,17 @@ const CreateInvoice = () => {
             <h4 className="font-medium text-[1.2rem] mb-2 mt-6">
               Items (Services)
             </h4>
-            <SelectItem
-              touched={form.touched}
-              label={"Items"}
-              onChange={handleItemSelect}
-              id={"items"}
-              placeholder="e.g Painter Service"
-              doctype={"Item"}
-              reference_doctype={
-                invoiceType == "purchase"
-                  ? "Purchase Invoice Item"
-                  : "Sales Invoice Item"
-              }
-              filters={{
-                ...(invoiceType == "purchase"
-                  ? { is_purchase_item: 1 }
-                  : { is_sales_item: 1 }),
-                has_variants: 0,
-              }}
-              errors={form.errors}
+            <SelectField
+              label="Select Item"
+              name="selectedItem"
+              value=""
+              options={availableItems.map((item) => item.name)}
+              onChange={(name, value) => handleItemSelect(value)}
+              errors={{}}
+              touched={{}}
+              placeholder="Select an item"
             />
+
             <p
               className="text-[#619B7D] text-[0.7rem] mt-1 cursor-pointer"
               onClick={(event) => {
@@ -318,6 +334,8 @@ const CreateInvoice = () => {
               + Add new item (service)
             </p>
           </div>
+
+          {/* items table */}
           <div className="mt-1 border-b border-collapse rounded-md ">
             <table className=" w-full text-xs ">
               <thead className="text-default-500">
