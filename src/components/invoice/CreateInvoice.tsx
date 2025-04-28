@@ -30,6 +30,7 @@ interface OrderForm {
   billingAddress: string;
   paymentId: string;
   paymentDate: string;
+  postingDate: string;
   paymentAmount: string;
   paymentCurrency: string;
   items: {
@@ -67,6 +68,7 @@ const CreateInvoice = () => {
     customerPhone: "",
     sourceWarehouse: "",
     destinationAddress: "",
+    postingDate: new Date().toISOString().split("T")[0],
     billingAddress: "",
     paymentId: "",
     invoiceType: orderType,
@@ -235,9 +237,17 @@ const CreateInvoice = () => {
 
           <form action="#" className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <InputField
+              label="Posting Date"
+              name="postingDate"
+              type="date"
+              value={orderForm.postingDate}
+              onChange={handleInputChange}
+            />
+
+            <InputField
               label="Schedule Date"
               name="scheduleDate"
-              type="datetime-local"
+              type="date"
               value={orderForm.scheduleDate}
               onChange={handleInputChange}
             />
