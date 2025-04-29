@@ -54,21 +54,21 @@ function AppContent() {
           />
           <Route path="/fleet/vehicle" element={<Vehicles />} />
           <Route path="/fleet/vehicle/info" element={<VehicleDetails />} />
-          <Route path="/order_management/order" element={<OrderDetails />} />
+          <Route path="/order-management/order" element={<OrderDetails />} />
           <Route path="/fleet/issues" element={<Issues />} />
           <Route path="/fleet/reminders" element={<Reminders />} />
           <Route path="/fleet/reminders/info" element={<ReminderDetails />} />
           <Route path="/fleet/service" element={<Service />} />
           <Route path="/fleet/fuel" element={<Fuel />} />
-          <Route path="/order_management" element={<OrderManagement />} />
+          <Route path="/order-management" element={<OrderManagement />} />
           <Route path="/locations" element={<Locations />} />
           <Route
-            path="/order_management/order_entry"
+            path="/order-management/order_entry"
             element={<InvoicePage />}
           />
           <Route path="/invoices" element={<Invoice />} />
           <Route
-            path="/order_management/inventory"
+            path="/order-management/inventory"
             element={<InventoryPage />}
           />
 

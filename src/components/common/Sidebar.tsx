@@ -87,17 +87,17 @@ const MenuItems = (): MenuItem[] => [
     title: "Order Management",
     icon: "hugeicons:document-validation",
     link: "/order_management",
-    parent: ["order_management", false],
+    parent: ["order-management", false],
     sublinks: [
       {
         title: "Orders",
         icon: "fluent-mdl2:activate-orders",
-        link: "/order_management",
+        link: "/order-management",
       },
       {
         title: "Inventory",
         icon: "material-symbols:inventory-rounded",
-        link: "/order_management/inventory",
+        link: "/order-management/inventory",
       },
     ],
   },
