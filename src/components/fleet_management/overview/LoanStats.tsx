@@ -33,7 +33,7 @@ const LoanStats = () => {
   }, []);
 
   return (
-    <div className="flex flex-col bg[#e0e6e930] shadow-md p-4 px-6 rounded-xl border border-[#e0e6e930]">
+    <div className="flex flex-1 flex-col bg[#e0e6e930] shadow-md p-4 px-6 rounded-xl border border-[#e0e6e930]">
       <div className="flex justify-between gap-3 mb-3">
         {stats.map(({ label, value }) => {
           const percentage = ((value / 124) * 100).toFixed(2);
@@ -44,18 +44,18 @@ const LoanStats = () => {
               className="uppercase flex flex-col min-w-40 gap-14 text-left"
             >
               <div>
-                <p className="text-[#929292]  text-[13px] mt-2">{label}</p>
-                <h3 className="text-xl font-bold">{value}</h3>
+                <p className="text-[#929292] text-[0.8rem] mt-2">{label}</p>
+                <h3 className="text-[1.25rem] font-bold">{value}</h3>
               </div>
               <div>
-                <p className="text-left text-[14px]">{percentage}%</p>
+                <p className="text-left text-[0.85rem]">{percentage}%</p>
                 <RangeBar value={value} total={124} />
               </div>
             </div>
           );
         })}
       </div>
-      <p className="text-sm">Last Updated: {lastUpdated}</p>
+      <p className="text-[0.82rem]">Last Updated: {lastUpdated}</p>
     </div>
   );
 };

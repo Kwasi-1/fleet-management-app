@@ -16,14 +16,14 @@ const OverallBreakdown = () => {
       </h2>
       <div className="flex items-center">
         <div className="w-full ">
-          <p className="text-[#929292] text-[13px] xmtracking-wider uppercase">
+          <p className="text-[#929292] text-[0.8rem] xmtracking-wider uppercase">
             Total Vehicles
           </p>
           <h3 className="text-lg font-[500] mb-5">
             {totalVehicles.toLocaleString()}
           </h3>
 
-          <p className="text-[#929292]  w-full text-[13px] tracking-wider uppercase">
+          <p className="text-[#929292]  w-full text-[0.78rem] tracking-wider uppercase">
             Active Vehicles
           </p>
           <h3 className="text-lg font-[500]">

@@ -125,7 +125,7 @@ const ShipmentOverview: React.FC = () => {
               ].map((col) => (
                 <th
                   key={col.key}
-                  className="p-3 cursor-pointer hover:text-[#929292]/70 transition duration-300 font-[600] text-[13px]"
+                  className="p-3 cursor-pointer hover:text-[#929292]/70 transition duration-300 font-[600] text-[0.84rem]"
                   onClick={() => handleSort(col.key as SortColumn)}
                 >
                   {col.label}
@@ -147,7 +147,7 @@ const ShipmentOverview: React.FC = () => {
             {sortedData.map((row, index) => (
               <tr
                 key={index}
-                className="border-t border-[#e5e7eb] text-[13px] text-black uppercase"
+                className="border-t border-[#e5e7eb] text-[0.75rem] text-black uppercase"
               >
                 <td className="p-3">{row.shipment}</td>
                 <td className="p-3">{row.driver}</td>

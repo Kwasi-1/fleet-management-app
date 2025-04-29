@@ -48,11 +48,11 @@ const DeliveryCard: React.FC<DeliveryData> = ({
   value,
 }) => {
   return (
-    <div className="bg-gray-100 backdrop-blur-sm text-sm p-4 rounded-2xl gap-4 border border-[#e0e6e9] w-full">
+    <div className="bg-gray-100 backdrop-blur-sm text-[0.85rem] p-4 rounded-2xl gap-4 border border-[#e0e6e9] w-full">
       <div className="flex items-start mb-5 justify-between">
         <div>
-          <h2 className="font-semibold text-[15px]">{title}</h2>
-          <p className="text-[#929292] text-sm">Driver: {driver}</p>
+          <h2 className="font-semibold text-[0.89rem]">{title}</h2>
+          <p className="text-[#929292] text-[0.85rem]">Driver: {driver}</p>
         </div>
         <div className="w-12 h-12">
           <CircularProgressbar
@@ -68,16 +68,16 @@ const DeliveryCard: React.FC<DeliveryData> = ({
         </div>
       </div>
 
-      <div className="flex flex-col flex-1">
+      <div className="flex flex-col flex-1 font-[400] text-[#929292]">
         <p className="flex gap-1 mt-2">
-          <span className="font-medium">Status:</span>
+          <span className="font-medium ">Status:</span>
           <StatusText text={status} />
         </p>
         <p>
-          Product: <span className="font-semibold">{product}</span>
+          Product: <span className="font-medium ">{product}</span>
         </p>
         <p>
-          Value: <span className="font-semibold">{value}</span>
+          Value: <span className="font-medium ml-[2px]">{value}</span>
         </p>
       </div>
     </div>
