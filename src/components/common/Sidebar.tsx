@@ -88,7 +88,13 @@ const MenuItems = (): MenuItem[] => [
     icon: "hugeicons:document-validation",
     link: "/order_management",
     parent: ["order_management", false],
-    sublinks: [],
+    sublinks: [
+      {
+        title: "Inventory",
+        icon: "material-symbols:inventory-rounded",
+        link: "/order_management/inventory",
+      },
+    ],
   },
   {
     title: "Logistics",

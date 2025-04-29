@@ -22,6 +22,7 @@ import Booking from "./pages/Booking";
 import FullPageMap from "./pages/FullPageMap";
 import InvoicePage from "./pages/InvoicePage";
 import InvoiceView from "./pages/ViewInvoice";
+import InventoryPage from "./pages/InventoryPage";
 
 function App() {
   return (
@@ -66,6 +67,11 @@ function AppContent() {
             element={<InvoicePage />}
           />
           <Route path="/invoices" element={<Invoice />} />
+          <Route
+            path="/order_management/inventory"
+            element={<InventoryPage />}
+          />
+
           <Route path="/invoices/view" element={<InvoiceView />} />
 
           <Route path="/invoices/create-invoice" element={<InvoicePage />} />
