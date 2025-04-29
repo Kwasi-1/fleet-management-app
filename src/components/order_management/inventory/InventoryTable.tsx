@@ -5,13 +5,18 @@ import { inventoryData } from "@/db/inventory";
 import { Settings, SlidersHorizontal } from "lucide-react";
 import { useState } from "react";
 import SelectField from "@/components/common/SelectField";
+import StockLevelDisplay from "./StockLevelDisplay";
 
 const columns = [
   { key: "product", label: "Product name" },
   { key: "sku", label: "SKU" },
   { key: "category", label: "Category" },
   { key: "supplier", label: "Supplier" },
-  { key: "stock", label: "Current Stock" },
+  {
+    key: "stock",
+    label: "Current Stock",
+    render: (row: any) => <StockLevelDisplay stock={row.stock} />,
+  },
   { key: "price", label: "Unit Price" },
 ];
 

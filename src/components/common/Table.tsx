@@ -98,7 +98,9 @@ const Table = <T extends TableRow>({
               >
                 {columns.map((col) => (
                   <td key={col.key} className="p-3">
-                    {col.key === "status" ? (
+                    {"render" in col && typeof col.render === "function" ? (
+                      col.render(row)
+                    ) : col.key === "status" ? (
                       <StatusText text={String(row[col.key])} />
                     ) : col.key === "operator" ? (
                       <button
