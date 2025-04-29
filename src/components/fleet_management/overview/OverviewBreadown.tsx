@@ -23,7 +23,7 @@ const OverallBreakdown = () => {
             {totalVehicles.toLocaleString()}
           </h3>
 
-          <p className="text-[#929292]  w-full text-[0.78rem] tracking-wider uppercase">
+          <p className="text-[#929292]  w-full text-[0.78rem] tracking-wider uppercase mr-2">
             Active Vehicles
           </p>
           <h3 className="text-lg font-[500]">
