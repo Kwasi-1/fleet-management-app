@@ -3,7 +3,7 @@ interface StockLevelDisplayProps {
 }
 
 const StockLevelDisplay: React.FC<StockLevelDisplayProps> = ({ stock }) => {
-  const [amount, level] = stock.split(" - ");
+  const [, level] = stock.split(" - ");
   const isLow = level.toLowerCase() === "low";
 
   return (
