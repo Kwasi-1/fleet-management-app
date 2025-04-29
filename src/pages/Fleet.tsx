@@ -14,9 +14,7 @@ const Fleet = () => {
 
       <div className="flex gap-4 mt-4 h-full">
         <OverallBreakdown />
-        <div className="flex-1 h-full">
-          <LoanStats />
-        </div>
+        <LoanStats />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-7 gap-4 mt-4">
