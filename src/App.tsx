@@ -22,7 +22,7 @@ import Booking from "./pages/Booking";
 import FullPageMap from "./pages/FullPageMap";
 import InvoicePage from "./pages/InvoicePage";
 import InvoiceView from "./pages/ViewInvoice";
-import InventoryPage from "./pages/InventoryPage";
+import InventoryPage from "./pages/InventoryPage2";
 
 function App() {
   return (
