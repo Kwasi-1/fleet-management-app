@@ -6,6 +6,7 @@ import { Settings, SlidersHorizontal } from "lucide-react";
 import { useState } from "react";
 import SelectField from "@/components/common/SelectField";
 import StockLevelDisplay from "./StockLevelDisplay";
+import VehicleRenewalModal from "@/components/fleet_management/reminders/VehicleRenewalModal";
 
 const columns = [
   { key: "product", label: "Product name" },
@@ -93,7 +94,7 @@ function InventoryTable() {
         actions={[
           {
             label: "Audit",
-            onClick: (row) => console.log("Edit", row),
+            onClick: handlleAuditClick,
           },
           {
             label: "edit",
@@ -104,6 +105,11 @@ function InventoryTable() {
             onClick: (row) => console.log("Delete", row),
           },
         ]}
+      />
+
+      <VehicleRenewalModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
       />
     </div>
   );
