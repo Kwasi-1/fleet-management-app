@@ -33,7 +33,7 @@ function InventoryTable() {
       <DateRangeFilter />
       <SelectField
         placeholder="Category"
-        classname="shadow-none bg-gray-200/30"
+        classname="shadow-none bg-gray-200/30  min-w-28"
         name="category"
         options={["Electronic", "Office", "Software"]}
         value={category}
@@ -41,7 +41,7 @@ function InventoryTable() {
       />
       <SelectField
         placeholder="Supplier"
-        classname="shadow-none bg-gray-200/30"
+        classname="shadow-none bg-gray-200/30 min-w-28"
         name="supplier"
         options={[
           "Urban Deals",
@@ -56,7 +56,7 @@ function InventoryTable() {
       />
       <SelectField
         placeholder="Stock level"
-        classname="shadow-none bg-gray-200/30"
+        classname="shadow-none bg-gray-200/30 min-w-28"
         name="stockLevel"
         options={["Low", "High", "Out of stock"]}
         value={stockLevel}
