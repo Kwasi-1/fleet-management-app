@@ -156,6 +156,8 @@ function OrderDetails() {
               <Button
                 className="px-6 mb-4"
                 onClick={() => setEditModalOpen(true)}
+                secondary={true}
+                icon="tabler:edit"
               >
                 Edit Order
               </Button>
@@ -227,7 +229,12 @@ function OrderDetails() {
                   <div className="bg-[#619B7D] h-2 w-2 rounded-full" />
                   Paid
                 </div>
-                <Button onClick={() => console.log("Refund")} className="px-6">
+                <Button
+                  onClick={() => console.log("Refund")}
+                  secondary={true}
+                  className="px-6"
+                  icon="ri:refund-2-line"
+                >
                   Refund
                 </Button>
               </div>
@@ -271,6 +278,8 @@ function OrderDetails() {
                 <Button
                   className="px-6"
                   onClick={() => setFulfillmentModalOpen(true)}
+                  secondary={true}
+                  icon="cil:truck"
                 >
                   Create Shipment
                 </Button>
