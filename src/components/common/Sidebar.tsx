@@ -162,7 +162,7 @@ const SideBar: React.FC = () => {
             <div
               key={index}
               className={`flex flex-col w-full nav ${
-                isHighlighted ? "bg-gray-200/40" : "h-12"
+                isHighlighted ? "bg-gray-200/30" : "h-12"
               } rounded-xl p-1 overflow-y-hidden duration-300`}
             >
               {/* Parent Menu Item */}
