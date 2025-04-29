@@ -2,17 +2,22 @@ import { Icon } from "@iconify/react";
 import { useState, ChangeEvent, MouseEvent } from "react";
 import StatusText from "./StatusText";
 import DateFilter from "../fleet_management/DateFilter";
+import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 export interface Column {
   key: string;
   label: string;
+  render?: (row: any) => React.ReactNode;
 }
 
-// Generic row type with `id` as string or number and flexible keys
 export interface TableRow {
   id: string | number;
   [key: string]: string | number | boolean | React.ReactNode | undefined;
-  // Add undefined to match optional Invoice properties
 }
 
 interface TableProps<T extends TableRow> {
@@ -24,6 +29,12 @@ interface TableProps<T extends TableRow> {
   onRowClick?: (row: T) => void;
   onButtonClick?: () => void;
   onOperatorClick?: (row: T, event: MouseEvent<HTMLButtonElement>) => void;
+  actions?: {
+    label: string;
+    icon?: string;
+    onClick: (row: T) => void;
+    variant?: "default" | "delete";
+  }[];
 }
 
 const Table = <T extends TableRow>({
@@ -35,6 +46,7 @@ const Table = <T extends TableRow>({
   onRowClick,
   onButtonClick,
   onOperatorClick,
+  actions,
 }: TableProps<T>) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
 
@@ -64,7 +76,6 @@ const Table = <T extends TableRow>({
                 setSearchTerm(e.target.value)
               }
             />
-            {/* {additionalFilters} */}
           </div>
           {buttonLabel ? (
             <button
@@ -87,6 +98,7 @@ const Table = <T extends TableRow>({
                   {col.label}
                 </th>
               ))}
+              {actions && <th className="p-3 text-right">Actions</th>}
             </tr>
           </thead>
           <tbody>
@@ -114,6 +126,56 @@ const Table = <T extends TableRow>({
                     )}
                   </td>
                 ))}
+                {actions && (
+                  <td className="p-3 text-right">
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-8 w-8 p-0"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <Icon
+                            icon="heroicons-outline:dots-vertical"
+                            className="h-4 w-4"
+                          />
+                          <span className="sr-only">Open menu</span>
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent
+                        className="w-48 p-2"
+                        align="end"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <div className="flex flex-col gap-1">
+                          {actions.map((action, index) => (
+                            <Button
+                              key={index}
+                              variant={
+                                action.label === "delete" ? "delete" : "ghost"
+                              }
+                              size="lg"
+                              className="justify-start rounded-xl capitalize "
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                action.onClick(row);
+                              }}
+                            >
+                              {action.icon && (
+                                <Icon
+                                  icon={action.icon}
+                                  className="mr-2 h-4 w-4"
+                                />
+                              )}
+                              {action.label}
+                            </Button>
+                          ))}
+                        </div>
+                      </PopoverContent>
+                    </Popover>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>

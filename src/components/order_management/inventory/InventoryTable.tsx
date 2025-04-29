@@ -84,6 +84,20 @@ function InventoryTable() {
         buttonLabel="Order Entry"
         searchPlaceholder="Search product..."
         additionalFilters={additionalFilters}
+        actions={[
+          {
+            label: "Audit",
+            onClick: (row) => console.log("Edit", row),
+          },
+          {
+            label: "edit",
+            onClick: (row) => console.log("Edit", row),
+          },
+          {
+            label: "delete",
+            onClick: (row) => console.log("Delete", row),
+          },
+        ]}
       />
     </div>
   );
