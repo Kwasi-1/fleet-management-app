@@ -76,6 +76,7 @@ const InventoryPage = () => {
       <Table
         columns={columns}
         data={data}
+        buttonLabel="Order"
         searchPlaceholder="Search"
         additionalFilters={<></>}
       />
