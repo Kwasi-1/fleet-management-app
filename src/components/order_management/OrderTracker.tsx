@@ -32,7 +32,7 @@ const OrderTracker = () => {
                 className="flex flex-col flex-1 text-center relative"
               >
                 <div
-                  className={`text-xs font-[400] flex items-center pb-2 ${
+                  className={`text-[13px] capitalize font-[400] flex items-center pb-2 ${
                     isActive ? "text-black" : "text-gray-400"
                   }`}
                 >
