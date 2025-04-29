@@ -44,7 +44,7 @@ const Layout: React.FC<LayoutProps> = ({
       )}
 
       {/* Conditional Tabs or No Tabs */}
-      <div className="bg-gray-200/30 h-full rounded-t-xl border border-[#e0e6e930]">
+      <div className="bg-gray-200/40 h-full rounded-t-xl border border-[#e0e6e930]">
         {tabs.length > 0 ? (
           <>
             <nav className="flex px-5">
