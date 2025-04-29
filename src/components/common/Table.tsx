@@ -20,6 +20,7 @@ interface TableProps<T extends TableRow> {
   data: T[];
   searchPlaceholder?: string;
   buttonLabel?: string;
+  additionalFilters?: React.ReactNode;
   onRowClick?: (row: T) => void;
   onButtonClick?: () => void;
   onOperatorClick?: (row: T, event: MouseEvent<HTMLButtonElement>) => void;
@@ -30,6 +31,7 @@ const Table = <T extends TableRow>({
   data,
   searchPlaceholder,
   buttonLabel,
+  additionalFilters,
   onRowClick,
   onButtonClick,
   onOperatorClick,
@@ -51,14 +53,19 @@ const Table = <T extends TableRow>({
     <div className="relative">
       <div className="p-4 h-full">
         <div className="flex justify-between items-center mb-4">
-          <input
-            type="text"
-            placeholder={searchPlaceholder}
-            className="p-2 border border-[#e5e7eb] appearance-none outline-none rounded-lg focus:outline-none focus:ring-2 focus:ring-[#619B7D] text-sm text-gray-600 w-1/3 bg-inherit"
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setSearchTerm(e.target.value)
-            }
-          />
+          <div className="flex items-center gap-2 flex-1">
+            <input
+              type="text"
+              placeholder={searchPlaceholder}
+              className={`p-2 border border-[#e5e7eb] appearance-none outline-none rounded-lg focus:outline-none focus:ring-2 focus:ring-[#619B7D] text-sm text-gray-600 ${
+                additionalFilters ? "w-1/4" : "w-1/3"
+              } bg-inherit`}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setSearchTerm(e.target.value)
+              }
+            />
+            {/* {additionalFilters} */}
+          </div>
           {buttonLabel ? (
             <button
               className="justify-center rounded-md text-[12.5px] ring-offset-white transition focus-visible:outline-none disabled:pointer-events-none  disabled:text-gray-500 h-10 px-4 py-2 flex items-center gap-1 bg-primary-green font-medium duation-300 hover:bg-[#619B7D]/80 bg-[#619B7D] text-black hover:opacity-90 disabled:bg-[#619B7D]/50"
@@ -71,6 +78,7 @@ const Table = <T extends TableRow>({
             <DateFilter />
           )}
         </div>
+        <div className="mb-6"> {additionalFilters}</div>
         <table className="w-full border-collapse">
           <thead>
             <tr className="border-b border-gray-200 uppercase font-semibold text-gray-600 text-[12px]">
