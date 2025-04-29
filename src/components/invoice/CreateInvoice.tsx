@@ -3,7 +3,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useDisclosure } from "@nextui-org/react";
 import { useFormik } from "formik";
 import { isEmpty } from "lodash";
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { toast } from "sonner";
 import * as Y from "yup";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -41,11 +41,12 @@ interface OrderForm {
 
 const CreateInvoice = () => {
   const navigate = useNavigate();
-
   const [params] = useSearchParams();
+
+  // Check if type parameter exists
   const hasTypeParam = params.has("type");
   const iType = hasTypeParam ? params.get("type") : "purchase";
-  const [invoiceType] = useState<TInvoice>(iType as TInvoice);
+  const [invoiceType, setInvoiceType] = useState<TInvoice>(iType as TInvoice);
 
   const isInvoiceTypeDisabled = hasTypeParam;
   const orderType = invoiceType === "sales" ? "Sales Order" : "Purchase Order";
@@ -86,6 +87,15 @@ const CreateInvoice = () => {
       ...prev,
       [name]: value,
     }));
+  };
+
+  const handleInvoiceTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.target;
+    setOrderForm((prev) => ({
+      ...prev,
+      invoiceType: value,
+    }));
+    setInvoiceType(value === "Sales Order" ? "sales" : "purchase");
   };
 
   const { ...form } = useFormik({
@@ -131,12 +141,12 @@ const CreateInvoice = () => {
   const [editMode, setEditMode] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSelectChange = useCallback(
-    (id: string, value: string) => {
-      form.setFieldValue(id, value);
-    },
-    [form]
-  );
+  // const handleSelectChange = useCallback(
+  //   (id: string, value: string) => {
+  //     form.setFieldValue(id, value);
+  //   },
+  //   [form]
+  // );
 
   function handleClose() {
     navigate(
@@ -168,7 +178,6 @@ const CreateInvoice = () => {
       setItems((prev) => [...prev, newItem]);
     }
 
-    // Reset the select field
     e.target.value = "";
   };
 
@@ -204,31 +213,42 @@ const CreateInvoice = () => {
               name="invoiceType"
               value={orderForm.invoiceType}
               options={["Purchase Order", "Sales Order"]}
-              onChange={(e) =>
-                handleSelectChange(e.target.name, e.target.value)
-              }
+              onChange={handleInvoiceTypeChange}
               disabled={isInvoiceTypeDisabled}
             />
+
             <InputField
-              label="Customer Name"
+              label={
+                invoiceType === "purchase" ? "Supplier Name" : "Customer Name"
+              }
               name="customerName"
-              type="email"
-              placeholder="customer@example.com"
+              type="text"
+              placeholder={
+                invoiceType === "purchase" ? "Supplier name" : "Customer name"
+              }
               value={orderForm.customerName}
               onChange={handleInputChange}
             />
 
             <InputField
-              label="Customer Email"
+              label={
+                invoiceType === "purchase" ? "Supplier Email" : "Customer Email"
+              }
               name="customerEmail"
               type="email"
-              placeholder="customer@example.com"
+              placeholder={
+                invoiceType === "purchase"
+                  ? "supplier@example.com"
+                  : "customer@example.com"
+              }
               value={orderForm.customerEmail}
               onChange={handleInputChange}
             />
 
             <InputField
-              label="Customer Phone"
+              label={
+                invoiceType === "purchase" ? "Supplier Phone" : "Customer Phone"
+              }
               name="customerPhone"
               type="tel"
               placeholder="e.g., 020XXXXXXX"
@@ -256,7 +276,6 @@ const CreateInvoice = () => {
           <div className="mt-6">
             <h4 className="font-medium text-[1.2rem] mb-2">Items (Services)</h4>
 
-            {/* select item field */}
             <SimpleSelect
               label="Select Item"
               name="selectedItem"
@@ -405,7 +424,6 @@ const CreateInvoice = () => {
         </div>
       </div>
 
-      {/* Updated Preview Section */}
       <div className="flex-[1] bg-gray-200/30 rounded-lg p-4 text-sm font-[300] tracking-tight">
         <h4 className="text-[1.3rem] font-medium tracking-tighter border-b">
           Preview
@@ -415,9 +433,24 @@ const CreateInvoice = () => {
           <PreviewTab label="Posting Date" value={orderForm.postingDate} />
           <PreviewTab label="Schedule Date" value={orderForm.scheduleDate} />
           <PreviewTab label="Invoice Type" value={orderForm.invoiceType} />
-          <PreviewTab label="Customer Name" value={orderForm.customerName} />
-          <PreviewTab label="Customer Email" value={orderForm.customerEmail} />
-          <PreviewTab label="Customer Phone" value={orderForm.customerPhone} />
+          <PreviewTab
+            label={
+              invoiceType === "purchase" ? "Supplier Name" : "Customer Name"
+            }
+            value={orderForm.customerName}
+          />
+          <PreviewTab
+            label={
+              invoiceType === "purchase" ? "Supplier Email" : "Customer Email"
+            }
+            value={orderForm.customerEmail}
+          />
+          <PreviewTab
+            label={
+              invoiceType === "purchase" ? "Supplier Phone" : "Customer Phone"
+            }
+            value={orderForm.customerPhone}
+          />
           <PreviewTab
             label="Source Warehouse"
             value={orderForm.sourceWarehouse}
@@ -435,7 +468,10 @@ const CreateInvoice = () => {
             label="Subject"
             value={`${
               invoiceType == "purchase" ? "Purchase Invoice" : "Sales Invoice"
-            } for ${form.values.party || "New Customer"}`}
+            } for ${
+              form.values.party ||
+              (invoiceType === "purchase" ? "New Supplier" : "New Customer")
+            }`}
           />
         </div>
 
