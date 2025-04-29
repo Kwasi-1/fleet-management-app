@@ -83,7 +83,7 @@ const OrdersTable = () => {
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
-    navigate("/order_management/order_entry");
+    navigate("/order_management/order_entry?type=sales");
   };
 
   const handleRowClick = (row: any) => {

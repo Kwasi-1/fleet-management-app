@@ -11,6 +11,7 @@ import InputField from "../common/InputField";
 import SelectField from "../common/SelectField";
 import SimpleSelect from "./SimpleSelect";
 import TextInputField from "../common/TextInputField";
+import BackButton from "../common/BackButton";
 
 type TInvoice = "purchase" | "sales";
 
@@ -42,9 +43,11 @@ const CreateInvoice = () => {
   const navigate = useNavigate();
 
   const [params] = useSearchParams();
-  const iType = params.has("type") ? params.get("type") : "purchase";
+  const hasTypeParam = params.has("type");
+  const iType = hasTypeParam ? params.get("type") : "purchase";
   const [invoiceType] = useState<TInvoice>(iType as TInvoice);
 
+  const isInvoiceTypeDisabled = hasTypeParam;
   const orderType = invoiceType === "sales" ? "Sales Order" : "Purchase Order";
 
   const formSchema = Y.object().shape({
@@ -68,7 +71,7 @@ const CreateInvoice = () => {
     postingDate: new Date().toISOString().split("T")[0],
     billingAddress: "",
     paymentId: "",
-    invoiceType: orderType,
+    invoiceType: hasTypeParam ? orderType : "Purchase Order",
     paymentDate: "",
     paymentAmount: "",
     paymentCurrency: "",
@@ -173,13 +176,7 @@ const CreateInvoice = () => {
     <div className="flex gap-6 h-[90vh] mt-5">
       <div className="flex-[0.9] flex justify-between flex-col tracking-tight">
         <div>
-          <button
-            className="flex col-span-full items-center h-fit gap-2 text-[#619B7D] text-[0.9rem] mb-4 hover:underline"
-            onClick={() => navigate(-1)}
-          >
-            <Icon icon={"hugeicons:arrow-turn-backward"} />
-            <p>Back</p>
-          </button>
+          <BackButton />
 
           <h4 className="font-medium text-[1.2rem] mb-2 tracking-tighter">
             Invoice Details
@@ -210,6 +207,7 @@ const CreateInvoice = () => {
               onChange={(e) =>
                 handleSelectChange(e.target.name, e.target.value)
               }
+              disabled={isInvoiceTypeDisabled}
             />
             <InputField
               label="Customer Name"
@@ -474,7 +472,7 @@ const CreateInvoice = () => {
           <div className="gap-10 flex font-semibold">
             <h2>Total Amount</h2>
             <p className="text-gray-500">
-              GHS{" "}
+              GHS
               {items.length > 0
                 ? parseToMoney(
                     items.reduce(

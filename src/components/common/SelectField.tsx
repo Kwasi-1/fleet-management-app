@@ -13,6 +13,7 @@ interface SelectFieldProps {
   name: string;
   options: string[];
   value: string;
+  disabled?: boolean;
   onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
 }
 
@@ -22,6 +23,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
   options,
   value,
   onChange,
+  disabled,
 }) => {
   // since ShadCN's Select returns just the value string,
   // we simulate a ChangeEvent for compatibility
@@ -38,7 +40,11 @@ const SelectField: React.FC<SelectFieldProps> = ({
   return (
     <div className="space-y-1.5">
       <Label className="text-[14px] font-thin text-[#929292]">{label}</Label>
-      <Select value={value} onValueChange={handleValueChange}>
+      <Select
+        value={value}
+        onValueChange={handleValueChange}
+        disabled={disabled}
+      >
         <SelectTrigger className="bg-[#F5F6F7] text-sm">
           <SelectValue placeholder="Select" />
         </SelectTrigger>
