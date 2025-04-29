@@ -7,6 +7,7 @@ import ActivitiesComponent from "../components/common/ActivitiesComponent";
 import Timeline from "../components/logistics/shipment/Timeline";
 import { useLocation } from "react-router-dom";
 import orderItems from "../db/orderItems";
+import OrderTracker from "@/components/order_management/OrderTracker";
 
 const styles = {
   card: "bg-gray-200/30 p-6 rounded-lg border border-[#e0e6e940] text-gray-700 mb-5 min-h-[200px]",
@@ -114,6 +115,8 @@ function OrderDetails() {
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         {/* Main Section */}
         <div className="lg:col-span-3 space-y-5">
+          <OrderTracker />
+
           {/* Order Summary */}
           <div className={styles.card}>
             <div className="mb-4">
