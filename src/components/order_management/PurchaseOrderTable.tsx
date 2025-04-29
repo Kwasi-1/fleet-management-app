@@ -82,7 +82,7 @@ const PurchaseOrdersTable = () => {
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
-    navigate("/order_management/order_entry?type=purchase_order");
+    navigate("/order-management/order_entry?type=purchase_order");
   };
 
   // const handleOpenModal = () => {
@@ -94,7 +94,7 @@ const PurchaseOrdersTable = () => {
   // };
 
   const handleRowClick = (row: any) => {
-    navigate(`/order_management/order`, {
+    navigate(`/order-management/order`, {
       state: {
         orderData: row,
       },

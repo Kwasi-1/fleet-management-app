@@ -83,11 +83,11 @@ const OrdersTable = () => {
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
-    navigate("/order_management/order_entry?type=sales");
+    navigate("/order-management/order_entry?type=sales");
   };
 
   const handleRowClick = (row: any) => {
-    navigate(`/order_management/order`, {
+    navigate(`/order-management/order`, {
       state: {
         orderData: row,
       },
