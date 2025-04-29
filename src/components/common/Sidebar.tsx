@@ -86,7 +86,7 @@ const MenuItems = (): MenuItem[] => [
   {
     title: "Order Management",
     icon: "hugeicons:document-validation",
-    link: "/order_management",
+    link: "/order-management",
     parent: ["order-management", false],
     sublinks: [
       {
