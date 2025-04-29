@@ -107,7 +107,7 @@ const ShipmentOverview: React.FC = () => {
   });
 
   return (
-    <div className="p-4 bg-[#e0e6e930] w-full h-full rounded-xl border border-[#e0e6e930]">
+    <div className="p-4 bg[#e0e6e930] shadow-md w-full h-full rounded-xl border border-[#e0e6e930]">
       <h1 className="text-gray-600 capitalize font-semibold text-base mb-4">
         deliveries
       </h1>

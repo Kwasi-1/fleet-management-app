@@ -86,7 +86,7 @@ const DeliveryCard: React.FC<DeliveryData> = ({
 
 const Alerts: React.FC = () => {
   return (
-    <div className="p-4 bg-[#e0e6e930] rounded-xl border border-[#e0e6e930] w-full h-[55vh] overflow-auto scrollbar-hide">
+    <div className="p-4 bg[#e0e6e930] shadow-md rounded-xl border border-[#e0e6e930] w-full h-[55vh] overflow-auto scrollbar-hide">
       <h1 className="text-[#4b5563] font-semibold mb-4">Alerts</h1>
       <div className="flex flex-col gap-4">
         {data.map((item, index) => (

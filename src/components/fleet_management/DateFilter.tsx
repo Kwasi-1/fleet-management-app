@@ -4,7 +4,7 @@ const DateFilter = () => {
   const [activeFilter, setActiveFilter] = useState("Today");
 
   return (
-    <div className="flex bg-[#e0e6e930] border border-gray-200  rounded-xl p-[5px]">
+    <div className="flex bg[#e0e6e930] shadow border border-gray-200  rounded-xl p-[5px]">
       {[
         "Today",
         "This Month",
