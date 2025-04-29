@@ -114,7 +114,7 @@ const ShipmentOverview: React.FC = () => {
       <div className="overflow-x-auto">
         <table className="w-full rounded-lg text-sm text-left">
           <thead className="border-b border-gray-300">
-            <tr className="text-[#929292] font-light text-[13px] border-b uppercase border-gray-300/70">
+            <tr className="text-[#929292] font-light border-b uppercase border-gray-300/70">
               {[
                 { label: "ShipmentId", key: "shipment" },
                 { label: "Driver", key: "driver" },
@@ -125,7 +125,7 @@ const ShipmentOverview: React.FC = () => {
               ].map((col) => (
                 <th
                   key={col.key}
-                  className="p-3 cursor-pointer hover:text-[#929292]/70 transition duration-300 font-[600] text-[0.84rem]"
+                  className="p-3 cursor-pointer hover:text-[#929292]/70 transition duration-300 font-[600] text-[0.79rem]"
                   onClick={() => handleSort(col.key as SortColumn)}
                 >
                   {col.label}
