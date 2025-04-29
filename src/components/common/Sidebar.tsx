@@ -90,6 +90,11 @@ const MenuItems = (): MenuItem[] => [
     parent: ["order_management", false],
     sublinks: [
       {
+        title: "Orders",
+        icon: "fluent-mdl2:activate-orders",
+        link: "/order_management",
+      },
+      {
         title: "Inventory",
         icon: "material-symbols:inventory-rounded",
         link: "/order_management/inventory",
