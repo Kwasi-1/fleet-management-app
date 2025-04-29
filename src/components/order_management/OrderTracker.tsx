@@ -2,7 +2,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 
 const OrderTracker = () => {
   return (
-    <div className="bg-gray-200/30 border border-gray-200/30 rounded-md py-4">
+    <div className="bggray-200/30 shadow-md border border-gray-200/30 rounded-md py-4">
       {/* Header */}
       <div className="flex justify-between items-center text-xs text-gray-500 mb-2 px-4">
         <div>

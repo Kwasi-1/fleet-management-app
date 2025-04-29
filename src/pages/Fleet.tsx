@@ -12,7 +12,7 @@ const Fleet = () => {
         <DateFilter />
       </div>
 
-      <div className="flex gap-4 mt-4">
+      <div className="flex gap-4 mt-4 h-full">
         <OverallBreakdown />
         <div className="flex-1 h-full">
           <LoanStats />

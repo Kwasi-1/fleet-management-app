@@ -11,19 +11,19 @@ const OverallBreakdown = () => {
 
   return (
     <div className="bg[#e0e6e930] shadow-md min-w-80  p-4 rounded-xl border border-[#e0e6e930] ">
-      <h2 className="text-[15px] text-[#4b5563] font-semibold mb-5">
+      <h2 className="text-[15px] text-[#4b5563] font-medium mb-5">
         Overall Breakdown
       </h2>
       <div className="flex items-center">
         <div className="w-full ">
-          <p className="text-gray-600 text-[13px] xmtracking-wider uppercase">
+          <p className="text-[#929292] text-[13px] xmtracking-wider uppercase">
             Total Vehicles
           </p>
           <h3 className="text-lg font-[500] mb-5">
             {totalVehicles.toLocaleString()}
           </h3>
 
-          <p className="text-gray-600 w-full text-[13px] tracking-wider uppercase">
+          <p className="text-[#929292]  w-full text-[13px] tracking-wider uppercase">
             Active Vehicles
           </p>
           <h3 className="text-lg font-[500]">

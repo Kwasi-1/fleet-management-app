@@ -20,7 +20,7 @@ const DateFilter = () => {
             ${
               activeFilter === filter
                 ? "bg-white border border-[#e5e7eb] text-black focus:border-[#e5e7eb]"
-                : "hover:text-gray-400 text-gray-500"
+                : "hover:text-gray-400 text-[#929292] "
             }`}
         >
           {filter}

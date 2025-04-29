@@ -24,6 +24,12 @@ function InventoryTable() {
   const [category, setCategory] = useState("");
   const [supplier, setSupplier] = useState("");
   const [stockLevel, setStockLevel] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handlleAuditClick = (row: any) => {
+    console.log("Audit", row);
+    setIsModalOpen(true);
+  };
 
   // Handler to update state from simulated ChangeEvent
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

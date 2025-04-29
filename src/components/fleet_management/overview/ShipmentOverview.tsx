@@ -108,13 +108,13 @@ const ShipmentOverview: React.FC = () => {
 
   return (
     <div className="p-4 bg[#e0e6e930] shadow-md w-full h-full rounded-xl border border-[#e0e6e930]">
-      <h1 className="text-gray-600 capitalize font-semibold text-base mb-4">
+      <h1 className="text-[#4b5563]  capitalize font-medium text-base mb-4">
         deliveries
       </h1>
       <div className="overflow-x-auto">
         <table className="w-full rounded-lg text-sm text-left">
           <thead className="border-b border-gray-300">
-            <tr className="text-gray-500 font-light text-[13px] border-b uppercase border-gray-300/70">
+            <tr className="text-[#929292] font-light text-[13px] border-b uppercase border-gray-300/70">
               {[
                 { label: "ShipmentId", key: "shipment" },
                 { label: "Driver", key: "driver" },
@@ -125,7 +125,7 @@ const ShipmentOverview: React.FC = () => {
               ].map((col) => (
                 <th
                   key={col.key}
-                  className="p-3 cursor-pointer hover:text-gray-500"
+                  className="p-3 cursor-pointer hover:text-[#929292]/70 transition duration-300 font-[600] text-[13px]"
                   onClick={() => handleSort(col.key as SortColumn)}
                 >
                   {col.label}

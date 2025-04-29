@@ -10,7 +10,7 @@ import orderItems from "../db/orderItems";
 import OrderTracker from "@/components/order_management/OrderTracker";
 
 const styles = {
-  card: "bg-gray-200/30 p-6 rounded-lg border border-[#e0e6e940] text-gray-700 mb-5 min-h-[200px]",
+  card: "shadow-md p-6 rounded-lg border border-[#e0e6e940] text-gray-700 mb-5 min-h-[200px]",
   sectionTitle: "text-xl font-semibold mb-4",
 };
 

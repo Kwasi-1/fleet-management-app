@@ -44,7 +44,7 @@ const LoanStats = () => {
               className="uppercase flex flex-col min-w-40 gap-14 text-left"
             >
               <div>
-                <p className="text-gray-600 text-[13px] mt-2">{label}</p>
+                <p className="text-[#929292]  text-[13px] mt-2">{label}</p>
                 <h3 className="text-xl font-bold">{value}</h3>
               </div>
               <div>
