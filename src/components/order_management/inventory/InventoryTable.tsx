@@ -96,6 +96,10 @@ function InventoryTable() {
             label: "Audit",
             onClick: handlleAuditClick,
           },
+          {
+            label: "view",
+            onClick: (row) => console.log("view", row),
+          },
         ]}
       />
 
