@@ -1,5 +1,6 @@
 import { ArcElement, Chart as ChartJS, Legend, Title, Tooltip } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
+import { styles } from "@/lib/styles";
 
 ChartJS.register(ArcElement, Legend, Title, Tooltip);
 
@@ -41,7 +42,9 @@ const AIRecommendation = () => {
   const aiScore = 41; // Example AI Score
 
   return (
-    <div className="bg-[#e0e6e930] p-4 rounded-xl border border-[#e0e6e930]">
+    <div
+      className={`${styles.cardSmall} p-4 rounded-xl border border-[#e0e6e930]`}
+    >
       <GaugeChart score={aiScore} />
       <p className="text-xs text-gray-400 text-center mt-2">
         20% of similar scores have been approved

@@ -3,6 +3,7 @@ import { Icon } from "@iconify/react";
 import EditButton from "../components/common/EditButton";
 import StatusText from "../components/common/StatusText";
 import ServiceReminderModal from "../components/fleet_management/reminders/ServiceReminderModal";
+import { styles } from "@/lib/styles";
 
 // Define types for reminderDetails and related objects
 interface ReminderDetails {
@@ -71,14 +72,6 @@ export const reminderDetails: ReminderDetails = {
       complianceDetails: "1 year, 4 days ahead • 105,316 miles behind",
     },
   ],
-};
-
-const styles = {
-  card: "bg-gray-200/30 p-4 rounded-lg border border-[#e0e6e940] text-gray-700 mb-4",
-  sectionTitle: "text-lg font-semibold mb-4",
-  overdueText: "text-red-500 font-bold",
-  detailRow:
-    "flex justify-between items-center text-gray-500 font-semibold text-sm border-b border-gray-200/40 pb-2 pt-4",
 };
 
 interface DetailRowProps {

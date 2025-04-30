@@ -8,11 +8,9 @@ import Timeline from "../components/logistics/shipment/Timeline";
 import { useLocation } from "react-router-dom";
 import orderItems from "../db/orderItems";
 import OrderTracker from "@/components/order_management/OrderTracker";
+import {styles} from "@/lib/styles";
 
-const styles = {
-  card: "shadow-md p-6 rounded-lg border border-[#e0e6e940] text-gray-700 mb-5 min-h-[200px]",
-  sectionTitle: "text-xl font-semibold mb-4",
-};
+
 
 const progress = [
   {

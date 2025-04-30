@@ -1,4 +1,5 @@
 import AlertCard, { AlertCardProps } from "../../common/AlertCard";
+import { styles } from "@/lib/styles";
 
 const Alerts: React.FC = () => {
   const alerts: AlertCardProps[] = [
@@ -29,7 +30,9 @@ const Alerts: React.FC = () => {
   ];
 
   return (
-    <div className="bg-gray-200/30 p-4 rounded-xl border border-gray-200/40 h-full">
+    <div
+      className={`${styles.cardSmall} p-4 rounded-xl border border-gray-200/40 h-full`}
+    >
       <h3 className="text-[17px] font-semibold mb-3">Vehicle Alerts</h3>
 
       <div className="space-y-3 overflow-y-auto max-h-[750px] pr-2 scrollbar-hide">

@@ -1,4 +1,5 @@
 import AlertCard from "../../common/AlertCard";
+import { styles } from "@/lib/styles";
 
 const KYCAlerts = () => {
   const alerts = [
@@ -35,7 +36,7 @@ const KYCAlerts = () => {
   ];
 
   return (
-    <div className="bg-gray-200/30 p-4 rounded-xl border border-gray-200/40">
+    <div className={`${styles.cardSmall} p-4 rounded-xl border border-gray-200/40`}>
       <h3 className="text-[17px] font-semibold mb-3">KYC Alerts</h3>
 
       {/* Scrollable Cards */}

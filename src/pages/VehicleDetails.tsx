@@ -8,6 +8,7 @@ import EditButton from "../components/common/EditButton";
 import VehicleModal from "../components/fleet_management/vehicle/VehicleModal";
 import { useLocation } from "react-router";
 import VehicleImage from "../components/fleet_management/vehicle/VehicleImage";
+import { styles } from "@/lib/styles";
 
 const VehicleDetails = () => {
   const location = useLocation();
@@ -56,7 +57,9 @@ const VehicleDetails = () => {
       </div>
       <div className="grid grid-cols-3 gap-4 mt-4">
         <div className="col-span-2">
-          <div className="bg-gray-200/30 p-4 rounded-xl flex items-center space-x-4 h-full">
+          <div
+            className={`${styles.cardSmall} p-4 rounded-xl flex items-center space-x-4 h-full`}
+          >
             {/* <div className="w-20 h-20 bg-gray-300 rounded-lg"></div> */}
             <div className="w-32 h-32 rounded-lg overflow-hidden">
               <VehicleImage

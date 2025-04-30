@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { styles } from "@/lib/styles";
 
 // Define a type for the match items
 type MatchItem = {
@@ -28,7 +29,9 @@ const VehicleDocuments: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   return (
-    <div className="bg-gray-200/30 p-4 rounded-xl border border-[#e0e6e990] text-gray-700">
+    <div
+      className={` ${styles.cardSmall} p-4 rounded-xl border border-[#e0e6e990] text-gray-700`}
+    >
       {/* Header */}
       <div className="flex justify-between items-center border-b border-[#e0e6e9] pb-2">
         <h3 className="text-[17px] font-semibold">Documents</h3>

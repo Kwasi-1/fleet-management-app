@@ -1,4 +1,5 @@
-// User Information Component
+import { styles } from "@/lib/styles";
+
 interface Driver {
   name: string;
   license: string;
@@ -11,10 +12,10 @@ const UserInfo = ({ driver }: { driver: Driver }) => {
   return (
     <div>
       <div className="flex items-center space-x-4">
-        <div className="w-14 h-14 bg-gray-500 rounded-full"></div>
+        <div className="w-14 h-14 bg-gray-200 rounded-full"></div>
         <div>
           <h2 className="text-[17px] font-bold">{driver.name}</h2>
-          <p className="text-[14px] text-gray-400">Fleet Driver</p>
+          <p className="text-[14px] text-[#929292]">Fleet Driver</p>
         </div>
       </div>
     </div>
@@ -25,10 +26,10 @@ const UserInfo = ({ driver }: { driver: Driver }) => {
 const DriverActions = () => {
   return (
     <div className="mt-4 flex space-x-2 text-xs">
-      <button className="border border-[#12B76A] px-3 py-1 rounded text-[#12B76A]">
+      <button className="border border-[#12B76A] px-3 py-1 rounded text-[#12B76A] cursor-pointer hover:bg-[#12B76A] hover:text-white transition duration-200">
         Approve
       </button>
-      <button className="border border-[#F94144] px-3 py-1 rounded text-[#F94144]">
+      <button className="border border-[#F94144] hover:bg-[#F94144] hover:text-white transition duration-200 px-3 py-1 rounded text-[#F94144] cursor-pointer">
         Reject
       </button>
     </div>
@@ -47,7 +48,9 @@ const DriverSummary = ({ driver }: { driver: Driver }) => {
   ];
 
   return (
-    <div className="bg-gray-200/30 flex gap-8 p-6 text-sm rounded-xl border border-[#e0e6e970] h-full">
+    <div
+      className={`${styles.cardSmall} flex gap-8 p-6 text-sm rounded-xl border border-[#e0e6e970] h-full`}
+    >
       {/* Left Section: User Info & Actions */}
       <div className="w-[300px]">
         <UserInfo driver={driver} />
@@ -55,7 +58,7 @@ const DriverSummary = ({ driver }: { driver: Driver }) => {
       </div>
 
       {/* Right Section: Statistics */}
-      <div className="grid grid-cols-3 gap-x-6 gap-y-4 text-gray-500 w-full">
+      <div className="grid grid-cols-3 gap-x-6 gap-y-4 text-[#929292] w-full">
         {stats.map((stat, index) => (
           <div
             key={index}
@@ -63,7 +66,7 @@ const DriverSummary = ({ driver }: { driver: Driver }) => {
           >
             {stat.label}:{" "}
             <span
-              className={`font-bold mt-1 ${
+              className={`font-semibold mt-1 ${
                 stat.danger ? "text-red-500" : "text-gray-700"
               }`}
             >
