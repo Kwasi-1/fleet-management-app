@@ -96,14 +96,6 @@ function InventoryTable() {
             label: "Audit",
             onClick: handlleAuditClick,
           },
-          {
-            label: "edit",
-            onClick: (row) => console.log("Edit", row),
-          },
-          {
-            label: "delete",
-            onClick: (row) => console.log("Delete", row),
-          },
         ]}
       />
 

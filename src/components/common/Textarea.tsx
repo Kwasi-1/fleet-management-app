@@ -30,9 +30,9 @@ const Textarea: React.FC<TextareaProps> = ({
       {label && (
         <label
           htmlFor={textareaId}
-          className="bg-white px-1 text-[11px] font-semibold text-gray-500"
+          className="px-1 text-[14px] font-thin text-[#929292] capitalize"
         >
-          {label.toUpperCase()}
+          {label}
         </label>
       )}
       <textarea
