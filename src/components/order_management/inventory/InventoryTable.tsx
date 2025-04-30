@@ -6,7 +6,7 @@ import { Settings, SlidersHorizontal } from "lucide-react";
 import { useState } from "react";
 import SelectField from "@/components/common/SelectField";
 import StockLevelDisplay from "./StockLevelDisplay";
-import VehicleRenewalModal from "@/components/fleet_management/reminders/VehicleRenewalModal";
+import AuditStockModal from "./AuditStockModal";
 
 const columns = [
   { key: "product", label: "Product name" },
@@ -107,7 +107,7 @@ function InventoryTable() {
         ]}
       />
 
-      <VehicleRenewalModal
+      <AuditStockModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />
