@@ -7,6 +7,7 @@ interface InputFieldProps {
   type?: string;
   placeholder?: string;
   value: string | number;
+  disabled?: boolean;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -16,6 +17,7 @@ function InputField({
   type = "text",
   placeholder,
   value,
+  disabled,
   onChange,
 }: InputFieldProps) {
   return (
@@ -32,6 +34,7 @@ function InputField({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        disabled={disabled}
         className="w-full border bg-[#F5F6F7] border-[#E5E7EB] px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#619B7D] text-sm text-gray-600"
       />
     </div>

@@ -119,6 +119,7 @@ export default function AuditStockModal({
                 value="100"
                 type="number"
                 onChange={() => console.log("Physical Count")}
+                disabled={true}
               />
               <InputField
                 label="Discrepancy"
@@ -126,6 +127,7 @@ export default function AuditStockModal({
                 value="100"
                 type="number"
                 onChange={() => console.log("Physical Count")}
+                disabled={true}
               />
             </div>
 
