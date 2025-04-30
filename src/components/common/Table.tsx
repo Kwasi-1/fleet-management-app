@@ -92,13 +92,15 @@ const Table = <T extends TableRow>({
         <div className="mb-6"> {additionalFilters}</div>
         <table className="w-full border-collapse">
           <thead>
-            <tr className="border-b border-gray-200 uppercase font-semibold text-[#929292] text-[12px]">
+            <tr className="border-b border-gray-200 uppercase text-[#4b5563] text-[12px]">
               {columns.map((col) => (
                 <th key={col.key} className="p-3 text-left font-[600]">
                   {col.label}
                 </th>
               ))}
-              {actions && <th className="p-3 text-right">Actions</th>}
+              {actions && (
+                <th className="p-3 text-righ font-[600]t">Actions</th>
+              )}
             </tr>
           </thead>
           <tbody>
