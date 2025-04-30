@@ -25,8 +25,8 @@ interface MenuItem {
 // Menu items generator
 const MenuItems = (): MenuItem[] => [
   {
-    title: "Dashboard",
-    icon: "hugeicons:home-02",
+    title: "Map Dashboard",
+    icon: "carbon:map",
     link: "/",
     parent: ["/", true],
     sublinks: [],
