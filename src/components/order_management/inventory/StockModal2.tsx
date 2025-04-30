@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react";
 import ModalLayout from "@/layouts/ModalLayout";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { RadioGroup, RadioOption } from "@/components/common/RadioGroup";
 import InputField from "@/components/common/InputField";
 import Button from "@/components/common/Button";
@@ -20,9 +20,15 @@ const adjustmentOptions: RadioOption[] = [
   { label: "Value Adjustment", value: "value" },
 ];
 
-function AdjustmentReasons() {
-  const [selectedReason, setSelectedReason] = useState("expire");
-
+function AdjustmentReasons({
+  selectedReason,
+  setSelectedReason,
+  error,
+}: {
+  selectedReason: string;
+  setSelectedReason: (value: string) => void;
+  error?: string;
+}) {
   return (
     <div>
       <h3 className="mb-1 text-[14px] font-thin text-[#929292] capitalize">
@@ -33,6 +39,7 @@ function AdjustmentReasons() {
         value={selectedReason}
         onChange={setSelectedReason}
       />
+      {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
     </div>
   );
 }
@@ -57,7 +64,7 @@ const TimelineItem = ({
     )}
     <div className="absolute left-0 top-0 h-3 w-3 rounded-full bg-[#619B7D] border-2 border-white"></div>
     <div>
-      <p className="font-[400] text-[0.85rem]">{entry.date}</p>
+      <p className="font-[500] text-sm">{entry.date}</p>
       <p className="text-gray-500 font-[100] text-xs mt-1">
         Adjust Stock "{entry.qty} Unit"
       </p>
@@ -77,34 +84,86 @@ export default function AuditStockModal({
   onClose: () => void;
 }) {
   const [adjustmentType, setAdjustmentType] = useState("quantity");
-  const [physicalCount, setPhysicalCount] = useState<number | "">("");
-  const [note, setNote] = useState("");
-  const [errors, setErrors] = useState<{ physicalCount?: string }>({});
+  const [formData, setFormData] = useState({
+    physicalCount: "",
+    available: "100", // Assuming this comes from inventory data
+    discrepancy: "",
+    note: "",
+    adjustmentReason: "expire",
+  });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isFormValid, setIsFormValid] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const availableStock = 100;
-  const discrepancy =
-    typeof physicalCount === "number" ? availableStock - physicalCount : "";
+  const validateForm = useCallback(() => {
+    const newErrors: Record<string, string> = {};
 
-  const handleSave = () => {
-    const newErrors: typeof errors = {};
+    if (!formData.physicalCount) {
+      newErrors.physicalCount = "Physical count is required";
+    } else if (isNaN(Number(formData.physicalCount))) {
+      newErrors.physicalCount = "Must be a valid number";
+    } else if (Number(formData.physicalCount) < 0) {
+      newErrors.physicalCount = "Cannot be negative";
+    }
 
-    if (physicalCount === "" || isNaN(Number(physicalCount))) {
-      newErrors.physicalCount =
-        "Physical count is required and must be a number.";
-    } else if (physicalCount < 0) {
-      newErrors.physicalCount = "Physical count cannot be negative.";
+    if (!formData.adjustmentReason) {
+      newErrors.adjustmentReason = "Reason is required";
     }
 
     setErrors(newErrors);
+    const isValid = Object.keys(newErrors).length === 0;
+    setIsFormValid(isValid);
+    return isValid;
+  }, [formData]);
 
-    if (Object.keys(newErrors).length === 0) {
-      console.log("Saving stock audit", {
-        physicalCount,
-        availableStock,
-        discrepancy,
-        adjustmentType,
-        note,
-      });
+  useEffect(() => {
+    // Calculate discrepancy whenever physicalCount changes
+    if (formData.physicalCount) {
+      const physicalCount = Number(formData.physicalCount);
+      const available = Number(formData.available);
+      const discrepancy = available - physicalCount;
+      setFormData((prev) => ({
+        ...prev,
+        discrepancy: discrepancy.toString(),
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        discrepancy: "",
+      }));
+    }
+  }, [formData.physicalCount, formData.available]);
+
+  useEffect(() => {
+    if (isSubmitted) {
+      validateForm();
+    }
+  }, [formData, isSubmitted, validateForm]);
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleReasonChange = (value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      adjustmentReason: value,
+    }));
+  };
+
+  const handleSubmit = () => {
+    setIsSubmitted(true);
+    const isValid = validateForm();
+
+    if (isValid) {
+      // Submit logic here
+      console.log("Form submitted:", formData);
       onClose();
     }
   };
@@ -140,42 +199,39 @@ export default function AuditStockModal({
               <InputField
                 label="Physical Count"
                 name="physicalCount"
-                value={physicalCount}
-                onChange={(e) => {
-                  const val = e.target.value;
-                  const parsed = parseInt(val, 10);
-                  if (val === "") {
-                    setPhysicalCount("");
-                  } else if (!isNaN(parsed)) {
-                    setPhysicalCount(parsed);
-                  }
-                }}
-                error={errors.physicalCount}
+                value={formData.physicalCount}
+                onChange={handleInputChange}
+                error={isSubmitted ? errors.physicalCount : undefined}
               />
               <InputField
                 label="Available"
                 name="available"
-                value={availableStock}
+                value={formData.available}
+                onChange={handleInputChange}
                 disabled={true}
-                onChange={() => console.log("Available")}
               />
               <InputField
                 label="Discrepancy"
                 name="discrepancy"
-                value={discrepancy}
-                onChange={() => console.log("Physical Count")}
+                value={formData.discrepancy}
+                onChange={handleInputChange}
                 disabled={true}
               />
             </div>
 
-            <AdjustmentReasons />
+            <AdjustmentReasons
+              selectedReason={formData.adjustmentReason}
+              setSelectedReason={handleReasonChange}
+              error={isSubmitted ? errors.adjustmentReason : undefined}
+            />
 
             <div>
               <Textarea
                 id="note"
                 label="Note"
-                onChange={(e) => setNote(e.target.value)}
-                value={note}
+                name="note"
+                onChange={handleInputChange}
+                value={formData.note}
                 className="w-full border border-gray-300 rounded-lg p-3 text-sm text-gray-700 mt-1 focus:outline-none focus:ring-2 focus:ring-[#619B7D]"
                 rows={4}
                 placeholder="Evaluate if the damage is repairable or if the item needs to be written off."
@@ -187,7 +243,7 @@ export default function AuditStockModal({
           <div className="w-1/3 bg-gray-50 border-l border-gray-200 p-6 space-y-6">
             <div className="flex items-start gap-3">
               <div>
-                <h2 className="font-[450] text-sm">
+                <h2 className="font-[500] text-sm">
                   Macbook Pro 14 Inch 512GB M1 Pro
                 </h2>
                 <p className="text-xs text-gray-500">SKU: MAC-09485</p>
@@ -210,13 +266,15 @@ export default function AuditStockModal({
             </div>
           </div>
         </div>
-
-        {/* Footer Buttons */}
         <div className="flex justify-end border-t pt-4">
           <Button onClick={onClose} outline={true} className="min-w-[10rem]">
             Cancel
           </Button>
-          <Button onClick={handleSave} className="min-w-[10rem] ml-4">
+          <Button
+            onClick={handleSubmit}
+            className="min-w-[10rem] ml-4"
+            disabled={!isFormValid && isSubmitted}
+          >
             Save
           </Button>
         </div>
