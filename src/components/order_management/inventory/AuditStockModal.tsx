@@ -77,6 +77,37 @@ export default function AuditStockModal({
   onClose: () => void;
 }) {
   const [adjustmentType, setAdjustmentType] = useState("quantity");
+  const [physicalCount, setPhysicalCount] = useState<number | "">("");
+  const [note, setNote] = useState("");
+  const [errors, setErrors] = useState<{ physicalCount?: string }>({});
+
+  const availableStock = 100;
+  const discrepancy =
+    typeof physicalCount === "number" ? availableStock - physicalCount : "";
+
+  const handleSave = () => {
+    const newErrors: typeof errors = {};
+
+    if (physicalCount === "" || isNaN(Number(physicalCount))) {
+      newErrors.physicalCount =
+        "Physical count is required and must be a number.";
+    } else if (physicalCount < 0) {
+      newErrors.physicalCount = "Physical count cannot be negative.";
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length === 0) {
+      console.log("Saving stock audit", {
+        physicalCount,
+        availableStock,
+        discrepancy,
+        adjustmentType,
+        note,
+      });
+      onClose();
+    }
+  };
 
   return (
     <ModalLayout
@@ -109,23 +140,29 @@ export default function AuditStockModal({
               <InputField
                 label="Physical Count"
                 name="physicalCount"
-                value="15"
-                type="number"
-                onChange={() => console.log("Physical Count")}
+                value={physicalCount}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  const parsed = parseInt(val, 10);
+                  if (val === "") {
+                    setPhysicalCount("");
+                  } else if (!isNaN(parsed)) {
+                    setPhysicalCount(parsed);
+                  }
+                }}
+                error={errors.physicalCount}
               />
               <InputField
                 label="Available"
                 name="available"
-                value="100"
-                type="number"
-                onChange={() => console.log("Physical Count")}
+                value={availableStock}
                 disabled={true}
+                onChange={() => console.log("Available")}
               />
               <InputField
                 label="Discrepancy"
                 name="discrepancy"
-                value="100"
-                type="number"
+                value={discrepancy}
                 onChange={() => console.log("Physical Count")}
                 disabled={true}
               />
@@ -137,8 +174,8 @@ export default function AuditStockModal({
               <Textarea
                 id="note"
                 label="Note"
-                onChange={() => console.log("Note")}
-                value="Evaluate if the damage is repairable or if the item needs to be written off."
+                onChange={(e) => setNote(e.target.value)}
+                value={note}
                 className="w-full border border-gray-300 rounded-lg p-3 text-sm text-gray-700 mt-1 focus:outline-none focus:ring-2 focus:ring-[#619B7D]"
                 rows={4}
                 placeholder="Evaluate if the damage is repairable or if the item needs to be written off."
@@ -173,11 +210,13 @@ export default function AuditStockModal({
             </div>
           </div>
         </div>
+
+        {/* Footer Buttons */}
         <div className="flex justify-end border-t pt-4">
           <Button onClick={onClose} outline={true} className="min-w-[10rem]">
             Cancel
           </Button>
-          <Button onClick={onClose} className="min-w-[10rem] ml-4">
+          <Button onClick={handleSave} className="min-w-[10rem] ml-4">
             Save
           </Button>
         </div>
