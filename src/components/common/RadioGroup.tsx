@@ -33,7 +33,7 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
             onClick={() => onChange(option.value)}
             type="button"
             className={cn(
-              "flex items-center justify-center rounded-lg px-1 py-2 border text-sm font-medium transition-all duration-150 ease-in-out",
+              "flex items-center justify-center rounded-lg px-1 py-2 border text-sm transition-all duration-150 ease-in-out font-thin",
               isSelected
                 ? `border-[#619B7D] text-white bg-[#619B7D] ${selectedClass}`
                 : `border-gray-300 bg-white text-gray-600 hover:border-[#619B7D] ${unselectedClass}`
