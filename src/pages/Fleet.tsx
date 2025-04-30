@@ -6,7 +6,7 @@ import ShipmentOverview from "../components/fleet_management/overview/ShipmentOv
 
 const Fleet = () => {
   return (
-    <div className=" p-6 min-h-screen font-sans">
+    <div className="flex flex-col p-6 min-h-screen font-sans">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-semibold">Fleet Management</h1>
         <DateFilter />
@@ -17,11 +17,11 @@ const Fleet = () => {
         <LoanStats />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-7 gap-4 mt-4">
+      <div className="flex-1 grid grid-cols-1 md:grid-cols-7 gap-4 mt-4">
         <div className="col-span-5">
           <ShipmentOverview />
         </div>
-        <div className=" col-span-2 flex flex-col gap-4">
+        <div className=" col-span-2 h-full">
           <Alerts />
         </div>
       </div>
