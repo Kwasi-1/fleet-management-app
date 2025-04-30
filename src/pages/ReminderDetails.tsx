@@ -14,7 +14,7 @@ interface ReminderDetails {
 }
 
 interface Vehicle {
-  id: string;
+  id: number;
   make: string;
   model: string;
   year: number;
@@ -42,7 +42,7 @@ export const reminderDetails: ReminderDetails = {
   id: 1,
   serviceTask: "Tire Rotation",
   vehicle: {
-    id: "3100",
+    id: 3100,
     make: "Chevrolet",
     model: "Express Cargo",
     year: 2014,
@@ -175,7 +175,7 @@ const History: React.FC<HistoryProps> = ({ history }) => (
         <div>
           <StatusText text={entry.compliance} />
         </div>
-        <div className="text-gray-500 text-xs">{entry.complianceDetails}</div>
+        <div className="text-[#929292] text-xs">{entry.complianceDetails}</div>
       </div>
     ))}
   </div>
@@ -213,7 +213,7 @@ const ReminderDetails: React.FC = () => {
       <ServiceReminderModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        // reminder={reminderDetails}
+        reminder={reminderDetails}
         isEditMode={true}
       />
     </div>

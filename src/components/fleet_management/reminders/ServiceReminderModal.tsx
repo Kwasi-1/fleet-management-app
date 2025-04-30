@@ -107,35 +107,35 @@ const ServiceReminderModal: React.FC<ServiceReminderModalProps> = ({
       }
     >
       <form className="space-y-4">
-        <SelectField
-          label="Vehicle *"
-          name="vehicle"
-          value={formData.vehicle}
-          onChange={handleChange}
-          options={[
-            "Select Vehicle",
-            reminder
-              ? `${reminder.vehicle.id} [${reminder.vehicle.year} ${reminder.vehicle.make} ${reminder.vehicle.model}]`
-              : "",
-            "2016 Ford F-150",
-            "2018 Toyota Prius",
-          ]}
-        />
-
-        <SelectField
-          label="Service Task *"
-          name="serviceTask"
-          value={formData.serviceTask}
-          onChange={handleChange}
-          options={[
-            "Select Service Task",
-            "Oil Change",
-            "Tire Rotation",
-            "Brake Inspection",
-          ]}
-        />
-
         <div className="grid grid-cols-2 gap-4">
+          <SelectField
+            label="Vehicle *"
+            name="vehicle"
+            value={formData.vehicle}
+            onChange={handleChange}
+            options={[
+              "Select Vehicle",
+              reminder
+                ? `${reminder.vehicle.id} [${reminder.vehicle.year} ${reminder.vehicle.make} ${reminder.vehicle.model}]`
+                : "",
+              "2016 Ford F-150",
+              "2018 Toyota Prius",
+            ]}
+          />
+
+          <SelectField
+            label="Service Task *"
+            name="serviceTask"
+            value={formData.serviceTask}
+            onChange={handleChange}
+            options={[
+              "Select Service Task",
+              "Oil Change",
+              "Tire Rotation",
+              "Brake Inspection",
+            ]}
+          />
+
           <InputField
             label="Time Interval"
             name="timeInterval"
