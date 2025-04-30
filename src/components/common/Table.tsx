@@ -49,6 +49,9 @@ const Table = <T extends TableRow>({
   actions,
 }: TableProps<T>) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [openPopoverRowId, setOpenPopoverRowId] = useState<
+    string | number | null
+  >(null);
 
   const filteredData = data.filter((row) =>
     Object.values(row).some((value) =>
@@ -130,7 +133,12 @@ const Table = <T extends TableRow>({
                 ))}
                 {actions && (
                   <td className="p-3 text-right">
-                    <Popover>
+                    <Popover
+                      open={openPopoverRowId === row.id}
+                      onOpenChange={(open) =>
+                        setOpenPopoverRowId(open ? row.id : null)
+                      }
+                    >
                       <PopoverTrigger asChild>
                         <Button
                           variant="ghost"
@@ -162,6 +170,7 @@ const Table = <T extends TableRow>({
                               onClick={(e) => {
                                 e.stopPropagation();
                                 action.onClick(row);
+                                setOpenPopoverRowId(null);
                               }}
                             >
                               {action.icon && (
