@@ -93,6 +93,10 @@ body {
   padding-bottom: 0.5rem;
 }
 
+.primary-green {
+  background-color: #619B7D !important;
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

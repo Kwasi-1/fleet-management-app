@@ -1,5 +1,5 @@
 import { Image } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 interface ProductImagesProps {
   images: string[];
@@ -7,16 +7,30 @@ interface ProductImagesProps {
 
 export default function ProductImages({ images }: ProductImagesProps) {
   const [selectedImage, setSelectedImage] = useState(0);
+  const [imageList, setImageList] = useState<string[]>(images);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // In a real application, you would handle image uploads here
   const handleAddImage = () => {
-    console.log("Add image clicked");
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (typeof reader.result === "string") {
+          setImageList((prev) => [...prev, reader.result as string]);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
     <div>
       <div className="grid grid-cols-4 gap-4">
-        {images.map((image, index) => (
+        {imageList.map((image, index) => (
           <div
             key={index}
             className={`rounded-lg overflow-hidden cursor-pointer transition-all border items-center flex ${
@@ -36,14 +50,23 @@ export default function ProductImages({ images }: ProductImagesProps) {
 
         {/* Add more image button */}
         <div
-          className="rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-4 cursor-pointer hover:bg-gray-50"
+          className="rounded-lg border-2 border-dashed bg-gray-200/30 bg- border-gray-300 flex flex-col items-center justify-center p-4 cursor-pointer hover:bg-gray-50"
           onClick={handleAddImage}
         >
           <Image className="w-6 h-6 text-gray-400 mb-2" />
-          <p className="text-xs text-gray-500 text-center">Add more image</p>
-          <button className="mt-2 text-blue-500 text-xs">Add Image</button>
+          <p className="text-xs text-gray-500 text-center">Add more images</p>
         </div>
       </div>
+
+      {/* Hidden file input */}
+      <input
+        type="file"
+        accept="image/*"
+        ref={fileInputRef}
+        className="hidden"
+        onChange={handleFileChange}
+        title="Upload an image"
+      />
     </div>
   );
 }
