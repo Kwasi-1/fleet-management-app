@@ -23,6 +23,7 @@ import FullPageMap from "./pages/FullPageMap";
 import InvoicePage from "./pages/InvoicePage";
 import InvoiceView from "./pages/ViewInvoice";
 import InventoryPage from "./pages/InventoryPage2";
+import ProductDetail from "./pages/ProductDetail";
 
 function App() {
   return (
@@ -71,6 +72,14 @@ function AppContent() {
             path="/order-management/inventory"
             element={<InventoryPage />}
           />
+          <Route
+            path={`order-management/inventory/products`}
+            element={<ProductDetail />}
+          />
+          {/* <Route
+            path={`order-management/inventory/products/${row.sku}`}
+            element={<ProductDetail />}
+          /> */}
 
           <Route path="/invoices/view" element={<InvoiceView />} />
 

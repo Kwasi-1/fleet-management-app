@@ -7,6 +7,7 @@ import { useState } from "react";
 import SelectField from "@/components/common/SelectField";
 import StockLevelDisplay from "./StockLevelDisplay";
 import AuditStockModal from "./AuditStockModal";
+import { useNavigate } from "react-router-dom";
 
 const columns = [
   { key: "product", label: "Product name" },
@@ -26,6 +27,14 @@ function InventoryTable() {
   const [supplier, setSupplier] = useState("");
   const [stockLevel, setStockLevel] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleRowClick = () => {
+    navigate(`/order-management/inventory/products`);
+  };
+  // const handleRowClick = (row: any) => {
+  //   navigate(`/order-management/inventory/products/${row.sku}`);
+  // };
 
   const handlleAuditClick = (row: any) => {
     console.log("Audit", row);
@@ -88,6 +97,7 @@ function InventoryTable() {
       <Table
         columns={columns}
         data={inventoryData}
+        onRowClick={handleRowClick}
         buttonLabel="Order Entry"
         searchPlaceholder="Search product..."
         additionalFilters={additionalFilters}
@@ -98,7 +108,7 @@ function InventoryTable() {
           },
           {
             label: "view",
-            onClick: (row) => console.log("view", row),
+            onClick: handleRowClick,
           },
         ]}
       />
