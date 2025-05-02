@@ -23,6 +23,16 @@ export interface Product {
   type: string;
   vendor: string | null;
   channel: string;
+  shipping: {
+    weight: number;
+    weightUnit: string;
+    length: number;
+    lengthUnit: string;
+    height: number;
+    heightUnit: string;
+    shipsInternationally: boolean;
+    isPhysical: boolean;
+  };
 }
 
 export interface SalesDataPoint {

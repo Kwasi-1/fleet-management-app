@@ -1,6 +1,11 @@
 import { Plus, Building } from "lucide-react";
 import { useState } from "react";
 import { Product } from "@/types/products";
+import { Card } from "@/components/ui/card";
+import InputField from "@/components/common/InputField";
+import { Badge } from "@/components/ui/badge";
+import SelectField from "@/components/common/SelectField";
+import { Button } from "@/components/ui/button";
 
 interface ProductOrganizationProps {
   product: Product;
@@ -9,85 +14,102 @@ interface ProductOrganizationProps {
 export default function ProductOrganization({
   product,
 }: ProductOrganizationProps) {
+  const [sku, setSku] = useState(product.sku);
   const [category, setCategory] = useState(product.category);
   const [type, setType] = useState(product.type);
   const [vendor, setVendor] = useState(product.vendor);
+  const [tags, setTags] = useState<string[]>([]);
 
   return (
-    <div className="p-6">
-      <h2 className="text-lg font-medium text-gray-900 mb-6">
-        Product Organization
-      </h2>
+    <Card className="p-6 sticky top-5">
+      <h2 className="font-medium mb-4">Product Organization</h2>
 
-      <div className="space-y-6">
-        <div>
-          <label className="text-sm text-gray-600 block mb-2">SKU</label>
-          <input
-            type="text"
-            className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={product.sku}
-            disabled
-          />
-        </div>
+      <div className="mb-4">
+        <div className="text-sm text-gray-500 mb-2">SKU</div>
+        <InputField
+          name="sku"
+          value={sku}
+          onChange={(e) => setSku(e.target.value)}
+          disabled
+          className="bg-gray-50"
+        />
+      </div>
 
-        <div>
-          <label className="text-sm text-gray-600 block mb-2">Channel</label>
-          <div className="flex">
-            <div className="flex-1 flex items-center p-2 border border-gray-300 rounded-md">
-              <Building className="w-5 h-5 text-gray-500 mr-2" />
-              <span className="text-sm text-gray-700">{product.channel}</span>
-            </div>
-            <button className="ml-2 p-2 rounded-md border border-gray-300 hover:bg-gray-50">
-              <Plus className="w-5 h-5 text-gray-500" />
-            </button>
-          </div>
-        </div>
-
-        <div>
-          <label className="text-sm text-gray-600 block mb-2">Category</label>
-          <select
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          >
-            <option value="Laptop">Laptop</option>
-            <option value="Desktop">Desktop</option>
-            <option value="Tablet">Tablet</option>
-            <option value="Smartphone">Smartphone</option>
-            <option value="Accessories">Accessories</option>
-          </select>
-        </div>
-
-        <div>
-          <label className="text-sm text-gray-600 block mb-2">Type</label>
-          <select
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={type}
-            onChange={(e) => setType(e.target.value)}
-          >
-            <option value="Electronic">Electronic</option>
-            <option value="Hardware">Hardware</option>
-            <option value="Software">Software</option>
-            <option value="Accessory">Accessory</option>
-          </select>
-        </div>
-
-        <div>
-          <label className="text-sm text-gray-600 block mb-2">Vendor</label>
-          <select
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={vendor || ""}
-            onChange={(e) => setVendor(e.target.value || null)}
-          >
-            <option value="">Select vendor</option>
-            <option value="Apple">Apple</option>
-            <option value="Dell">Dell</option>
-            <option value="HP">HP</option>
-            <option value="Lenovo">Lenovo</option>
-            <option value="Microsoft">Microsoft</option>
-          </select>
+      <div className="mb-4">
+        <div className="text-sm text-gray-500 mb-2">Channel</div>
+        <div className="flex items-center">
+          <Button variant="outline" className="flex items-center gap-2">
+            <Building className="h-4 w-4" />
+            <span>Fikri Store</span>
+          </Button>
+          <Button variant="ghost" size="icon" className="ml-2">
+            <Plus className="h-4 w-4" />
+          </Button>
         </div>
       </div>
-    </div>
+
+      <div className="mb-4">
+        <div className="text-sm text-gray-500 mb-2">Category</div>
+        <SelectField
+          name="category"
+          options={["Laptop", "Desktop", "Accessories"]}
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          classname="w-full"
+        />
+      </div>
+
+      <div className="mb-4">
+        <div className="text-sm text-gray-500 mb-2">Type</div>
+        <SelectField
+          name="type"
+          options={["Electronic", "Software", "Peripheral"]}
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+          classname="w-full"
+        />
+      </div>
+
+      <div className="mb-4">
+        <div className="text-sm text-gray-500 mb-2">Vendor</div>
+        <SelectField
+          name="vendor"
+          options={["Select vendor", "Apple", "Dell", "HP"]}
+          value={vendor || ""}
+          onChange={(e) => setVendor(e.target.value || null)}
+          classname="w-full"
+        />
+      </div>
+
+      <div>
+        <div className="text-sm text-gray-500 mb-2">Tags</div>
+        <div className="flex flex-wrap gap-2 mb-2">
+          <Badge variant="secondary" className="flex items-center gap-1">
+            Apple
+            <button className="ml-1">×</button>
+          </Badge>
+          <Badge variant="secondary" className="flex items-center gap-1">
+            Macbook
+            <button className="ml-1">×</button>
+          </Badge>
+          <Badge variant="secondary" className="flex items-center gap-1">
+            Laptop
+            <button className="ml-1">×</button>
+          </Badge>
+          <Badge variant="secondary" className="flex items-center gap-1">
+            Workspace
+            <button className="ml-1">×</button>
+          </Badge>
+        </div>
+        <InputField
+          placeholder="Add more tags..."
+          value={tags.join(", ")}
+          onChange={(e) =>
+            setTags(e.target.value.split(",").map((tag) => tag.trim()))
+          }
+          name="tags"
+        />
+      </div>
+    </Card>
   );
 }

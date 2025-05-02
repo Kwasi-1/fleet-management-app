@@ -10,6 +10,7 @@ import {
 } from "recharts";
 import { formatCurrency } from "@/lib/utils";
 import { SalesDataPoint } from "@/types/products";
+import { Card } from "@/components/ui/card";
 
 interface ProductSalesProps {
   totalSales: number;
@@ -29,11 +30,11 @@ export default function ProductSales({
   };
 
   return (
-    <div className="p-6">
+    <Card className="p-6">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center">
           <h2 className="text-lg font-medium text-gray-900">Total sales</h2>
-          <button className="ml-1">
+          <button type="button" className="ml-1" aria-label="More information">
             <Info className="w-4 h-4 text-gray-400" />
           </button>
         </div>
@@ -92,6 +93,6 @@ export default function ProductSales({
           </LineChart>
         </ResponsiveContainer>
       </div>
-    </div>
+    </Card>
   );
 }

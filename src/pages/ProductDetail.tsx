@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import ProductHeader from "@/components/order_management/inventory/product/ProductHeader";
 import ProductImages from "@/components/order_management/inventory/product/ProductImages";
 import ProductDescription from "@/components/order_management/inventory/product/ProductDescription";
@@ -8,6 +7,8 @@ import ProductStock from "@/components/order_management/inventory/product/Produc
 import ProductSales from "@/components/order_management/inventory/product/ProductSales";
 import ProductOrganization from "@/components/order_management/inventory/product/ProductOrganization";
 import { Product, SalesDataPoint } from "@/types/products";
+import ProductShipping from "@/components/order_management/inventory/product/ProductShipping";
+import BackButton from "@/components/common/BackButton";
 
 // Mock data based on the image
 const mockProduct: Product = {
@@ -17,9 +18,9 @@ const mockProduct: Product = {
   description:
     "Experience unparalleled performance with the MacBook Pro 14-inch, featuring the powerful M1 Pro chip. With 512GB of storage, it's perfect for file intensive tasks, creative projects, and seamless multitasking. Enjoy the stunning Retina display, long battery life, and advanced features designed for professionals.",
   images: [
-    "/images/macbook-front.jpg",
-    "/images/macbook-top.jpg",
-    "/images/macbook-side.jpg",
+    "https://i5.walmartimages.com/seo/Apple-MacBook-Pro-14-inch-Apple-M1-Pro-chip-with-8-core-CPU-and-14-core-GPU-16GB-RAM-512GB-SSD-Space-Gray-New-Open-Box_0c58794a-1339-43fe-bb2d-998d6400d9a3.b31e77570774d20505e055d600da2dd6.jpeg",
+    "https://m.media-amazon.com/images/I/61vFO3R5UNL._AC_SL1500_.jpg",
+    "https://www.imagineonline.store/cdn/shop/files/MacBook_Pro_14-in_Space_Gray_PDP_Image_Position-10__GBEN.jpg?v=1692377366&width=823",
   ],
   createdAt: "2024-01-30T00:00:00Z",
   updatedAt: "2025-05-01T00:00:00Z", // "Yesterday" from the image
@@ -40,6 +41,16 @@ const mockProduct: Product = {
   type: "Electronic",
   vendor: null,
   channel: "Fikri Store",
+  shipping: {
+    weight: 5,
+    weightUnit: "Kilogram (kg)",
+    length: 40,
+    lengthUnit: "Centimeter (cm)",
+    height: 32,
+    heightUnit: "Centimeter (cm)",
+    shipsInternationally: true,
+    isPhysical: true,
+  },
 };
 
 // Mock sales data for the chart
@@ -63,7 +74,7 @@ const mockSalesData: SalesDataPoint[] = [
 
 export default function ProductDetail() {
   const [product, setProduct] = useState<Product>(mockProduct);
-  const [salesData, setSalesData] = useState<SalesDataPoint[]>(mockSalesData);
+  const [salesData] = useState<SalesDataPoint[]>(mockSalesData);
 
   // In a real application, you would fetch the product data
   useEffect(() => {
@@ -71,56 +82,38 @@ export default function ProductDetail() {
     // For now, we're using mock data
   }, []);
 
-  return (
-    <div className="bg-gray-50 min-h-screen">
-      <div className="container mx-auto p-4">
-        {/* Navigation */}
-        <div className="flex items-center justify-between mb-4">
-          <button className="p-2 rounded-full hover:bg-gray-200">
-            <ChevronLeft className="w-5 h-5 text-gray-600" />
-          </button>
-          <div className="flex space-x-4">
-            <button className="text-gray-600 px-4 py-2 rounded-md hover:bg-gray-200">
-              Duplicate
-            </button>
-            <button className="text-gray-600 px-4 py-2 rounded-md hover:bg-gray-200">
-              Share Products
-            </button>
-          </div>
-          <button className="p-2 rounded-full hover:bg-gray-200">
-            <ChevronRight className="w-5 h-5 text-gray-600" />
-          </button>
-        </div>
+  const handleShippingUpdate = (updatedShipping: Product["shipping"]) => {
+    setProduct((prev) => ({
+      ...prev,
+      shipping: updatedShipping,
+    }));
+  };
 
-        {/* Product Header */}
+  return (
+    <div className="min-h-screen">
+      <div className="container mx-auto p-10">
+        <BackButton />
         <ProductHeader product={product} />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4">
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg shadow mb-6">
-              {/* Product Images */}
+            <div className="mb-6">
               <ProductImages images={product.images} />
             </div>
-
-            <div className="bg-white rounded-lg shadow mb-6">
-              {/* Product Description */}
-              <ProductDescription description={product.description} />
-            </div>
-
-            <div className="bg-white rounded-lg shadow mb-6">
-              {/* Product Pricing */}
+            <ProductDescription description={product.description} />
+            <div className="mb-6">
               <ProductPricing product={product} />
             </div>
+            <ProductStock stock={product.stock} />
 
-            <div className="bg-white rounded-lg shadow">
-              {/* Product Stock */}
-              <ProductStock stock={product.stock} />
-            </div>
+            <ProductShipping
+              product={product}
+              onShippingUpdate={handleShippingUpdate}
+            />
           </div>
 
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow mb-6">
-              {/* Product Sales */}
+            <div className=" mb-6">
               <ProductSales
                 totalSales={product.totalSales}
                 salesChange={product.salesChange}
@@ -128,10 +121,7 @@ export default function ProductDetail() {
               />
             </div>
 
-            <div className="bg-white rounded-lg shadow">
-              {/* Product Organization */}
-              <ProductOrganization product={product} />
-            </div>
+            <ProductOrganization product={product} />
           </div>
         </div>
       </div>

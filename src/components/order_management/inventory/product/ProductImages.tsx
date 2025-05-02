@@ -1,4 +1,4 @@
-import { Image, Plus } from "lucide-react";
+import { Image } from "lucide-react";
 import { useState } from "react";
 
 interface ProductImagesProps {
@@ -14,13 +14,13 @@ export default function ProductImages({ images }: ProductImagesProps) {
   };
 
   return (
-    <div className="p-6">
+    <div>
       <div className="grid grid-cols-4 gap-4">
         {images.map((image, index) => (
           <div
             key={index}
-            className={`rounded-lg bg-gray-100 overflow-hidden cursor-pointer transition-all ${
-              selectedImage === index ? "ring-2 ring-blue-500" : ""
+            className={`rounded-lg overflow-hidden cursor-pointer transition-all border items-center flex ${
+              selectedImage === index ? "ring-2 ring-black" : ""
             }`}
             onClick={() => setSelectedImage(index)}
           >
