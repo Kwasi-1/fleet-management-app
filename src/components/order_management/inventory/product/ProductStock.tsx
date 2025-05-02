@@ -55,7 +55,7 @@ export default function ProductStock({ stock }: ProductStockProps) {
           </div>
           <div>
             <div className="text-sm text-gray-500 mb-1">Reorder point</div>
-            <div className="text-blue-500 cursor-pointer">
+            <div className="text-[#619B7D] text-sm underline hover:line-through cursor-pointer">
               +Set reorder point
             </div>
           </div>

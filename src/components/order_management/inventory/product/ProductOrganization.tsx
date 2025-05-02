@@ -3,7 +3,6 @@ import { useState } from "react";
 import { Product } from "@/types/products";
 import { Card } from "@/components/ui/card";
 import InputField from "@/components/common/InputField";
-import { Badge } from "@/components/ui/badge";
 import SelectField from "@/components/common/SelectField";
 import { Button } from "@/components/ui/button";
 
@@ -18,7 +17,6 @@ export default function ProductOrganization({
   const [category, setCategory] = useState(product.category);
   const [type, setType] = useState(product.type);
   const [vendor, setVendor] = useState(product.vendor);
-  const [tags, setTags] = useState<string[]>([]);
 
   return (
     <Card className="p-6 sticky top-5">
@@ -78,36 +76,6 @@ export default function ProductOrganization({
           value={vendor || ""}
           onChange={(e) => setVendor(e.target.value || null)}
           classname="w-full"
-        />
-      </div>
-
-      <div>
-        <div className="text-sm text-gray-500 mb-2">Tags</div>
-        <div className="flex flex-wrap gap-2 mb-2">
-          <Badge variant="secondary" className="flex items-center gap-1">
-            Apple
-            <button className="ml-1">×</button>
-          </Badge>
-          <Badge variant="secondary" className="flex items-center gap-1">
-            Macbook
-            <button className="ml-1">×</button>
-          </Badge>
-          <Badge variant="secondary" className="flex items-center gap-1">
-            Laptop
-            <button className="ml-1">×</button>
-          </Badge>
-          <Badge variant="secondary" className="flex items-center gap-1">
-            Workspace
-            <button className="ml-1">×</button>
-          </Badge>
-        </div>
-        <InputField
-          placeholder="Add more tags..."
-          value={tags.join(", ")}
-          onChange={(e) =>
-            setTags(e.target.value.split(",").map((tag) => tag.trim()))
-          }
-          name="tags"
         />
       </div>
     </Card>
