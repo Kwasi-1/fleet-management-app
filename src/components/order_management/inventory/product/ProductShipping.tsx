@@ -3,6 +3,7 @@ import InputField from "@/components/common/InputField";
 import SelectField from "@/components/common/SelectField";
 import { Card } from "@/components/ui/card";
 import { Product } from "@/types/products";
+import { Switch } from "@/components/ui/switch";
 
 interface ProductShippingProps {
   product: Product;
@@ -33,7 +34,7 @@ function ProductShipping({ product, onShippingUpdate }: ProductShippingProps) {
   };
 
   return (
-    <Card className="p-6 ">
+    <Card className="p-6">
       <h2 className="font-medium text-lg">Shipping Dimensions & Options</h2>
       <p className="text-sm text-[#929292] mb-4">
         Specify the shipping dimensions and international availability for this
@@ -81,19 +82,17 @@ function ProductShipping({ product, onShippingUpdate }: ProductShippingProps) {
         />
       </div>
 
-      <div className="mt-4">
-        <label className="flex items-center cursor-pointer">
-          <input
-            type="checkbox"
-            name="shipsInternationally"
-            checked={shippingData.shipsInternationally}
-            onChange={handleInputChange}
-            className="w-4 h-4 text-blue-600 border-gray-300 rounded"
-          />
-          <span className="ml-2 text-sm">
-            This product ships internationally
-          </span>
-        </label>
+      <div className="flex justify-between items-center space-x-3 mt-6">
+        <span className="text-sm">This product ships internationally</span>
+
+        <Switch
+          checked={shippingData.shipsInternationally}
+          onCheckedChange={(checked) =>
+            handleInputChange({
+              target: { name: "shipsInternationally", checked, value: "" },
+            } as any)
+          }
+        />
       </div>
     </Card>
   );

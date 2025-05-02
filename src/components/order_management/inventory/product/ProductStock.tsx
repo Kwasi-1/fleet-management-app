@@ -64,10 +64,7 @@ export default function ProductStock({ stock }: ProductStockProps) {
 
       <div className="flex justify-between items-center mb-4">
         <label className="flex items-center cursor-pointer">
-          <input
-            type="checkbox"
-            className="w-4 h-4 text-blue-600 border-gray-300 rounded"
-          />
+          <Switch id="continueSelling" />
           <span className="ml-2 text-sm">
             Continue selling when out of stock
           </span>
