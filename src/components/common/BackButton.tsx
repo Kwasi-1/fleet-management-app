@@ -7,7 +7,7 @@ function BackButton() {
   return (
     <div>
       <button
-        className="flex col-span-full items-center h-fit gap-2 text-[#619B7D] text-[0.9rem] mb-4 hover:underline"
+        className="flex col-span-full items-center h-fit gap-2 text-[#619B7D] text-[1rem] mb-4 hover:underline tracking-tighter"
         onClick={() => navigate(-1)}
       >
         <Icon icon={"hugeicons:arrow-turn-backward"} />
