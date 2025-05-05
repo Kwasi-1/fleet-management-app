@@ -8,6 +8,7 @@ import SelectField from "@/components/common/SelectField";
 import StockLevelDisplay from "./StockLevelDisplay";
 import AuditStockModal from "./AuditStockModal";
 import { useNavigate } from "react-router-dom";
+import ImportProductModal from "./ImportProductModal";
 
 const columns = [
   { key: "product", label: "Product name" },
@@ -27,6 +28,7 @@ function InventoryTable() {
   const [supplier, setSupplier] = useState("");
   const [stockLevel, setStockLevel] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleRowClick = () => {
@@ -35,6 +37,9 @@ function InventoryTable() {
   // const handleRowClick = (row: any) => {
   //   navigate(`/order-management/inventory/products/${row.sku}`);
   // };
+  const handleButtonClick = () => {
+    setIsImportModalOpen(true);
+  };
 
   const handlleAuditClick = (row: any) => {
     console.log("Audit", row);
@@ -98,7 +103,8 @@ function InventoryTable() {
         columns={columns}
         data={inventoryData}
         onRowClick={handleRowClick}
-        buttonLabel="Order Entry"
+        buttonLabel="Import Product"
+        onButtonClick={() => setIsImportModalOpen(true)}
         searchPlaceholder="Search product..."
         additionalFilters={additionalFilters}
         actions={[
@@ -116,6 +122,10 @@ function InventoryTable() {
       <AuditStockModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+      />
+      <ImportProductModal
+        isOpen={isImportModalOpen}
+        onClose={() => setIsImportModalOpen(false)}
       />
     </div>
   );
