@@ -8,7 +8,7 @@ interface InputFieldProps {
   name: string;
   type?: string;
   placeholder?: string;
-  value: string | number;
+  value?: string | number;
   disabled?: boolean;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   error?: string;
@@ -16,6 +16,7 @@ interface InputFieldProps {
   prefix?: string;
   suffix?: string;
   icon?: string;
+  accept?: string;
 }
 
 function InputField({
@@ -29,6 +30,7 @@ function InputField({
   onChange,
   error,
   className,
+  accept,
   prefix,
   suffix,
 }: InputFieldProps) {
@@ -51,6 +53,8 @@ function InputField({
           type={type}
           placeholder={placeholder}
           value={value}
+          multiple={type === "file" && accept?.includes(",")}
+          accept={accept}
           onChange={onChange}
           disabled={disabled}
           className={cn(

@@ -10,7 +10,7 @@ import { ChangeEvent } from "react";
 
 interface SelectFieldProps {
   label?: string;
-  name: string;
+  name?: string;
   options: string[];
   value: string;
   placeholder?: string;
