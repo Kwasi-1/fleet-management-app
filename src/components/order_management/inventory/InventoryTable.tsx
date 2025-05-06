@@ -104,7 +104,7 @@ function InventoryTable() {
         data={inventoryData}
         onRowClick={handleRowClick}
         buttonLabel="Import Product"
-        onButtonClick={() => setIsImportModalOpen(true)}
+        onButtonClick={handleButtonClick}
         searchPlaceholder="Search product..."
         additionalFilters={additionalFilters}
         actions={[
