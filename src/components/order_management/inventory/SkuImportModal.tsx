@@ -11,7 +11,6 @@ interface SkuImportModalProps {
 }
 
 const SkuImportModal: React.FC<SkuImportModalProps> = ({ isOpen, onClose }) => {
-  const [activeTab, setActiveTab] = useState(0);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [selectedAccount, setSelectedAccount] = useState<string>("");
   const [columnMappings, setColumnMappings] = useState([
@@ -52,7 +51,6 @@ const SkuImportModal: React.FC<SkuImportModalProps> = ({ isOpen, onClose }) => {
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedFile(e.target.files[0]);
-      setActiveTab(1); // Move to next tab after file selection
     }
   };
 

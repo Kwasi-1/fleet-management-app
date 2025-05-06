@@ -8,7 +8,8 @@ import SelectField from "@/components/common/SelectField";
 import StockLevelDisplay from "./StockLevelDisplay";
 import AuditStockModal from "./AuditStockModal";
 import { useNavigate } from "react-router-dom";
-import ImportProductModal from "./ImportProductModal";
+// import ImportProductModal from "./ImportProductModal";
+import SkuImportModal from "./SkuImportModal";
 
 const columns = [
   { key: "product", label: "Product name" },
@@ -123,7 +124,11 @@ function InventoryTable() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />
-      <ImportProductModal
+      {/* <ImportProductModal
+        isOpen={isImportModalOpen}
+        onClose={() => setIsImportModalOpen(false)}
+      /> */}
+      <SkuImportModal
         isOpen={isImportModalOpen}
         onClose={() => setIsImportModalOpen(false)}
       />
