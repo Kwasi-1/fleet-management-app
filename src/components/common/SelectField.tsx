@@ -16,6 +16,7 @@ interface SelectFieldProps {
   placeholder?: string;
   classname?: string;
   disabled?: boolean;
+  error?: string;
   onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
 }
 
@@ -28,6 +29,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
   classname = "",
   onChange,
   disabled,
+  error,
 }) => {
   // since ShadCN's Select returns just the value string,
   // we simulate a ChangeEvent for compatibility
@@ -64,6 +66,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
           ))}
         </SelectContent>
       </Select>
+      {error && <p className="text-red-500 text-sm">{error}</p>}
     </div>
   );
 };
