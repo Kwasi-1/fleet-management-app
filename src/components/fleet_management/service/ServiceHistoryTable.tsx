@@ -1,6 +1,10 @@
+import { useState } from "react";
 import Table from "../../common/Table";
+import ServiceEntryModal from "./ServiceEntryModal";
 
 const ServiceHistoryTable = () => {
+  const [isServiceEntryModalOpen, setIsServiceEntryModalOpen] = useState(false);
+
   // Define columns for the table
   const columns = [
     { key: "asset", label: "Asset" },
@@ -98,6 +102,14 @@ const ServiceHistoryTable = () => {
     },
   ];
 
+  const handleServiceEntry = () => {
+    setIsServiceEntryModalOpen(true);
+  };
+
+  const handleCloseServiceEntryModal = () => {
+    setIsServiceEntryModalOpen(false);
+  };
+
   return (
     <div>
       <Table
@@ -106,7 +118,11 @@ const ServiceHistoryTable = () => {
         searchPlaceholder="Search service history..."
         buttonLabel="Add Service Entry"
         onRowClick={(row) => console.log("Clicked Row:", row)}
-        onButtonClick={() => console.log("Add Service Entry Clicked")}
+        onButtonClick={handleServiceEntry}
+      />
+      <ServiceEntryModal
+        isOpen={isServiceEntryModalOpen}
+        onClose={handleCloseServiceEntryModal}
       />
     </div>
   );
