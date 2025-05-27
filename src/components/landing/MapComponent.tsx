@@ -636,40 +636,40 @@ const MapComponent: React.FC = () => {
   // }, [showEVStations, userLocation]);
 
   // Add EV stations search term to geocoder
-  const addEVSearchTerm = useCallback(() => {
-    if (!geocoderContainerRef.current) return;
+  // const addEVSearchTerm = useCallback(() => {
+  //   if (!geocoderContainerRef.current) return;
 
-    const button = document.createElement("button");
-    button.className = "mapboxgl-ctrl-geocoder--button";
-    button.innerHTML = "EV Stops Near Me";
-    button.onclick = () => {
-      setShowEVStations(true);
-      if (userLocation) {
-        mapRef.current?.flyTo({
-          center: userLocation,
-          zoom: 13,
-        });
-      }
-      if (nearbyStations.length > 0) {
-        setSelectedStation(nearbyStations[0]);
-      }
-    };
+  //   const button = document.createElement("button");
+  //   button.className = "mapboxgl-ctrl-geocoder--button";
+  //   button.innerHTML = "EV Stops Near Me";
+  //   button.onclick = () => {
+  //     setShowEVStations(true);
+  //     if (userLocation) {
+  //       mapRef.current?.flyTo({
+  //         center: userLocation,
+  //         zoom: 13,
+  //       });
+  //     }
+  //     if (nearbyStations.length > 0) {
+  //       setSelectedStation(nearbyStations[0]);
+  //     }
+  //   };
 
-    const existingButton = geocoderContainerRef.current.querySelector(
-      ".mapboxgl-ctrl-geocoder--button"
-    );
-    if (existingButton) {
-      geocoderContainerRef.current.replaceChild(button, existingButton);
-    } else {
-      geocoderContainerRef.current.appendChild(button);
-    }
-  }, [geocoderContainerRef, userLocation, nearbyStations]);
+  //   const existingButton = geocoderContainerRef.current.querySelector(
+  //     ".mapboxgl-ctrl-geocoder--button"
+  //   );
+  //   if (existingButton) {
+  //     geocoderContainerRef.current.replaceChild(button, existingButton);
+  //   } else {
+  //     geocoderContainerRef.current.appendChild(button);
+  //   }
+  // }, [geocoderContainerRef, userLocation, nearbyStations]);
 
-  useEffect(() => {
-    if (showGeocoder) {
-      addEVSearchTerm();
-    }
-  }, [showGeocoder, addEVSearchTerm]);
+  // useEffect(() => {
+  //   if (showGeocoder) {
+  //     addEVSearchTerm();
+  //   }
+  // }, [showGeocoder, addEVSearchTerm]);
 
   const toggleTheme = () => {
     setIsDarkMode((prev) => {
@@ -710,8 +710,8 @@ const MapComponent: React.FC = () => {
           businesses={businesses}
           geocoderContainerRef={geocoderContainerRef}
           styleProps={`absolute ${
-            isMap ? "top-[0.5vw]" : "top-[1.4vw]"
-          } right-[10vw] z-100`}
+            isMap ? "top-[0.5vw]" : "top-[0.6vw]"
+          } right-[15vw] z-100`}
         />
       )}
       <div
