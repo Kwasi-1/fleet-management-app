@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { useRef, useEffect, useState, RefObject, useCallback } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -78,7 +77,6 @@ const MapComponent = () => {
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const mapContainerRef = useNonNullableRef<HTMLDivElement>(null!);
   const geocoderContainerRef = useNonNullableRef<HTMLDivElement>(null!);
-  const userLocationMarkerRef = useRef<mapboxgl.Marker | null>(null);
   const [businesses, setBusinesses] = useState<Business[]>([]);
   const [showGeocoder, setShowGeocoder] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -172,7 +170,7 @@ const MapComponent = () => {
     []
   );
 
-  // Get user location - now runs independently
+  // Get user location
   const getUserLocation = useCallback((): Promise<[number, number]> => {
     return new Promise((resolve, reject) => {
       if (!navigator.geolocation) {
@@ -377,6 +375,7 @@ const MapComponent = () => {
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return;
 
+    // Initialize map immediately with hardcoded center
     mapRef.current = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: isDarkMode
@@ -470,19 +469,19 @@ const MapComponent = () => {
         el.className = "ev-marker";
         el.innerHTML = "⚡";
         el.style.cssText = `
-        background: #10B981;
-        color: white;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 16px;
-        cursor: pointer;
-        border: 2px solid white;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-      `;
+          background: #10B981;
+          color: white;
+          border-radius: 50%;
+          width: 30px;
+          height: 30px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 16px;
+          cursor: pointer;
+          border: 2px solid white;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        `;
 
         const marker = new mapboxgl.Marker(el)
           .setLngLat(station.coordinates)
@@ -513,94 +512,6 @@ const MapComponent = () => {
     };
   }, [isDarkMode, mapContainerRef, generateMockStations, getUserLocation]);
 
-  // Get user location after map is initialized
-  useEffect(() => {
-    const fetchUserLocation = async () => {
-      const location = await getUserLocation();
-      setUserLocation(location);
-
-      // Only update if we got a different location than the initial center
-      if (
-        location[0] !== INITIAL_CENTER[0] ||
-        location[1] !== INITIAL_CENTER[1]
-      ) {
-        // Update EV stations based on actual user location
-        const userBasedStations = generateMockStations(
-          location[0],
-          location[1]
-        );
-        setNearbyStations(userBasedStations);
-
-        // Remove existing EV markers
-        if (mapRef.current) {
-          document.querySelectorAll(".ev-marker").forEach((el) => {
-            const marker = el.closest(".mapboxgl-marker");
-            if (marker) marker.remove();
-          });
-
-          // Add new EV station markers based on user location
-          userBasedStations.forEach((station) => {
-            const el = document.createElement("div");
-            el.className = "ev-marker";
-            el.innerHTML = "⚡";
-            el.style.cssText = `
-              background: #10B981;
-              color: white;
-              border-radius: 50%;
-              width: 30px;
-              height: 30px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-size: 16px;
-              cursor: pointer;
-              border: 2px solid white;
-              box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            `;
-
-            const marker = new mapboxgl.Marker(el)
-              .setLngLat(station.coordinates)
-              .addTo(mapRef.current);
-
-            el.addEventListener("click", () => {
-              setSelectedStation(station);
-              setShowEVStations(true);
-
-              if (userLocation) {
-                mapRef.current?.flyTo({
-                  center: userLocation,
-                  zoom: 13,
-                });
-              }
-            });
-          });
-        }
-      }
-
-      // Add/update user location marker
-      if (mapRef.current) {
-        // Remove existing user location marker if it exists
-        if (userLocationMarkerRef.current) {
-          userLocationMarkerRef.current.remove();
-        }
-
-        // Add new user location marker
-        userLocationMarkerRef.current = new mapboxgl.Marker({
-          color: "#3B82F6",
-        })
-          .setLngLat(location)
-          .setPopup(
-            new mapboxgl.Popup().setHTML(
-              '<div class="font-semibold">Your Location</div>'
-            )
-          )
-          .addTo(mapRef.current);
-      }
-    };
-
-    fetchUserLocation();
-  }, [getUserLocation, generateMockStations]);
-
   // Handle theme changes
   useEffect(() => {
     if (mapRef.current) {
@@ -619,12 +530,7 @@ const MapComponent = () => {
     // Clear existing markers (except user location and EV stations)
     document
       .querySelectorAll(".mapboxgl-marker:not(.ev-marker)")
-      .forEach((marker) => {
-        // Don't remove the user location marker
-        if (marker !== userLocationMarkerRef.current?.getElement()) {
-          marker.remove();
-        }
-      });
+      .forEach((marker) => marker.remove());
 
     // Clear existing route
     if (mapRef.current.getLayer("route")) mapRef.current.removeLayer("route");
@@ -713,7 +619,7 @@ const MapComponent = () => {
         addShipmentMarkersAndRoute();
       } else {
         mapRef.current?.flyTo({
-          center: userLocation || INITIAL_CENTER, // Fall back to INITIAL_CENTER if userLocation is null
+          center: userLocation || INITIAL_CENTER,
           zoom: INITIAL_ZOOM,
           essential: true,
           pitch: 60,
