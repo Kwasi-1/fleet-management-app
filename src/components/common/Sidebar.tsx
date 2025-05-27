@@ -156,7 +156,7 @@ const SideBar: React.FC = () => {
   };
 
   return (
-    <div className="w-[15%] fixed bg-white dark:bg-[#121212] h-screen py-4 px-2 border-r border-[#e5e7eb] dark:border-gray-700">
+    <div className="w-[15%] fixed bg-white dark:bg-[#121212] h-screen py-4 px-2 border-r border-[#e5e7eb] dark:border-[#2a2a2a]">
       {/* Logo and title */}
       <div
         onClick={() => navigate("/")}
