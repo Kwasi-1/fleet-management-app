@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { useRef, useEffect, useState, RefObject, useCallback } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -76,6 +78,7 @@ const MapComponent = () => {
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const mapContainerRef = useNonNullableRef<HTMLDivElement>(null!);
   const geocoderContainerRef = useNonNullableRef<HTMLDivElement>(null!);
+  const userLocationMarkerRef = useRef<mapboxgl.Marker | null>(null);
   const [businesses, setBusinesses] = useState<Business[]>([]);
   const [showGeocoder, setShowGeocoder] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -169,7 +172,7 @@ const MapComponent = () => {
     []
   );
 
-  // Get user location
+  // Get user location - now runs independently
   const getUserLocation = useCallback((): Promise<[number, number]> => {
     return new Promise((resolve, reject) => {
       if (!navigator.geolocation) {
@@ -388,6 +391,24 @@ const MapComponent = () => {
 
     mapRef.current.addControl(new mapboxgl.NavigationControl());
 
+    // Get user location and update map
+    const updateUserLocation = async () => {
+      const location = await getUserLocation();
+      setUserLocation(location);
+
+      // If we got a different location than our initial center, update the map
+      if (
+        location[0] !== INITIAL_CENTER[0] ||
+        location[1] !== INITIAL_CENTER[1]
+      ) {
+        mapRef.current?.flyTo({
+          center: location,
+          zoom: INITIAL_ZOOM,
+          essential: true,
+        });
+      }
+    };
+
     mapRef.current.on("load", async () => {
       if (!mapRef.current) return;
 
@@ -461,7 +482,7 @@ const MapComponent = () => {
         cursor: pointer;
         border: 2px solid white;
         box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  `;
+      `;
 
         const marker = new mapboxgl.Marker(el)
           .setLngLat(station.coordinates)
@@ -469,9 +490,8 @@ const MapComponent = () => {
 
         el.addEventListener("click", () => {
           setSelectedStation(station);
-          setShowEVStations(true); // Show the Nearby EV Stations card
+          setShowEVStations(true);
 
-          // Center the map on user's location while showing the station details
           if (userLocation) {
             mapRef.current?.flyTo({
               center: userLocation,
@@ -482,6 +502,9 @@ const MapComponent = () => {
       });
     });
 
+    // Start getting user location after map is initialized
+    updateUserLocation();
+
     return () => {
       if (mapRef.current) {
         mapRef.current.remove();
@@ -489,6 +512,94 @@ const MapComponent = () => {
       }
     };
   }, [isDarkMode, mapContainerRef, generateMockStations, getUserLocation]);
+
+  // Get user location after map is initialized
+  useEffect(() => {
+    const fetchUserLocation = async () => {
+      const location = await getUserLocation();
+      setUserLocation(location);
+
+      // Only update if we got a different location than the initial center
+      if (
+        location[0] !== INITIAL_CENTER[0] ||
+        location[1] !== INITIAL_CENTER[1]
+      ) {
+        // Update EV stations based on actual user location
+        const userBasedStations = generateMockStations(
+          location[0],
+          location[1]
+        );
+        setNearbyStations(userBasedStations);
+
+        // Remove existing EV markers
+        if (mapRef.current) {
+          document.querySelectorAll(".ev-marker").forEach((el) => {
+            const marker = el.closest(".mapboxgl-marker");
+            if (marker) marker.remove();
+          });
+
+          // Add new EV station markers based on user location
+          userBasedStations.forEach((station) => {
+            const el = document.createElement("div");
+            el.className = "ev-marker";
+            el.innerHTML = "⚡";
+            el.style.cssText = `
+              background: #10B981;
+              color: white;
+              border-radius: 50%;
+              width: 30px;
+              height: 30px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 16px;
+              cursor: pointer;
+              border: 2px solid white;
+              box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            `;
+
+            const marker = new mapboxgl.Marker(el)
+              .setLngLat(station.coordinates)
+              .addTo(mapRef.current);
+
+            el.addEventListener("click", () => {
+              setSelectedStation(station);
+              setShowEVStations(true);
+
+              if (userLocation) {
+                mapRef.current?.flyTo({
+                  center: userLocation,
+                  zoom: 13,
+                });
+              }
+            });
+          });
+        }
+      }
+
+      // Add/update user location marker
+      if (mapRef.current) {
+        // Remove existing user location marker if it exists
+        if (userLocationMarkerRef.current) {
+          userLocationMarkerRef.current.remove();
+        }
+
+        // Add new user location marker
+        userLocationMarkerRef.current = new mapboxgl.Marker({
+          color: "#3B82F6",
+        })
+          .setLngLat(location)
+          .setPopup(
+            new mapboxgl.Popup().setHTML(
+              '<div class="font-semibold">Your Location</div>'
+            )
+          )
+          .addTo(mapRef.current);
+      }
+    };
+
+    fetchUserLocation();
+  }, [getUserLocation, generateMockStations]);
 
   // Handle theme changes
   useEffect(() => {
@@ -508,7 +619,12 @@ const MapComponent = () => {
     // Clear existing markers (except user location and EV stations)
     document
       .querySelectorAll(".mapboxgl-marker:not(.ev-marker)")
-      .forEach((marker) => marker.remove());
+      .forEach((marker) => {
+        // Don't remove the user location marker
+        if (marker !== userLocationMarkerRef.current?.getElement()) {
+          marker.remove();
+        }
+      });
 
     // Clear existing route
     if (mapRef.current.getLayer("route")) mapRef.current.removeLayer("route");
@@ -597,7 +713,7 @@ const MapComponent = () => {
         addShipmentMarkersAndRoute();
       } else {
         mapRef.current?.flyTo({
-          center: INITIAL_CENTER,
+          center: userLocation || INITIAL_CENTER, // Fall back to INITIAL_CENTER if userLocation is null
           zoom: INITIAL_ZOOM,
           essential: true,
           pitch: 60,
@@ -611,7 +727,7 @@ const MapComponent = () => {
     } else {
       mapRef.current.once("load", handleMapLoad);
     }
-  }, [shipmentData, addShipmentMarkersAndRoute]);
+  }, [shipmentData, addShipmentMarkersAndRoute, userLocation]);
 
   // Toggle EV stations visibility
   const toggleEVStations = useCallback(() => {
@@ -704,6 +820,7 @@ const MapComponent = () => {
           isMap ? "mx-0 md:mx-0 h-[92vh]" : "mx-5 md:mx-0 h-[65vh] md:h-[92vh]"
         } relative overflow-hidden`}
       >
+        {/* Top section (map) - takes remaining height */}
         <BusinessLayer
           mapRef={mapRef as RefObject<mapboxgl.Map>}
           businesses={businesses}
@@ -717,19 +834,18 @@ const MapComponent = () => {
               : "h-[65vh] md:h-[92vh] rounded-xl md:rounded-none border"
           } border-gray-200`}
         />
-
         {/* EV Stations UI Elements */}
         {showEVStations && (
           <>
-            {/* Station list panel */}
-            <div className="absolute top-0 left-0 w-80 bg-white shadow-lg max-h-96 h-full overflow-y-auto z-10">
+            {/* Station list panel - now on the left side */}
+            <div className="absolute top-0 left-0 w-80 h-[calc(92vh-300px)] bg-white shadow-lg z-10">
               <div className="p-4 border-b sticky top-0 bg-white z-20">
                 <h2 className="text-base font-semibold flex items-center gap-2">
                   <Zap className="w-5 h-5 text-green-600" />
                   Nearby EV Stations ({nearbyStations.length})
                 </h2>
               </div>
-              <div className="p-2">
+              <div className="p-2 h-[calc(100%-56px)] overflow-y-auto">
                 {nearbyStations.map((station) => (
                   <div
                     key={station.id}
@@ -740,20 +856,15 @@ const MapComponent = () => {
                     }`}
                     onClick={() => {
                       setSelectedStation(station);
-
-                      // If we're navigating, clear current route first
                       if (isNavigating) {
                         clearRoute();
                       }
-
                       mapRef.current?.flyTo({
                         center: station.coordinates,
                         zoom: 15,
                         // pitch: 40,
                         // bearing: -20,
                       });
-
-                      // If we were navigating, start new route after animation
                       if (isNavigating && userLocation) {
                         mapRef.current?.once("moveend", async () => {
                           const route = await getRoute(
@@ -799,7 +910,7 @@ const MapComponent = () => {
 
             {/* Selected station details */}
             {selectedStation && (
-              <div className="absolute bottom-0 left-0 right-4 bg-white shadow-lg p-4 md:right-auto md:w-80 border-t z-60">
+              <div className="absolute bottom-0 left-0 right-4 bg-white shadow-lg p-4 h-[300px] md:right-auto md:w-80 border-t z-60">
                 <div className="flex justify-between items-start mb-3">
                   <h3 className="text-base font-semibold">
                     {selectedStation.name}
