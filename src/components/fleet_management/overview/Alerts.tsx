@@ -48,11 +48,13 @@ const DeliveryCard: React.FC<DeliveryData> = ({
   value,
 }) => {
   return (
-    <div className="bg-gray-100 backdrop-blur-sm text-[0.85rem] p-4 rounded-2xl gap-4 border border-[#e0e6e9] w-full">
+    <div className="bg-gray-100 dark:bg-[#323233] backdrop-blur-sm text-[0.85rem] p-4 rounded-2xl gap-4 border border-[#e0e6e9] dark:border-[#2a2a2a] w-full">
       <div className="flex items-start mb-5 justify-between">
         <div>
-          <h2 className="font-[400] text-[0.89rem]">{title}</h2>
-          <p className="text-[#929292] text-[0.85rem]">Driver: {driver}</p>
+          <h2 className="font-[400] text-[0.89rem] dark:text-white">{title}</h2>
+          <p className="text-[#929292] dark:text-gray-400 text-[0.85rem]">
+            Driver: {driver}
+          </p>
         </div>
         <div className="w-12 h-12">
           <CircularProgressbar
@@ -86,8 +88,10 @@ const DeliveryCard: React.FC<DeliveryData> = ({
 
 const Alerts: React.FC = () => {
   return (
-    <div className="p-4 bg[#e0e6e930] shadow-md rounded-xl border border-[#e0e6e930] w-full h-[55vh] min-h-full overflow-auto scrollbar-hide">
-      <h1 className="text-[#4b5563] font-medium mb-4">Alerts</h1>
+    <div className="p-4 shadow-md rounded-xl border border-[#e0e6e930] w-full h-[55vh] min-h-full overflow-auto scrollbar-hide">
+      <h1 className="text-[15px] text-[#4b5563] dark:text-gray-200 font-medium mb-4">
+        Alerts
+      </h1>
       <div className="flex flex-col gap-4">
         {data.map((item, index) => (
           <DeliveryCard key={index} {...item} />

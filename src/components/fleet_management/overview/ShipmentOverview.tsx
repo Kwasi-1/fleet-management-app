@@ -107,14 +107,14 @@ const ShipmentOverview: React.FC = () => {
   });
 
   return (
-    <div className="p-4 bg[#e0e6e930] shadow-md w-full h-full rounded-xl border border-[#e0e6e930]">
-      <h1 className="text-[#4b5563]  capitalize font-medium text-base mb-4">
+    <div className="p-4 shadow-md w-full h-full rounded-xl border border-[#e0e6e930]">
+      <h1 className="text-[#4b5563] dark:text-gray-200 capitalize font-medium text-base mb-4">
         deliveries
       </h1>
       <div className="overflow-x-auto">
         <table className="w-full rounded-lg text-sm text-left">
           <thead className="border-b border-gray-300">
-            <tr className="text-[#929292] font-light border-b uppercase border-gray-300/70">
+            <tr className="text-[#929292] font-light border-b uppercase border-gray-300/70 dark:border-[#2a2a2a]">
               {[
                 { label: "ShipmentId", key: "shipment" },
                 { label: "Driver", key: "driver" },
@@ -147,7 +147,7 @@ const ShipmentOverview: React.FC = () => {
             {sortedData.map((row, index) => (
               <tr
                 key={index}
-                className="border-t border-[#e5e7eb] text-[0.75rem] text-black uppercase"
+                className="border-t border-[#e5e7eb] dark:border-[#2a2a2a] text-[0.75rem] text-black dark:text-white uppercase"
               >
                 <td className="p-3">{row.shipment}</td>
                 <td className="p-3">{row.driver}</td>

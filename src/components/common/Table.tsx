@@ -72,7 +72,7 @@ const Table = <T extends TableRow>({
             <input
               type="text"
               placeholder={searchPlaceholder}
-              className={`p-2 border appearance-none outline-none rounded-lg focus:outline-none focus:ring-2 focus:ring-[#619B7D] text-sm text-gray-600 dark:text-gray-100 border-[#e5e7eb] dark:border-gray-700 bg-background ${
+              className={`p-2 border appearance-none outline-none rounded-lg focus:outline-none focus:ring-2 focus:ring-[#619B7D] text-sm text-gray-600 dark:text-gray-100 border-[#e5e7eb] dark:border-[#2a2a2a] bg-background ${
                 additionalFilters ? "w-1/4" : "w-1/3"
               } bg-inherit`}
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
