@@ -2,7 +2,6 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../../assets/foundry_logo.png";
-import logoWhite from "../../assets/foundry_logo_white.png";
 
 // Define sublink and menu item types
 interface SubLink {
@@ -150,10 +149,6 @@ const SideBar: React.FC = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
-  const isDarkMode =
-    window.matchMedia &&
-    window.matchMedia("(prefers-color-scheme: dark)").matches;
-
   const highlight = (tuple: [string, boolean]): boolean => {
     if (pathname === `/${tuple[0]}`) return true;
     if (pathname.includes(tuple[0]) && !tuple[1]) return true;
@@ -161,18 +156,14 @@ const SideBar: React.FC = () => {
   };
 
   return (
-    <div className="w-[15%] fixed bg-[#121212] h-screen py-4 px-2 border-r border-[#2a2a2a] text-[#e0e0e0]">
+    <div className="w-[15%] fixed bg-white dark:bg-[#121212] h-screen py-4 px-2 border-r border-[#e5e7eb] dark:border-gray-700">
       {/* Logo and title */}
       <div
         onClick={() => navigate("/")}
         className="flex gap-x-2 pt-2 place-items-center hover:cursor-pointer pl-4"
       >
-        <img
-          src={isDarkMode ? logoWhite : logo}
-          alt="logo"
-          className="w-4 h-5"
-        />{" "}
-        <div className="flex flex-col mr-auto text-[#b0b0b0]">
+        <img src={logo} className="w-4 h-5" alt="Logo" />
+        <div className="flex flex-col mr-auto text-gray-600 dark:text-[#b0b0b0]">
           <h1 className="font-medium capitalize">Foundry</h1>
         </div>
       </div>
@@ -187,7 +178,7 @@ const SideBar: React.FC = () => {
             <div
               key={index}
               className={`flex flex-col w-full nav ${
-                isHighlighted ? "bg-[#2a2a2a]" : "h-12"
+                isHighlighted ? "bg-gray-200/30 dark:bg-[#2a2a2a]" : "h-12"
               } rounded-xl p-1 overflow-y-hidden duration-300`}
             >
               {/* Parent Menu Item */}
@@ -195,8 +186,8 @@ const SideBar: React.FC = () => {
                 onClick={() => navigate(item.link)}
                 className={`${
                   isHighlighted
-                    ? "text-white"
-                    : "hover:bg-[#2a2a2a] text-[#b0b0b0]"
+                    ? "text-black dark:text-white"
+                    : "hover:bg-gray-200/10 dark:hover:bg-[#2a2a2a] text-gray-500 dark:text-[#b0b0b0]"
                 } rounded-xl p-2 flex flex-row gap-x-3 items-center`}
               >
                 <Icon
@@ -220,8 +211,8 @@ const SideBar: React.FC = () => {
                       onClick={() => navigate(sublink.link)}
                       className={`${
                         isSublinkActive
-                          ? "text-white bg-[#1f1f1f]"
-                          : "hover:bg-[#2a2a2a] text-[#a0a0a0]"
+                          ? "text-black dark:text-white bg-white dark:bg-[#1f1f1f]"
+                          : "hover:bg-gray-200/10 dark:hover:bg-[#2a2a2a]   text-gray-500 dark:text-[#a0a0a0]"
                       } rounded-xl scrollbar-hide p-2 flex flex-row gap-x-2 items-center my-1 overflow-auto text-ellipsis`}
                     >
                       <Icon
@@ -244,7 +235,7 @@ const SideBar: React.FC = () => {
         {/* Logout Button */}
         <button
           onClick={() => {}}
-          className="w-full flex items-center p-2 rounded-lg mt-auto gap-x-2 text-[#b0b0b0] hover:text-white transition-all duration-500 hover:bg-red-600"
+          className="w-full flex items-center p-2 rounded-lg mt-auto text-gray-600 gap-x-2 dark:text-[#b0b0b0] hover:text-white transition-all duration-500 hover:bg-red-600"
         >
           <Icon icon="bi:dash-circle" rotate={2} fontSize={20} />
           Log out
