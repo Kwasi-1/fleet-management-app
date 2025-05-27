@@ -65,14 +65,14 @@ const Table = <T extends TableRow>({
   };
 
   return (
-    <div className="relative">
+    <div className="relative text-gray-800 dark:text-gray-100 rounded-lg">
       <div className="p-4 h-full">
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center gap-2 flex-1">
             <input
               type="text"
               placeholder={searchPlaceholder}
-              className={`p-2 border border-[#e5e7eb] appearance-none outline-none rounded-lg focus:outline-none focus:ring-2 focus:ring-[#619B7D] text-sm text-gray-600 ${
+              className={`p-2 border appearance-none outline-none rounded-lg focus:outline-none focus:ring-2 focus:ring-[#619B7D] text-sm text-gray-600 dark:text-gray-100 border-[#e5e7eb] dark:border-gray-700 bg-background ${
                 additionalFilters ? "w-1/4" : "w-1/3"
               } bg-inherit`}
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
@@ -95,14 +95,14 @@ const Table = <T extends TableRow>({
         <div className="mb-6"> {additionalFilters}</div>
         <table className="w-full border-collapse">
           <thead>
-            <tr className="border-b border-gray-200 uppercase text-[#4b5563] text-[12px]">
+            <tr className="border-b border-gray-200 dark:border-[#2a2a2a] uppercase text-[#4b5563] text-[12px] dark:text-gray-300">
               {columns.map((col) => (
                 <th key={col.key} className="p-3 text-left font-[600]">
                   {col.label}
                 </th>
               ))}
               {actions && (
-                <th className="p-3 text-righ font-[600]t">Actions</th>
+                <th className="p-3 text-right font-[600]">Actions</th>
               )}
             </tr>
           </thead>
@@ -110,7 +110,7 @@ const Table = <T extends TableRow>({
             {filteredData.map((row) => (
               <tr
                 key={row.id}
-                className="border-b border-[#e5e7eb] last:border-b-0 hover:bg-gray-100 cursor-pointer text-[13px] text-gray-600"
+                className="border-b border-[#e5e7eb] dark:border-[#2a2a2a] last:border-b-0 hover:bg-gray-100 cursor-pointer text-[13px] text-gray-600 dark:hover:bg-[#12121250] dark:text-gray-300"
                 onClick={() => onRowClick?.(row)}
               >
                 {columns.map((col) => (
