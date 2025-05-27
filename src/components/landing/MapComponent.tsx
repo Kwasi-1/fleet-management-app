@@ -723,6 +723,7 @@ const MapComponent: React.FC = () => {
         <BusinessLayer
           mapRef={mapRef as RefObject<mapboxgl.Map>}
           businesses={businesses}
+          isDarkMode={isDarkMode}
         />
         <div
           id="map-container"
@@ -730,7 +731,7 @@ const MapComponent: React.FC = () => {
           className={`${
             isMap
               ? "h-full border-t"
-              : "h-[65vh] md:h-[92vh] rounded-xl md:rounded-none border"
+              : "h-[65vh] md:h-[92vh] rounded-xl md:rounded-none border-t dark:border-gray-500"
           } border-gray-200`}
         />
         {/* EV Stations UI Elements */}
