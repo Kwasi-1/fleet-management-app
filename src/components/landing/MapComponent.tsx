@@ -68,28 +68,36 @@ interface RouteInfo {
   geometry: any;
 }
 
-const useNonNullableRef = <T,>(initialValue: T) => {
+interface ShipmentData {
+  coordinates: ShipmentCoordinates | null;
+  details: ShipmentDetails | null;
+}
+
+const useNonNullableRef = <T,>(initialValue: T): RefObject<T> => {
   const ref = useRef<T>(initialValue);
   return ref as RefObject<T>;
 };
 
-const MapComponent = () => {
+const MapComponent: React.FC = () => {
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const mapContainerRef = useNonNullableRef<HTMLDivElement>(null!);
   const geocoderContainerRef = useNonNullableRef<HTMLDivElement>(null!);
   const [businesses, setBusinesses] = useState<Business[]>([]);
-  const [showGeocoder, setShowGeocoder] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    return localStorage.getItem("theme") === "dark";
+  const [showGeocoder, setShowGeocoder] = useState<boolean>(false);
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("theme") === "dark";
+    }
+    return false;
   });
   const location = useLocation();
 
-  const [routeData, setRouteData] = useState<RouteData | null>(null);
-  const [isShipmentClick, setIsShipmentClick] = useState(false);
-  const [shipmentData, setShipmentData] = useState<{
-    coordinates: ShipmentCoordinates | null;
-    details: ShipmentDetails | null;
-  }>({ coordinates: null, details: null });
+  // Removed unused routeData state
+  const [isShipmentClick, setIsShipmentClick] = useState<boolean>(false);
+  const [shipmentData, setShipmentData] = useState<ShipmentData>({
+    coordinates: null,
+    details: null,
+  });
 
   // EV Charging Map State
   const [userLocation, setUserLocation] = useState<[number, number] | null>(
@@ -100,24 +108,31 @@ const MapComponent = () => {
     null
   );
   const [currentRoute, setCurrentRoute] = useState<RouteInfo | null>(null);
-  const [isNavigating, setIsNavigating] = useState(false);
-  const [routeLoading, setRouteLoading] = useState(false);
-  const [showEVStations, setShowEVStations] = useState(false);
+  const [isNavigating, setIsNavigating] = useState<boolean>(false);
+  const [routeLoading, setRouteLoading] = useState<boolean>(false);
+  const [showEVStations, setShowEVStations] = useState<boolean>(false);
   const pendingRouteRequest = useRef<AbortController | null>(null);
 
   // Memoized function to get optimal route
   const getOptimalRoute = useCallback(
-    async (pickup: [number, number], destination: [number, number]) => {
+    async (
+      pickup: [number, number],
+      destination: [number, number]
+    ): Promise<RouteData | null> => {
       try {
         const response = await fetch(
           `https://api.mapbox.com/directions/v5/mapbox/driving/${pickup[0]},${pickup[1]};${destination[0]},${destination[1]}?geometries=geojson&access_token=${mapboxgl.accessToken}`
         );
         const data = await response.json();
-        return {
-          coordinates: data.routes[0].geometry.coordinates,
-          distance: data.routes[0].distance,
-          duration: data.routes[0].duration,
-        };
+
+        if (data.routes && data.routes[0]) {
+          return {
+            coordinates: data.routes[0].geometry.coordinates,
+            distance: data.routes[0].distance,
+            duration: data.routes[0].duration,
+          };
+        }
+        return null;
       } catch (error) {
         console.error("Error fetching route:", error);
         return null;
@@ -172,7 +187,7 @@ const MapComponent = () => {
 
   // Get user location
   const getUserLocation = useCallback((): Promise<[number, number]> => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       if (!navigator.geolocation) {
         resolve(INITIAL_CENTER);
         return;
@@ -222,7 +237,7 @@ const MapComponent = () => {
           };
         }
         return null;
-      } catch (error) {
+      } catch (error: any) {
         if (error.name !== "AbortError") {
           console.error("Error fetching route:", error);
         }
@@ -339,37 +354,98 @@ const MapComponent = () => {
   useEffect(() => {
     if (location.state) {
       setShipmentData({
-        coordinates: location.state.shipmentCoordinates,
-        details: location.state.shipmentDetails,
+        coordinates: location.state.shipmentCoordinates || null,
+        details: location.state.shipmentDetails || null,
       });
     }
   }, [location.state]);
 
-  // Helper function to fit map to both points
-  const fitMapToPoints = useCallback(
-    (pickup: [number, number], destination: [number, number]) => {
-      if (!mapRef.current) return;
+  // Updated clearMarkersAndRoute function
+  const clearMarkersAndRoute = useCallback(() => {
+    if (!mapRef.current) return;
 
-      const bounds = new mapboxgl.LngLatBounds()
-        .extend(pickup)
-        .extend(destination);
+    // Clear existing markers (except user location and EV stations)
+    document
+      .querySelectorAll(".mapboxgl-marker:not(.ev-marker)")
+      .forEach((marker) => marker.remove());
 
-      const padding = {
-        top: 100,
-        bottom: 100,
-        left: 100,
-        right: 100,
-      };
+    // Clear existing route
+    if (mapRef.current.getLayer("route")) mapRef.current.removeLayer("route");
+    if (mapRef.current.getSource("route")) mapRef.current.removeSource("route");
+  }, []);
 
-      mapRef.current.fitBounds(bounds, {
-        padding: padding,
-        maxZoom: 15,
-        pitch: 60,
-        bearing: -20,
-      });
-    },
-    []
-  );
+  // Updated addShipmentMarkersAndRoute with proper dependencies
+  const addShipmentMarkersAndRoute = useCallback(async () => {
+    if (!mapRef.current || !shipmentData.coordinates || !shipmentData.details)
+      return;
+
+    await clearMarkersAndRoute(); // Wait for cleanup to complete
+
+    const { pickup, destination } = shipmentData.coordinates;
+
+    // Get optimal route
+    const optimalRoute = await getOptimalRoute(pickup, destination);
+    if (!optimalRoute) return;
+
+    // setRouteData(optimalRoute); // Removed unused state update
+
+    // Add markers with proper details from shipmentData
+    new mapboxgl.Marker({ color: "blue" })
+      .setLngLat(pickup)
+      .setPopup(
+        new mapboxgl.Popup().setText(`Pickup: ${shipmentData.details.pickup}`)
+      )
+      .addTo(mapRef.current);
+
+    new mapboxgl.Marker({ color: "black" })
+      .setLngLat(destination)
+      .setPopup(
+        new mapboxgl.Popup().setText(
+          `Destination: ${shipmentData.details.destination}`
+        )
+      )
+      .addTo(mapRef.current);
+
+    // Add route layer
+    mapRef.current.addSource("route", {
+      type: "geojson",
+      data: {
+        type: "Feature",
+        properties: {},
+        geometry: {
+          type: "LineString",
+          coordinates: optimalRoute.coordinates,
+        },
+      },
+    });
+
+    mapRef.current.addLayer({
+      id: "route",
+      type: "line",
+      source: "route",
+      layout: {
+        "line-join": "round",
+        "line-cap": "round",
+      },
+      paint: {
+        "line-color": "#619B7D",
+        "line-width": 4,
+        "line-opacity": 0.75,
+      },
+    });
+
+    // Fit map to show the entire route
+    const bounds = optimalRoute.coordinates.reduce((bounds, coord) => {
+      return bounds.extend(coord);
+    }, new mapboxgl.LngLatBounds(optimalRoute.coordinates[0], optimalRoute.coordinates[0]));
+
+    mapRef.current.fitBounds(bounds, {
+      padding: { top: 100, bottom: 100, left: 100, right: 100 },
+      maxZoom: 15,
+      pitch: 60,
+      bearing: -20,
+    });
+  }, [shipmentData, getOptimalRoute, clearMarkersAndRoute]);
 
   // Initialize and manage the map - runs only once
   useEffect(() => {
@@ -483,9 +559,9 @@ const MapComponent = () => {
           box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         `;
 
-        const marker = new mapboxgl.Marker(el)
+        new mapboxgl.Marker(el)
           .setLngLat(station.coordinates)
-          .addTo(mapRef.current);
+          .addTo(mapRef.current!);
 
         el.addEventListener("click", () => {
           setSelectedStation(station);
@@ -523,93 +599,6 @@ const MapComponent = () => {
     }
   }, [isDarkMode]);
 
-  // Updated clearMarkersAndRoute function
-  const clearMarkersAndRoute = useCallback(() => {
-    if (!mapRef.current) return;
-
-    // Clear existing markers (except user location and EV stations)
-    document
-      .querySelectorAll(".mapboxgl-marker:not(.ev-marker)")
-      .forEach((marker) => marker.remove());
-
-    // Clear existing route
-    if (mapRef.current.getLayer("route")) mapRef.current.removeLayer("route");
-    if (mapRef.current.getSource("route")) mapRef.current.removeSource("route");
-  }, []);
-
-  // Updated addShipmentMarkersAndRoute with proper dependencies
-  const addShipmentMarkersAndRoute = useCallback(async () => {
-    if (!mapRef.current || !shipmentData.coordinates || !shipmentData.details)
-      return;
-
-    await clearMarkersAndRoute(); // Wait for cleanup to complete
-
-    const { pickup, destination } = shipmentData.coordinates;
-
-    // Get optimal route
-    const optimalRoute = await getOptimalRoute(pickup, destination);
-    if (!optimalRoute) return;
-
-    setRouteData(optimalRoute);
-
-    // Add markers with proper details from shipmentData
-    new mapboxgl.Marker({ color: "blue" })
-      .setLngLat(pickup)
-      .setPopup(
-        new mapboxgl.Popup().setText(`Pickup: ${shipmentData.details.pickup}`)
-      )
-      .addTo(mapRef.current);
-
-    new mapboxgl.Marker({ color: "black" })
-      .setLngLat(destination)
-      .setPopup(
-        new mapboxgl.Popup().setText(
-          `Destination: ${shipmentData.details.destination}`
-        )
-      )
-      .addTo(mapRef.current);
-
-    // Add route layer
-    mapRef.current.addSource("route", {
-      type: "geojson",
-      data: {
-        type: "Feature",
-        properties: {},
-        geometry: {
-          type: "LineString",
-          coordinates: optimalRoute.coordinates,
-        },
-      },
-    });
-
-    mapRef.current.addLayer({
-      id: "route",
-      type: "line",
-      source: "route",
-      layout: {
-        "line-join": "round",
-        "line-cap": "round",
-      },
-      paint: {
-        "line-color": "#619B7D",
-        "line-width": 4,
-        "line-opacity": 0.75,
-      },
-    });
-
-    // Fit map to show the entire route
-    const bounds = optimalRoute.coordinates.reduce((bounds, coord) => {
-      return bounds.extend(coord);
-    }, new mapboxgl.LngLatBounds(optimalRoute.coordinates[0], optimalRoute.coordinates[0]));
-
-    mapRef.current.fitBounds(bounds, {
-      padding: { top: 100, bottom: 100, left: 100, right: 100 },
-      maxZoom: 15,
-      pitch: 60,
-      bearing: -20,
-    });
-  }, [shipmentData, getOptimalRoute, clearMarkersAndRoute]);
-
   // Updated shipment data effect
   useEffect(() => {
     if (!mapRef.current) return;
@@ -636,15 +625,15 @@ const MapComponent = () => {
   }, [shipmentData, addShipmentMarkersAndRoute, userLocation]);
 
   // Toggle EV stations visibility
-  const toggleEVStations = useCallback(() => {
-    setShowEVStations(!showEVStations);
-    if (!showEVStations && userLocation) {
-      mapRef.current?.flyTo({
-        center: userLocation,
-        zoom: 13,
-      });
-    }
-  }, [showEVStations, userLocation]);
+  // const toggleEVStations = useCallback(() => {
+  //   setShowEVStations(!showEVStations);
+  //   if (!showEVStations && userLocation) {
+  //     mapRef.current?.flyTo({
+  //       center: userLocation,
+  //       zoom: 13,
+  //     });
+  //   }
+  // }, [showEVStations, userLocation]);
 
   // Add EV stations search term to geocoder
   const addEVSearchTerm = useCallback(() => {
@@ -685,16 +674,20 @@ const MapComponent = () => {
   const toggleTheme = () => {
     setIsDarkMode((prev) => {
       const newTheme = !prev;
-      localStorage.setItem("theme", newTheme ? "dark" : "light");
+      if (typeof window !== "undefined") {
+        localStorage.setItem("theme", newTheme ? "dark" : "light");
+      }
       return newTheme;
     });
   };
 
   useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
+    if (typeof document !== "undefined") {
+      if (isDarkMode) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
     }
   }, [isDarkMode]);
 
@@ -847,7 +840,7 @@ const MapComponent = () => {
                       }`}
                     ></div>
                     <span className="text-sm">
-                      {selectedStation.availableChargers} of
+                      {selectedStation.availableChargers} of{" "}
                       {selectedStation.totalChargers} chargers available
                     </span>
                   </div>
