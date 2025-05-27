@@ -696,7 +696,7 @@ const MapComponent: React.FC = () => {
   return (
     <div
       className={`min-h-screen md:h-screen h-screen w-screen overflow-hidden ${
-        isDarkMode ? "dark bg-black/80 text-gray-200" : "bg-white text-gray-900"
+        isDarkMode ? "text-gray-200" : "bg-white text-gray-900"
       }`}
     >
       <Navbar
@@ -731,7 +731,7 @@ const MapComponent: React.FC = () => {
           className={`${
             isMap
               ? "h-full border-t"
-              : "h-[65vh] md:h-[92vh] rounded-xl md:rounded-none border-t dark:border-gray-500"
+              : "h-[65vh] md:h-[92vh] rounded-xl md:rounded-none border-t dark:border-gray-400"
           } border-gray-200`}
         />
         {/* EV Stations UI Elements */}
