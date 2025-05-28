@@ -11,6 +11,7 @@ import { useLocation } from "react-router-dom";
 import ShipmentNotificationCard from "./ShipmentNotificationCard";
 import { Zap, MapPin, Clock, DollarSign, Navigation, X } from "lucide-react";
 import Button from "../common/Button";
+import { useTheme } from "@/context/ThemeContext";
 
 // Set Mapbox access token
 mapboxgl.accessToken =
@@ -84,12 +85,8 @@ const MapComponent: React.FC = () => {
   const geocoderContainerRef = useNonNullableRef<HTMLDivElement>(null!);
   const [businesses, setBusinesses] = useState<Business[]>([]);
   const [showGeocoder, setShowGeocoder] = useState<boolean>(false);
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("theme") === "dark";
-    }
-    return false;
-  });
+  const { theme } = useTheme();
+  const isDarkMode = theme === "dark";
   const location = useLocation();
 
   // Removed unused routeData state
@@ -671,25 +668,25 @@ const MapComponent: React.FC = () => {
   //   }
   // }, [showGeocoder, addEVSearchTerm]);
 
-  const toggleTheme = () => {
-    setIsDarkMode((prev) => {
-      const newTheme = !prev;
-      if (typeof window !== "undefined") {
-        localStorage.setItem("theme", newTheme ? "dark" : "light");
-      }
-      return newTheme;
-    });
-  };
+  // const toggleTheme = () => {
+  //   setIsDarkMode((prev) => {
+  //     const newTheme = !prev;
+  //     if (typeof window !== "undefined") {
+  //       localStorage.setItem("theme", newTheme ? "dark" : "light");
+  //     }
+  //     return newTheme;
+  //   });
+  // };
 
-  useEffect(() => {
-    if (typeof document !== "undefined") {
-      if (isDarkMode) {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
-    }
-  }, [isDarkMode]);
+  // useEffect(() => {
+  //   if (typeof document !== "undefined") {
+  //     if (isDarkMode) {
+  //       document.documentElement.classList.add("dark");
+  //     } else {
+  //       document.documentElement.classList.remove("dark");
+  //     }
+  //   }
+  // }, [isDarkMode]);
 
   const isMap = location.pathname === "/map";
 
@@ -699,11 +696,7 @@ const MapComponent: React.FC = () => {
         isDarkMode ? "text-gray-200" : "bg-white text-gray-900"
       }`}
     >
-      <Navbar
-        onSearchClick={() => setShowGeocoder(!showGeocoder)}
-        onToggleTheme={toggleTheme}
-        isDarkMode={isDarkMode}
-      />
+      <Navbar onSearchClick={() => setShowGeocoder(!showGeocoder)} />
       {showGeocoder && (
         <GeocoderComponent
           mapRef={mapRef as RefObject<mapboxgl.Map>}

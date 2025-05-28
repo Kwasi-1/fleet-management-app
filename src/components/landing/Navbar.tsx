@@ -3,6 +3,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import logo from "../../assets/foundry_logo.png";
 import logoWhite from "../../assets/foundry_logo_white.png";
 import { NavLink, useLocation, useNavigate } from "react-router";
+import { useTheme } from "@/context/ThemeContext";
 
 interface NavLinkItem {
   to: string;
@@ -28,19 +29,15 @@ interface NotificationItem {
 
 interface NavbarProps {
   onSearchClick: () => void;
-  onToggleTheme: () => void;
-  isDarkMode: boolean;
 }
 
-const Navbar: React.FC<NavbarProps> = ({
-  onSearchClick,
-  onToggleTheme,
-  isDarkMode,
-}) => {
+const Navbar: React.FC<NavbarProps> = ({ onSearchClick }) => {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const location = useLocation();
   const isOnMapPage = location.pathname === "/map";
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
+  const isDarkMode = theme === "dark";
 
   const handleBackClick = () => {
     navigate(-1);
@@ -298,7 +295,7 @@ const Navbar: React.FC<NavbarProps> = ({
         <button
           type="button"
           title={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
-          onClick={onToggleTheme}
+          onClick={toggleTheme}
           className={`p-3 rounded-md transition duration-300 group ${
             isDarkMode ? "hover:bg-white/10" : "hover:bg-gray-100"
           }`}

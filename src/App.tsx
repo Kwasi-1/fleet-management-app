@@ -24,12 +24,16 @@ import InvoicePage from "./pages/InvoicePage";
 import InvoiceView from "./pages/ViewInvoice";
 import InventoryPage from "./pages/InventoryPage2";
 import ProductDetail from "./pages/ProductDetail";
+// import ReturnDetailsPage from "./pages/ReturnDetailsPage";
+import { ThemeProvider } from "./context/ThemeContext";
 
 function App() {
   return (
-    <BrowserRouter>
-      <AppContent />
-    </BrowserRouter>
+    <ThemeProvider>
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 
@@ -79,6 +83,14 @@ function AppContent() {
           {/* <Route
             path={`order-management/inventory/products/${row.sku}`}
             element={<ProductDetail />}
+          /> */}
+          {/* <Route
+            path="/order-management/returns"
+            element={<ReturnDetailsPage />}
+          />
+          <Route
+            path="/order-management/returns/details"
+            element={<ReturnDetailsPage />}
           /> */}
 
           <Route path="/invoices/view" element={<InvoiceView />} />
