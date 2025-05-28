@@ -84,7 +84,7 @@ const InvoiceView = () => {
 
           <div className="flex items-center justify-end font-medium mt-10 gap-10">
             <span> Grand Amount</span>
-            <span className="text-gray-500">GHS 56.00</span>
+            <span className="text-gray-500 dark:text-gray-300">GHS 56.00</span>
           </div>
         </div>
 
@@ -101,7 +101,7 @@ const InvoiceView = () => {
           </div>
 
           <table className="w-full text-sm">
-            <div className="grid grid-cols-6 px-2 py-2 border-b uppercase text-[0.75rem] font-medium text-gray-500">
+            <div className="grid grid-cols-6 px-2 py-2 border-b uppercase text-[0.75rem] font-medium text-gray-500 dark:text-gray-400">
               <p>AMOUNT</p>
               <p>DATE</p>
               <p className="col-span-2">Proof of payment</p>
