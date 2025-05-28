@@ -737,10 +737,10 @@ const MapComponent: React.FC = () => {
         {/* EV Stations UI Elements */}
         {showEVStations && (
           <>
-            {/* Station list panel - now on the left side */}
-            <div className="absolute top-0 left-0 w-80 h-[calc(92vh-300px)] bg-white shadow-lg z-10">
-              <div className="p-4 border-b sticky top-0 bg-white z-20">
-                <h2 className="text-base font-semibold flex items-center gap-2">
+            {/* Station list panel */}
+            <div className="absolute top-0 left-0 w-80 h-[calc(92vh-300px)] bg-background  shadow-lg z-10">
+              <div className="p-4 border-b border-gray-200 dark:border-[#2a2a2a] sticky top-0 bg-background  z-20">
+                <h2 className="text-base font-semibold flex items-center gap-2 text-gray-900 dark:text-gray-100">
                   <Zap className="w-5 h-5 text-green-600" />
                   Nearby EV Stations ({nearbyStations.length})
                 </h2>
@@ -751,8 +751,8 @@ const MapComponent: React.FC = () => {
                     key={station.id}
                     className={`p-3 rounded-lg mb-1 cursor-pointer transition-colors ${
                       selectedStation?.id === station.id
-                        ? "bg-blue-50 border border-blue-200"
-                        : "hover:bg-gray-50"
+                        ? "bg-blue-50 dark:bg-blue-900 border border-blue-200 dark:border-blue-400"
+                        : "hover:bg-gray-50 dark:hover:bg-[#323233]"
                     }`}
                     onClick={() => {
                       setSelectedStation(station);
@@ -762,8 +762,6 @@ const MapComponent: React.FC = () => {
                       mapRef.current?.flyTo({
                         center: station.coordinates,
                         zoom: 15,
-                        // pitch: 40,
-                        // bearing: -20,
                       });
                       if (isNavigating && userLocation) {
                         mapRef.current?.once("moveend", async () => {
@@ -780,10 +778,10 @@ const MapComponent: React.FC = () => {
                       }
                     }}
                   >
-                    <div className="font-medium text-sm text-gray-900">
+                    <div className="font-medium text-sm text-gray-900 dark:text-gray-100">
                       {station.name}
                     </div>
-                    <div className="text-[13px] text-gray-600 flex items-center gap-1 mt-1">
+                    <div className="text-[13px] text-gray-600 dark:text-gray-400 flex items-center gap-1 mt-1">
                       <MapPin className="w-3 h-3" />
                       {station.address}
                     </div>
@@ -799,7 +797,7 @@ const MapComponent: React.FC = () => {
                         {station.availableChargers}/{station.totalChargers}{" "}
                         available
                       </span>
-                      <span className="text-gray-500">
+                      <span className="text-gray-500 dark:text-gray-400">
                         ${station.pricePerKwh}/kWh
                       </span>
                     </div>
@@ -810,9 +808,9 @@ const MapComponent: React.FC = () => {
 
             {/* Selected station details */}
             {selectedStation && (
-              <div className="absolute bottom-0 left-0 right-4 bg-white shadow-lg p-4 h-[300px] md:right-auto md:w-80 border-t z-60">
+              <div className="absolute bottom-0 left-0 right-4 bg-background  shadow-lg p-4 h-[300px] md:right-auto md:w-80 border-t border-gray-200 dark:border-[#2a2a2a] z-60">
                 <div className="flex justify-between items-start mb-3">
-                  <h3 className="text-base font-semibold">
+                  <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100">
                     {selectedStation.name}
                   </h3>
                   <button
@@ -820,14 +818,14 @@ const MapComponent: React.FC = () => {
                       setSelectedStation(null);
                       clearRoute();
                     }}
-                    className="text-gray-400 hover:text-gray-600"
+                    className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                   >
                     ✕
                   </button>
                 </div>
 
                 <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-gray-600">
+                  <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
                     <MapPin className="w-4 h-4" />
                     <span className="text-sm">{selectedStation.address}</span>
                   </div>
@@ -840,35 +838,35 @@ const MapComponent: React.FC = () => {
                           : "bg-red-500"
                       }`}
                     ></div>
-                    <span className="text-sm">
+                    <span className="text-sm text-gray-900 dark:text-gray-200">
                       {selectedStation.availableChargers} of{" "}
                       {selectedStation.totalChargers} chargers available
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-2 text-gray-600">
+                  <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
                     <Clock className="w-4 h-4" />
                     <span className="text-sm">
                       {selectedStation.operatingHours}
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-2 text-gray-600">
+                  <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
                     <DollarSign className="w-4 h-4" />
                     <span className="text-sm">
                       ${selectedStation.pricePerKwh} per kWh
                     </span>
                   </div>
 
-                  <div className="pt-2 border-t">
-                    <div className="text-sm text-gray-600 mb-1">
+                  <div className="pt-2 border-t border-gray-200 dark:border-[#2a2a2a]">
+                    <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
                       Charger Types:
                     </div>
                     <div className="flex gap-2">
                       {selectedStation.chargerTypes.map((type) => (
                         <span
                           key={type}
-                          className="px-2 py-1 bg-gray-100 rounded text-xs"
+                          className="px-2 py-1 bg-gray-100 dark:bg-gray-800 dark:text-gray-200 rounded text-xs"
                         >
                           {type}
                         </span>
@@ -880,7 +878,7 @@ const MapComponent: React.FC = () => {
                     <Button
                       onClick={handleNavigateToStation}
                       disabled={routeLoading}
-                      className="flex-1 text-white py-2 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                      className="flex-1 text-white py-2 px-4 rounded-lg dark:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     >
                       {routeLoading ? (
                         <>
@@ -899,7 +897,7 @@ const MapComponent: React.FC = () => {
                     {isNavigating && (
                       <button
                         onClick={clearRoute}
-                        className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                        className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                       >
                         <X className="w-4 h-4" />
                       </button>
@@ -911,22 +909,22 @@ const MapComponent: React.FC = () => {
 
             {/* Navigation info panel */}
             {isNavigating && currentRoute && (
-              <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-4 flex items-center gap-4 z-10">
+              <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-background  rounded-lg shadow-lg p-4 flex items-center gap-4 z-10">
                 <div className="flex items-center gap-2">
                   <Navigation className="w-5 h-5 text-blue-600" />
                   <div>
-                    <div className="font-medium text-gray-900">
+                    <div className="font-medium text-gray-900 dark:text-gray-100">
                       {formatDistance(currentRoute.distance)} •{" "}
                       {formatDuration(currentRoute.duration)}
                     </div>
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm text-gray-600 dark:text-gray-400">
                       Navigating to {selectedStation?.name}
                     </div>
                   </div>
                 </div>
                 <button
                   onClick={clearRoute}
-                  className="text-gray-400 hover:text-gray-600 p-1"
+                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -934,20 +932,22 @@ const MapComponent: React.FC = () => {
             )}
 
             {/* Legend */}
-            <div className="absolute top-4 right-4 bg-white rounded-lg shadow-lg p-3 z-10">
-              <div className="text-sm font-medium mb-2">Legend</div>
-              <div className="flex items-center gap-2 text-xs">
+            <div className="absolute top-4 right-4 bg-background  rounded-lg shadow-lg p-3 z-10">
+              <div className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
+                Legend
+              </div>
+              <div className="flex items-center gap-2 text-xs text-gray-700 dark:text-gray-300">
                 <div className="w-4 h-4 bg-blue-600 rounded-full"></div>
                 <span>Your Location</span>
               </div>
-              <div className="flex items-center gap-2 text-xs mt-1">
+              <div className="flex items-center gap-2 text-xs mt-1 text-gray-700 dark:text-gray-300">
                 <div className="w-4 h-4 bg-green-600 rounded-full flex items-center justify-center text-white text-xs">
                   ⚡
                 </div>
                 <span>EV Charging Station</span>
               </div>
               {isNavigating && (
-                <div className="flex items-center gap-2 text-xs mt-1">
+                <div className="flex items-center gap-2 text-xs mt-1 text-gray-700 dark:text-gray-300">
                   <div className="w-4 h-1 bg-blue-600 rounded"></div>
                   <span>Navigation Route</span>
                 </div>
