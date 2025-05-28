@@ -9,7 +9,7 @@ interface DashboardProps {
 
 const Dashboard: React.FC<DashboardProps> = ({ stats }) => {
   return (
-    <div className="grid grid-cols-4 gap-4 shadow-md p-4 border border-gray-200/30 rounded-lg">
+    <div className="grid grid-cols-4 gap-4 shadow-md p-4 border border-[#e0e6e930] rounded-lg">
       {stats.map((stat, index) => (
         <div
           key={index}
