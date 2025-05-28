@@ -19,7 +19,7 @@ const DateFilter = () => {
           className={`px-3 py-[5px] rounded-lg text-[13px] cursor-pointer
             ${
               activeFilter === filter
-                ? "bg-white border border-[#e5e7eb] dark:border-[#2f3031] text-black focus:border-[#e5e7eb]"
+                ? "bg-white dark:bg-accent border border-[#e5e7eb] dark:border-[#2f3031] text-black dark:text-white focus:border-[#e5e7eb]"
                 : "hover:text-gray-400 text-[#929292] dark:text-[#b0b0b0]"
             }`}
         >
