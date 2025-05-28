@@ -1,6 +1,10 @@
-import Table from "../../common/Table";
+import { useState } from "react";
+import Table from "@/components/common/Table";
+import IssueModal from "../issues/IssueModal";
 
 const IssuesTable = () => {
+  const [isIssueModalOpen, setIsIssueModalOpen] = useState(false);
+
   // Define the table columns
   const columns = [
     { key: "priority", label: "Priority" },
@@ -104,6 +108,14 @@ const IssuesTable = () => {
     },
   ];
 
+  const handleAddIssue = () => {
+    setIsIssueModalOpen(true);
+  };
+
+  const handleCloseIssueModal = () => {
+    setIsIssueModalOpen(false);
+  };
+
   return (
     <div>
       <Table
@@ -111,9 +123,9 @@ const IssuesTable = () => {
         data={data}
         searchPlaceholder="Search issues..."
         buttonLabel="Add Issue"
-        onRowClick={(row) => console.log("Clicked Row:", row)}
-        onButtonClick={() => console.log("Add Issue Clicked")}
+        onButtonClick={handleAddIssue}
       />
+      <IssueModal isOpen={isIssueModalOpen} onClose={handleCloseIssueModal} />
     </div>
   );
 };
