@@ -58,7 +58,7 @@ function InputField({
           onChange={onChange}
           disabled={disabled}
           className={cn(
-            "w-full border bg-[#F5F6F7] border-[#E5E7EB] px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#619B7D] text-sm text-gray-600",
+            "w-full border bg-[#F5F6F7] border-[#E5E7EB] dark:bg-[#2f3031] dark:border-[#4b5563] px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#619B7D] text-sm text-gray-600 dark:text-gray-300",
             error && "border-red-500 focus:ring-red-300",
             (icon || prefix) && "pl-10",
             suffix && "pr-10",

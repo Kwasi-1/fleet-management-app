@@ -37,7 +37,7 @@ const Textarea: React.FC<TextareaProps> = ({
       )}
       <textarea
         id={textareaId}
-        className={`w-full border bg-[#F5F6F7] border-[#E5E7EB] px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#619B7D] text-sm text-gray-600 ${className}`}
+        className={`w-full border bg-[#F5F6F7] dark:bg-input border-[#E5E7EB] dark:border-[#4b5563] px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#619B7D] text-sm text-gray-600 dark:text-gray-300 ${className}`}
         rows={rows}
         placeholder={placeholder}
         value={value}

@@ -33,7 +33,9 @@ export default function ProductSales({
     <Card className="p-6">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center">
-          <h2 className="text-lg font-medium text-gray-900">Total sales</h2>
+          <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+            Total sales
+          </h2>
           <button type="button" className="ml-1" aria-label="More information">
             <Info className="w-4 h-4 text-gray-400" />
           </button>

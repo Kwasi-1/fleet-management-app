@@ -50,7 +50,7 @@ export default function ProductImages({ images }: ProductImagesProps) {
 
         {/* Add more image button */}
         <div
-          className="rounded-lg border-2 border-dashed bg-gray-200/30 bg- border-gray-300 flex flex-col items-center justify-center p-4 cursor-pointer hover:bg-gray-50"
+          className="rounded-lg border-2 border-dashed bg-gray-200/30 border-gray-300 dark:border-[#e0e6e930] flex flex-col items-center justify-center p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-accent transition-colors"
           onClick={handleAddImage}
         >
           <Image className="w-6 h-6 text-gray-400 mb-2" />

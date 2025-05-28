@@ -29,7 +29,7 @@ export default function ProductStock({ stock }: ProductStockProps) {
         </CustomButton>
       </div>
 
-      <div className="p-4 bg-gray-50 rounded-md mb-4">
+      <div className="p-4 bg-gray-50 dark:bg-accent rounded-md mb-4">
         <div className="flex items-center justify-between mb-4">
           <span className="font-medium">Main warehouse</span>
           <div className="flex items-center space-x-2">
@@ -42,19 +42,19 @@ export default function ProductStock({ stock }: ProductStockProps) {
 
         <div className="grid grid-cols-4 gap-4 mb-4">
           <div>
-            <div className="text-sm text-gray-500 mb-1">Reorder method</div>
+            <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">Reorder method</div>
             <div>Purchase order</div>
           </div>
           <div>
-            <div className="text-sm text-gray-500 mb-1">Vendor</div>
+            <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">Vendor</div>
             <div>Apple Store</div>
           </div>
           <div>
-            <div className="text-sm text-gray-500 mb-1">Quantity</div>
+            <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">Quantity</div>
             <div>30</div>
           </div>
           <div>
-            <div className="text-sm text-gray-500 mb-1">Reorder point</div>
+            <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">Reorder point</div>
             <div className="text-[#619B7D] text-sm underline hover:line-through cursor-pointer">
               +Set reorder point
             </div>

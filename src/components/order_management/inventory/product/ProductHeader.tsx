@@ -29,7 +29,9 @@ export default function ProductHeader({ product }: ProductHeaderProps) {
   return (
     <div className="mb-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-gray-900">{product.name}</h1>
+        <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+          {product.name}
+        </h1>
         <div className="flex items-center space-x-4 text-[#929292]">
           {/* Status with Switch */}
           <div className="flex items-center space-x-2">
