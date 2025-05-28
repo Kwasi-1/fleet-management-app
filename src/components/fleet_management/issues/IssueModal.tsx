@@ -28,6 +28,10 @@ const IssueModal = ({ isOpen, onClose }: IssueModalProps) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setFormData({ ...formData, [e.target.name]: e.target.files[0] });
@@ -84,7 +88,7 @@ const IssueModal = ({ isOpen, onClose }: IssueModalProps) => {
           name="priority"
           options={["No Priority", "Low", "Medium", "High"]}
           value={formData.priority}
-          onChange={handleChange}
+          onChange={handleSelectChange}
         />
 
         <InputField
