@@ -12,7 +12,7 @@ interface NavLinkItem {
 const navLinks: NavLinkItem[] = [
   { to: "/", label: "Dashboard" },
   { to: "/fleet", label: "Fleet" },
-  { to: "/order_Management", label: "Order Management" },
+  { to: "/order-management", label: "Order Management" },
   { to: "/logistics", label: "Logistics" },
   { to: "/invoices", label: "Invoices" },
   { to: "/locations", label: "Locations" },
