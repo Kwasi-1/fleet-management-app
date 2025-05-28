@@ -2,6 +2,8 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../../assets/foundry_logo.png";
+import logoWhite from "../../assets/foundry_logo_white.png";
+import { useTheme } from "@/context/ThemeContext";
 
 // Define sublink and menu item types
 interface SubLink {
@@ -148,6 +150,8 @@ const MenuItems = (): MenuItem[] => [
 const SideBar: React.FC = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const { theme } = useTheme();
+  const isDarkMode = theme === "dark";
 
   const highlight = (tuple: [string, boolean]): boolean => {
     if (pathname === `/${tuple[0]}`) return true;
@@ -162,7 +166,11 @@ const SideBar: React.FC = () => {
         onClick={() => navigate("/")}
         className="flex gap-x-2 pt-2 place-items-center hover:cursor-pointer pl-4"
       >
-        <img src={logo} className="w-4 h-5" alt="Logo" />
+        <img
+          src={isDarkMode ? logoWhite : logo}
+          className="w-4 h-5"
+          alt="Logo"
+        />
         <div className="flex flex-col mr-auto text-gray-600 dark:text-[#b0b0b0]">
           <h1 className="font-medium capitalize">Foundry</h1>
         </div>
