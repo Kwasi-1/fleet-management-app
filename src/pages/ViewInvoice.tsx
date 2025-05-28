@@ -32,7 +32,7 @@ const payments: Payment[] = [];
 
 const InvoiceView = () => {
   return (
-    <div className="min-h-screen bg-white flex flex-col px-6 mt-5">
+    <div className="min-h-screen bg-background flex flex-col px-6 mt-5">
       <h4 className="font-medium text-[1.5rem] mb-2 tracking-tighter">
         Invoice Details
       </h4>
@@ -50,7 +50,7 @@ const InvoiceView = () => {
           <div className="grid grid-cols-2 my-10 gap-4">
             {invoiceDetails.map(({ label, value }, index) => (
               <p key={index} className="font-medium">
-                <span className="text-gray-400 font-thin text-[14px]">
+                <span className="text-gray-400 dark:text-gray-300/90 font-thin text-[14px]">
                   {label}
                 </span>
                 <br />
@@ -121,7 +121,7 @@ const InvoiceView = () => {
                 ))
               ) : (
                 <div>
-                  <p className="py-6 text-center text-gray-400 col-span-6">
+                  <p className="py-6 text-center text-gray-400 dark:text-gray-300/90 col-span-6">
                     No records found
                   </p>
                 </div>
