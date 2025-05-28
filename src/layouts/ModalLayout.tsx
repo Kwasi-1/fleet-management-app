@@ -51,7 +51,7 @@ const ModalLayout: React.FC<ModalLayoutProps> = ({
       onClick={handleBackdropClick}
     >
       <div
-        className={`fixed top-0 right-0 h-full bg-white shadow-lg w-1/2 transition-transform duration-300 ${
+        className={`fixed top-0 right-0 h-full bg-background shadow-lg w-1/2 transition-transform duration-300 ${
           isOpen ? "translate-x-0" : "translate-x-full"
         } ${className}`}
         onClick={(e) => e.stopPropagation()}
@@ -67,7 +67,7 @@ const ModalLayout: React.FC<ModalLayoutProps> = ({
         {/* Modal Header */}
         <div className="mb-3 bg-[#619B7D] py-6 px-[30px] text-white">
           <h2 className="text-lg font-semibold">{title}</h2>
-          {description && <p>{description}</p>}
+          {description && <p className="text-[0.89rem]">{description}</p>}
         </div>
 
         {/* Tabs (if they exist) */}
@@ -122,7 +122,7 @@ const ModalLayout: React.FC<ModalLayoutProps> = ({
 
         {/* Buttons */}
         {tabs.length > 0 && (
-          <div className="absolute bottom-0 left-0 right-0 bg-white p-4 grid grid-cols-2 gap-4">
+          <div className="absolute bottom-0 left-0 right-0 bg-background p-4 grid grid-cols-2 gap-4">
             <button
               onClick={() => setActiveTab((prev) => Math.max(prev - 1, 0))}
               disabled={activeTab === 0}

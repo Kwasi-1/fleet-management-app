@@ -55,7 +55,9 @@ const SelectField: React.FC<SelectFieldProps> = ({
         onValueChange={handleValueChange}
         disabled={disabled}
       >
-        <SelectTrigger className={`bg-[#F5F6F7] text-sm ${classname}`}>
+        <SelectTrigger
+          className={`bg-[#F5F6F7] dark:bg-input text-sm ${classname}`}
+        >
           <SelectValue placeholder={placeholder ? placeholder : "Select"} />
         </SelectTrigger>
         <SelectContent>
