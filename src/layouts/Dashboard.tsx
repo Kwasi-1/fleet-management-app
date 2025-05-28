@@ -15,7 +15,7 @@ const Dashboard: React.FC<DashboardProps> = ({ stats }) => {
           key={index}
           className="p-4 border-r border-[#e5e7eb90] last:border-r-0"
         >
-          <h3 className="text-sm text-gray-500 dark:text-gray-400">
+          <h3 className="text-sm text-gray-500 dark:text-gray-300">
             {stat.label}
           </h3>
           <p className="text-xl font-semibold">{stat.value}</p>
